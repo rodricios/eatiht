@@ -63,7 +63,7 @@ The number of research papers I found on the subject largely outweighs the numbe
 
 In the process of coming up with a solution, I made two unoriginal observations:
 
-1. XPath's select all (//), parent node (..), and functions ('string-length') are remarkably powerful when used together
+1. XPath's select all (//), parent node (..) queries and functions ('string-length') are remarkably powerful when used together
 2. Unnecessary machine learning is unnecessary
 
 By making an assumption on sentence length, and this is trivial, one can query for text-nodes satisfying said sentence length, then create a frequency distribution (histogram) across the parent-nodes, and the argmax of the resulting distribution is the xpath that is shared amongst likely sentences. 
