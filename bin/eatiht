@@ -11,4 +11,4 @@ parser.add_argument('URL', metavar='U', type=str,
 
 args = parser.parse_args()
 
-print eatiht.extractArticleText(args.URL)
+print eatiht.extract(args.URL)

@@ -5,7 +5,7 @@ import re
 
 ### This xpath expression effectively queries html text
 ### nodes that have a string-length greater than 20
-text_finder_xpath = '//body//*[not(self::script or self::style or self::i or self::b or self::strong or self::span or self::a)]/text()[string-length(normalize-space()) > 20]/..'
+TEXT_FINDER_PATH = '//body//*[not(self::script or self::style or self::i or self::b or self::strong or self::span or self::a)]/text()[string-length(normalize-space()) > 20]/..'
 
 ### REGEX patterns for catching bracketted numbers - as seen in wiki articles -
 ### and sentence splitters
@@ -33,7 +33,7 @@ sentence_token_pattern_C = re.compile(r"""
 
 
 ### Return a frequency distribution over  that gets the most common xpath
-def getXPathFrequencyDistribution(paths):
+def get_xpath_frequency_distribution(paths):
     #split xpath into list of strings
     splitpaths = [p.split('/') for p in paths]
 
@@ -48,7 +48,7 @@ def getXPathFrequencyDistribution(paths):
 ### Given the url (string), it will download, parse, then iterate through
 ### text nodes (using xpath), and for each text leafnode, it will build up
 ### a list of tuples containing the sentence and xpath to said sentence
-def getSentencesAndXpaths(url):
+def get_sentence_xpath_tuples(url):
     try:
         parsed_html = html.parse(url)
     except IOError as e:
@@ -69,20 +69,20 @@ def getSentencesAndXpaths(url):
 
     xpath_finder = parsed_html.getroot().getroottree().getpath
 
-    nodes_with_text = parsed_html.xpath(text_finder_xpath)
+    nodes_with_text = parsed_html.xpath(TEXT_FINDER_PATH)
 
     sent_xpath_pairs = [(s, xpath_finder(n))
         for n in nodes_with_text
         #for s in sent_tokenize(re.sub(bracket_pattern,'',''.join(n.xpath('.//text()'))))
-        for s in sentence_token_pattern_A.split( re.sub( bracket_pattern, '', ''.join( n.xpath( './/text()') ) ) )
+        for s in sentence_token_pattern_C.split( bracket_pattern.sub( '', ''.join( n.xpath( './/text()') ) ) )
         if s.endswith('.')]
 
     return sent_xpath_pairs
 
-def extractArticleText(url):
-    sent_xpath_pairs = getSentencesAndXpaths(url)
+def extract(url):
+    sent_xpath_pairs = get_sentence_xpath_tuples(url)
 
-    max_path = getXPathFrequencyDistribution([x for (s,x) in sent_xpath_pairs])[0]
+    max_path = get_xpath_frequency_distribution([x for (s,x) in sent_xpath_pairs])[0]
 
     article_text = ' '.join( [ s for (s,x) in sent_xpath_pairs if max_path[0] in x ])
     #text = ' '.join([d['sent'] for d in sentences])
