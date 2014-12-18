@@ -1,1 +1,1 @@
-from .eatiht import getXPathFrequencyDistribution, getSentencesAndXpaths, extractArticleText
+from .eatiht import extractArticleText, getSentencesAndXpaths, getXPathFrequencyDistribution

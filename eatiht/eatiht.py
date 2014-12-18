@@ -33,7 +33,7 @@ sentence_token_pattern_C = re.compile(r"""
 
 
 ### Return a frequency distribution over  that gets the most common xpath
-def buildXPathFrequencyDistribution(paths):
+def getXPathFrequencyDistribution(paths):
     #split xpath into list of strings
     splitpaths = [p.split('/') for p in paths]
 
@@ -80,10 +80,10 @@ def getSentencesAndXpaths(url):
     return sent_xpath_pairs
 
 def extractArticleText(url):
-    sent_xpath_pairs = extractSentencesAndXpaths(url)
+    sent_xpath_pairs = getSentencesAndXpaths(url)
 
-    max_path = getNFrequentParentPaths([x for (s,x) in sent_xpath_pairs])[0]
+    max_path = getXPathFrequencyDistribution([x for (s,x) in sent_xpath_pairs])[0]
 
-    article_text = ' '.join( [ s for (s,x) in sent_xpath_pairs if max_path in x ])
+    article_text = ' '.join( [ s for (s,x) in sent_xpath_pairs if max_path[0] in x ])
     #text = ' '.join([d['sent'] for d in sentences])
     return article_text#.encode('latin-1',errors='ignore')
