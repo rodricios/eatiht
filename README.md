@@ -1,7 +1,7 @@
 eatiht
 ======
 
-A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents.
+A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out this [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html).
 
 
 At a Glance
@@ -50,7 +50,7 @@ lxml
 Motivation
 ----------
 
-After searching through the deepest crevices of the internet for some tool|library|module that could effectively extract the main content from a website (ignoring text from ads, sidebar links, etc.), I was a slightly disheartened by the apparent ambiguity caused by this content-extraction problem. 
+After searching through the deepest crevices of the internet for some tool|library|module that could effectively extract the main content from a website (ignoring text from ads, sidebar links, etc.), I was slightly disheartened by the apparent ambiguity caused by this content-extraction problem. 
 
 My survey resulted in some of the following solutions:
 
@@ -61,9 +61,9 @@ My survey resulted in some of the following solutions:
 
 The number of research papers I found on the subject largely outweighs the number available open-source projects. This is my attempt at balancing out the disparity. 
 
-In the process of coming up with a solution, I made two unoriginal obserservations:
+In the process of coming up with a solution, I made two unoriginal observations:
 
-1. XPath's select all (//), parent node (..), and functions ('string-length') are remarkably powerful when used together
+1. XPath's select all (//), parent node (..) queries and functions ('string-length') are remarkably powerful when used together
 2. Unnecessary machine learning is unnecessary
 
 By making an assumption on sentence length, and this is trivial, one can query for text-nodes satisfying said sentence length, then create a frequency distribution (histogram) across the parent-nodes, and the argmax of the resulting distribution is the xpath that is shared amongst likely sentences. 
