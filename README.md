@@ -40,6 +40,8 @@ in the water with Curiosity's onboard instruments...
 eatiht http://news.yahoo.com/curiosity-rover-drills-mars-rock-finds-water-122321635.html >> out.txt
 ```
 
+Note: Window's users may have to add the C:\PythonXX\Scripts directory to your ["path"](http://www.computerhope.com/issues/ch000549.htm) so that the command line tool works from any directory, not only the ..\Scripts directory. 
+
 Requirements
 ------------
 ```
