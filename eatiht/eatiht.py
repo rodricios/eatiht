@@ -2,12 +2,53 @@
 eatiht
 Extract Article Text In HyperText documents
 
-written by Rodrigo
+written by Rodrigo Palacios
 
-With the help of one of the most basic statistical tools - the frequency distribution -
-one can retrieve the argmax (the element appearing the most frequent). Now, if the
-element you are measuring the frequency of are XPaths leading to text-nodes (sentences),
-one can approximate an XPath that will likely lead to the bulk of the article's text.
+**tl;dr**
+
+Note: for those unfamiliar with xpaths, think of them as file/folder
+paths, where each "file/folder" is really just some HTML element.
+
+Algorithm, dammit!:
+Using a clever xpath expression that targets text nodes of a certain
+length N, one can get a list of what we might consider "ideal" nodes
+(nodes that have sentences).
+
+Using some simple statistics, we can find the xpath that appears most
+frequently. In other words, we found a path that leads to webpage's
+main text body.
+
+**A slightly more formal explenation**
+
+A reminder: with the help of one of the most fundamental statistical
+tools - the frequency distribution - one can easily pick out the
+element appearing most frequently in a list of elements.
+
+Now, consider some arbitrary webpage, comprising of stylistic/structural
+nodes (div, p, etc.) and "text" nodes (html leafnodes that contain
+onscreen text). For every node, there exists at least one XPath that
+can describe a leaf node's location within the html tree. If one
+assumes some arbitry "sentence length" N and queries for text nodes
+that adhere to that constraint (ie. string-length > N), a list of only
+text nodes with string length greater than N is returned.
+
+Using those newly-acquired list of nodes, two things must happen for
+this algorithm to work properly:
+
+1. Split the text within each text node into sentences (current
+implementation relies on REGEX sentence-splitting patterns).
+
+2. For each new pseudo-node that is created upon sentence-split, attach
+*not* the xpath that leads to the original text node, but the xpath of
+the *parent* node that leads to the original text node.
+
+The last two steps will essentially create a list of (sentence, xpath)
+tuples. After this, one can build a frequency distribution across the
+xpaths.
+
+Finally, the most frequent element in the freq. distribution (aka
+"argmax") should* be the parent node leading to the structural html-element
+that "divides" or "encompasses" the main text body.
 
 Please refer to this project's github page for more information:
 https://github.com/im-rodrigo/eatiht
@@ -18,10 +59,17 @@ email - rodrigopala91@gmail.com
 github - https://github.com/im-rodrigo
 """
 
-from lxml import html
-from collections import Counter
-from exceptions import IOError
 import re
+from exceptions import IOError
+from collections import Counter
+try:
+    from cStringIO import StringIO as BytesIO
+except ImportError:
+    from io import BytesIO
+
+from lxml import html
+import requests
+
 
 ### This xpath expression effectively queries html text
 ### nodes that have a string-length greater than 20
@@ -31,11 +79,11 @@ TEXT_FINDER_XPATH = '//body//*[not(self::script or self::style or self::i or sel
 ### and sentence splitters
 bracket_pattern = re.compile('(\[\d*\])')
 #http://stackoverflow.com/questions/8465335/a-regex-for-extracting-sentence-from-a-paragraph-in-python
-sentence_token_pattern_A = re.compile(r'''(?<=[.!?]['"\s])\s*(?=[A-Z])''')
+#sentence_token_pattern_A = re.compile(r'''(?<=[.!?]['"\s])\s*(?=[A-Z])''')
 #http://stackoverflow.com/questions/25735644/python-regex-for-splitting-text-into-sentences-sentence-tokenizing
-sentence_token_pattern_B = re.compile(r'''(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s''')
+#sentence_token_pattern_B = re.compile(r'''(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s''')
 #http://stackoverflow.com/questions/8465335/a-regex-for-extracting-sentence-from-a-paragraph-in-python
-sentence_token_pattern_C = re.compile(r"""
+sentence_token_pattern = re.compile(r"""
         # Split sentences on whitespace between them.
         (?:               # Group for two positive lookbehinds.
           (?<=[.!?])      # Either an end of sentence punct,
@@ -77,17 +125,10 @@ def get_sentence_xpath_tuples(url, xpath_to_text = TEXT_FINDER_XPATH):
         parsed_html = html.parse(url)
 
     except IOError as e:
-        # workaround for problems in some sites requiring cookies
-        # like nytimes.com
+        # use requests as a workaround for problems in some
+        # sites requiring cookies like nytimes.com
         # http://stackoverflow.com/questions/15148376/urllib2-returning-no-html
-        import requests
-
         page = requests.get(url)
-
-        try:
-            from cStringIO import StringIO as BytesIO
-        except ImportError:
-            from io import BytesIO
 
         # http://lxml.de/parsing.html
         parsed_html = html.parse( BytesIO(page.content), html.HTMLParser() )
@@ -98,7 +139,7 @@ def get_sentence_xpath_tuples(url, xpath_to_text = TEXT_FINDER_XPATH):
 
     sent_xpath_pairs = [(s, xpath_finder(n))
         for n in nodes_with_text
-        for s in sentence_token_pattern_C.split( bracket_pattern.sub( '', ''.join( n.xpath( './/text()') ) ) )
+        for s in sentence_token_pattern.split( bracket_pattern.sub( '', ''.join( n.xpath( './/text()') ) ) )
         if s.endswith('.')]
 
     return sent_xpath_pairs
@@ -106,8 +147,12 @@ def get_sentence_xpath_tuples(url, xpath_to_text = TEXT_FINDER_XPATH):
 
 def extract(url, xpath_to_text = TEXT_FINDER_XPATH):
     """
-    Wrapper function for extracting the main article from html document
-    url[,xpath] -> xpaths of text-paths -> frequency distribution -> argmax( freq. dist. ) = likely xpath leading to article's content
+    Wrapper function for extracting the main article from html document.
+
+    A crappy flowchart/state-diagram:
+    start: url[,xpath] -> xpaths of text-nodes -> frequency distribution
+    -> argmax( freq. dist. ) = likely xpath leading to article's content
+
     """
     sent_xpath_pairs = get_sentence_xpath_tuples(url, xpath_to_text)
 
