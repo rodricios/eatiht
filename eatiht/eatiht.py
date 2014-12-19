@@ -60,7 +60,6 @@ github - https://github.com/im-rodrigo
 """
 
 import re
-from exceptions import IOError
 from collections import Counter
 try:
     from cStringIO import StringIO as BytesIO
@@ -118,8 +117,9 @@ def get_xpath_frequency_distribution(paths):
 
 def get_sentence_xpath_tuples(url, xpath_to_text = TEXT_FINDER_XPATH):
     """
-    Given a url and xpath, this function will download, parse, then iterate though
-    queried text-nodes. From the resulting text-nodes, extract a list of (text, exact-xpath) tuples.
+    Given a url and xpath, this function will download, parse, then
+    iterate though queried text-nodes. From the resulting text-nodes,
+    extract a list of (text, exact-xpath) tuples.
     """
     try:
         parsed_html = html.parse(url)
@@ -131,16 +131,19 @@ def get_sentence_xpath_tuples(url, xpath_to_text = TEXT_FINDER_XPATH):
         page = requests.get(url)
 
         # http://lxml.de/parsing.html
-        parsed_html = html.parse( BytesIO(page.content), html.HTMLParser() )
+        parsed_html = html.parse(BytesIO(page.content), html.HTMLParser() )
 
     xpath_finder = parsed_html.getroot().getroottree().getpath
 
     nodes_with_text = parsed_html.xpath(xpath_to_text)
 
-    sent_xpath_pairs = [(s, xpath_finder(n))
+    sent_xpath_pairs = [
+        ('\n\n' + s, xpath_finder(n)) if e == 0     # hard-code paragraph breaks (there has to be a better way)
+        else (s, xpath_finder(n))
         for n in nodes_with_text
-        for s in sentence_token_pattern.split( bracket_pattern.sub( '', ''.join( n.xpath( './/text()') ) ) )
-        if s.endswith('.')]
+        for e, s in enumerate(sentence_token_pattern.split(bracket_pattern.sub('', ''.join(n.xpath('.//text()')))))
+        if s.endswith('.')
+        ]
 
     return sent_xpath_pairs
 
@@ -152,12 +155,13 @@ def extract(url, xpath_to_text = TEXT_FINDER_XPATH):
     A crappy flowchart/state-diagram:
     start: url[,xpath] -> xpaths of text-nodes -> frequency distribution
     -> argmax( freq. dist. ) = likely xpath leading to article's content
-
     """
     sent_xpath_pairs = get_sentence_xpath_tuples(url, xpath_to_text)
 
-    max_path = get_xpath_frequency_distribution([x for (s,x) in sent_xpath_pairs])[0]
+    max_path = get_xpath_frequency_distribution([x for (s,x) in sent_xpath_pairs ])[0]
 
-    article_text = ' '.join( [ s for (s,x) in sent_xpath_pairs if max_path[0] in x ])
+    article_text = ' '.join([s for (s,x) in sent_xpath_pairs if max_path[0] in x])
 
-    return article_text
+    # return starting from index 2 because of the two extra
+    # newlines in front
+    return article_text[2:]
