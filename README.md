@@ -74,3 +74,7 @@ The results were surprisingly good. I personally prefer this approach to the oth
 
 Please raise any issues or yell at me at rodrigopala91@gmail.com or [@mi_ogirdor](https://twitter.com/mi_ogirdor)
 
+TODO: 
+-----
+
+* Add newline and tab options for printing. Please check out the [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html) for a taste of how double newlines look.  
