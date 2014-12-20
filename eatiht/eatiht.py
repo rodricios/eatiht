@@ -5,20 +5,30 @@ Extract Article Text In HyperText documents
 written by Rodrigo Palacios
 
 **tl;dr**
+(revised on 12/20/2014)
 
 Note: for those unfamiliar with xpaths, think of them as file/folder
 paths, where each "file/folder" is really just some HTML element.
 
 Algorithm, dammit!:
-Using a clever xpath expression that targets text nodes of a certain
-length N, one can get a list of what we can consider as "ideal" text nodes
-(nodes that have sentences).
+Using a clever xpath expression that targets the immediate parents of
+text nodes of a certain length N, one can get a list of parent nodes
+which have, what we can consider as "ideal," text nodes (nodes that
+have sentences).
 
-For each node in said text nodes, we  , we can find the xpath that appears most
-frequently. In other words, we found a path that leads to webpage's
-main text body.
+For each text node, we "partition" the text node so that instead of the
+parent node having the original text node as its lone child, the parent
+now has P children; the partitioning method used is a REGEX sentence
+split. 
+
+Finally, using now the *parents* of the the above mentioned parent 
+nodes as our sample, we create a frequency distribution measuring
+the number of text node descendants of each parent. In other words, 
+We can find the xpath with the most number of text node descendants.
+This output has shown to lead us to the main article in a webpage.
 
 **A slightly more formal explenation**
+(Needs revision as 12/20/2014)
 
 A reminder: with the help of one of the most fundamental statistical
 tools - the frequency distribution - one can easily pick out the
