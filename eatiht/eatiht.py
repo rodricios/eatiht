@@ -11,10 +11,10 @@ paths, where each "file/folder" is really just some HTML element.
 
 Algorithm, dammit!:
 Using a clever xpath expression that targets text nodes of a certain
-length N, one can get a list of what we might consider "ideal" nodes
+length N, one can get a list of what we can consider as "ideal" text nodes
 (nodes that have sentences).
 
-Using some simple statistics, we can find the xpath that appears most
+For each node in said text nodes, we  , we can find the xpath that appears most
 frequently. In other words, we found a path that leads to webpage's
 main text body.
 
