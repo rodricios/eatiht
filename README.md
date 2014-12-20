@@ -3,6 +3,13 @@ eatiht
 
 A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out this [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html).
 
+What people have been saying
+----------------------------
+*You should write a paper on this work* - [/u/queue_cumber](http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz0vfj)
+
+*This is neat-o. A short and sweet project...* - [/u/CandyCorns_](http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz17gv)
+
+*From a quick glance this looks super elegant! Very neat idea!* - [/u/worldsayshi](http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz3akt)
 
 At a Glance
 -----------
@@ -77,4 +84,4 @@ Please raise any issues or yell at me at rodrigopala91@gmail.com or [@mi_ogirdor
 TODO: 
 -----
 
-* Add newline and tab options for printing. Please check out the [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html) for a taste of how double newlines look.  
+* ~~Add newline and tab options for printing.~~ Please check out the [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html) for a taste of how double newlines look.  
