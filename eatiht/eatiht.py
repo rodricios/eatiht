@@ -80,15 +80,15 @@ from lxml import html
 import requests
 
 
-### This xpath expression effectively queries html text
-### nodes that have a string-length greater than 20
+# This xpath expression effectively queries html text
+# nodes that have a string-length greater than 20
 TEXT_FINDER_XPATH = '//body//*[not(self::script or self::style or self::i or self::b or self::strong or self::span or self::a)]/text()[string-length(normalize-space()) > 20]/..'
 
-### REGEX patterns for catching bracketted numbers - as seen in wiki articles -
-### and sentence splitters
+# REGEX patterns for catching bracketted numbers - as seen in wiki articles -
+# and sentence splitters
 bracket_pattern = re.compile('(\[\d*\])')
 
-#http://stackoverflow.com/questions/8465335/a-regex-for-extracting-sentence-from-a-paragraph-in-python
+# http://stackoverflow.com/questions/8465335/a-regex-for-extracting-sentence-from-a-paragraph-in-python
 sentence_token_pattern = re.compile(r"""
         # Split sentences on whitespace between them.
         (?:               # Group for two positive lookbehinds.
@@ -104,6 +104,8 @@ sentence_token_pattern = re.compile(r"""
         \s+               # Split on whitespace between sentences.
         """,
         re.IGNORECASE | re.VERBOSE)
+
+sentence_ending = ['.', '"', '?', '!', "'"]
 
 
 def get_xpath_frequency_distribution(paths):
@@ -122,7 +124,7 @@ def get_xpath_frequency_distribution(paths):
     return parentpathsCounter.most_common()
 
 
-def get_sentence_xpath_tuples(url, xpath_to_text = TEXT_FINDER_XPATH):
+def get_sentence_xpath_tuples(url, xpath_to_text=TEXT_FINDER_XPATH):
     """
     Given a url and xpath, this function will download, parse, then
     iterate though queried text-nodes. From the resulting text-nodes,
@@ -138,7 +140,7 @@ def get_sentence_xpath_tuples(url, xpath_to_text = TEXT_FINDER_XPATH):
         page = requests.get(url)
 
         # http://lxml.de/parsing.html
-        parsed_html = html.parse(BytesIO(page.content), html.HTMLParser() )
+        parsed_html = html.parse(BytesIO(page.content), html.HTMLParser())
 
     xpath_finder = parsed_html.getroot().getroottree().getpath
 
@@ -149,7 +151,7 @@ def get_sentence_xpath_tuples(url, xpath_to_text = TEXT_FINDER_XPATH):
         else (s, xpath_finder(n))
         for n in nodes_with_text
         for e, s in enumerate(sentence_token_pattern.split(bracket_pattern.sub('', ''.join(n.xpath('.//text()')))))
-        if s.endswith('.') or s.endswith('"') or s.endswith('?')
+        if s.endswith(tuple(sentence_ending))
         ]
 
     return sent_xpath_pairs
@@ -165,9 +167,9 @@ def extract(url, xpath_to_text = TEXT_FINDER_XPATH):
     """
     sent_xpath_pairs = get_sentence_xpath_tuples(url, xpath_to_text)
 
-    max_path = get_xpath_frequency_distribution([x for (s,x) in sent_xpath_pairs ])[0]
+    max_path = get_xpath_frequency_distribution([x for (s, x) in sent_xpath_pairs])[0]
 
-    article_text = ' '.join([s for (s,x) in sent_xpath_pairs if max_path[0] in x])
+    article_text = ' '.join([s for (s, x) in sent_xpath_pairs if max_path[0] in x])
 
     # starting from index 2 because of the two extra newlines in front
     return article_text[2:]
