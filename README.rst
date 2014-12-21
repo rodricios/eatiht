@@ -5,6 +5,18 @@ A python package for **e**\ xtracting **a**\ rticle **t**\ ext **i**\ n
 **ht**\ ml documents. Check out this
 `demo <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html>`__.
 
+What people have been saying
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*You should write a paper on this work* -
+`/u/queue\_cumber <http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz0vfj>`__
+
+*This is neat-o. A short and sweet project...* -
+`/u/CandyCorns\_ <http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz17gv>`__
+
+*From a quick glance this looks super elegant! Very neat idea!* -
+`/u/worldsayshi <http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz3akt>`__
+
 At a Glance
 -----------
 
@@ -25,7 +37,7 @@ Using in Python
 
 .. code:: python
 
-    import eatiht 
+    import eatiht
 
     url = 'http://news.yahoo.com/curiosity-rover-drills-mars-rock-finds-water-122321635.html'
 
@@ -38,8 +50,8 @@ Output
 
     NASA's Curiosity rover is continuing to help scientists piece together the mystery of how Mars lost its
     surface water over the course of billions of years. The rover drilled into a piece of Martian rock called
-    Cumberland and found some ancient water hidden within it. Researchers were then able to test a key ratio 
-    in the water with Curiosity's onboard instruments... 
+    Cumberland and found some ancient water hidden within it. Researchers were then able to test a key ratio
+    in the water with Curiosity's onboard instruments...
 
 Using as a command line tool:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -107,5 +119,19 @@ The results were surprisingly good. I personally prefer this approach to
 the others as it seems to lie somewhere in between the purely rule-based
 and the drowning-in-ML approaches.
 
-Please raise any issues or yell at me at rodrigopala91@gmail.com or
-[@mi\_ogirdor](https://twitter.com/mi\_ogirdor)
+Issues or Contact
+-----------------
+
+Please raise any
+`issues <https://github.com/rodricios/eatiht/issues>`__ or yell at me
+at rodrigopala91@gmail.com or
+[@rodricios](https://twitter.com/rodricios)
+
+TODO:
+-----
+
+-  [STRIKEOUT:Add newline and tab options for printing.] Please check
+   out the
+   `demo <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html>`__
+   for the new **default** output (sorry, no options for formatting as
+   of yet).

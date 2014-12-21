@@ -19,16 +19,16 @@ have sentences).
 For each text node, we "partition" the text node so that instead of the
 parent node having the original text node as its lone child, the parent
 now has P children; the partitioning method used is a REGEX sentence
-split. 
+split.
 
-Finally, using now the *parents* of the the above mentioned parent 
+Finally, using now the *parents* of the the above mentioned parent
 nodes as our sample, we create a frequency distribution measuring
-the number of text node descendants of each parent. In other words, 
+the number of text node descendants of each parent. In other words,
 We can find the xpath with the most number of text node descendants.
 This output has shown to lead us to the main article in a webpage.
 
 **A slightly more formal explenation**
-(Needs revision as 12/20/2014)
+(Needs revision as of 12/20/2014)
 
 A reminder: with the help of one of the most fundamental statistical
 tools - the frequency distribution - one can easily pick out the
@@ -87,10 +87,7 @@ TEXT_FINDER_XPATH = '//body//*[not(self::script or self::style or self::i or sel
 ### REGEX patterns for catching bracketted numbers - as seen in wiki articles -
 ### and sentence splitters
 bracket_pattern = re.compile('(\[\d*\])')
-#http://stackoverflow.com/questions/8465335/a-regex-for-extracting-sentence-from-a-paragraph-in-python
-#sentence_token_pattern_A = re.compile(r'''(?<=[.!?]['"\s])\s*(?=[A-Z])''')
-#http://stackoverflow.com/questions/25735644/python-regex-for-splitting-text-into-sentences-sentence-tokenizing
-#sentence_token_pattern_B = re.compile(r'''(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s''')
+
 #http://stackoverflow.com/questions/8465335/a-regex-for-extracting-sentence-from-a-paragraph-in-python
 sentence_token_pattern = re.compile(r"""
         # Split sentences on whitespace between them.
@@ -152,7 +149,7 @@ def get_sentence_xpath_tuples(url, xpath_to_text = TEXT_FINDER_XPATH):
         else (s, xpath_finder(n))
         for n in nodes_with_text
         for e, s in enumerate(sentence_token_pattern.split(bracket_pattern.sub('', ''.join(n.xpath('.//text()')))))
-        if s.endswith('.')
+        if s.endswith('.') or s.endswith('"') or s.endswith('?')
         ]
 
     return sent_xpath_pairs
@@ -172,6 +169,5 @@ def extract(url, xpath_to_text = TEXT_FINDER_XPATH):
 
     article_text = ' '.join([s for (s,x) in sent_xpath_pairs if max_path[0] in x])
 
-    # return starting from index 2 because of the two extra
-    # newlines in front
+    # starting from index 2 because of the two extra newlines in front
     return article_text[2:]
