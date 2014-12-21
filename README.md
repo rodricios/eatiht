@@ -79,7 +79,10 @@ By making an assumption on sentence length, and this is trivial, one can query f
 
 The results were surprisingly good. I personally prefer this approach to the others as it seems to lie somewhere in between the purely rule-based and the drowning-in-ML approaches.
 
-Please raise any issues or yell at me at rodrigopala91@gmail.com or [@mi_ogirdor](https://twitter.com/mi_ogirdor)
+Issues or Contact
+-----------------
+
+Please raise any [issues](https://github.com/im-rodrigo/eatiht/issues) or yell at me at rodrigopala91@gmail.com or [@rodricios](https://twitter.com/rodricios)
 
 TODO: 
 -----
