@@ -1,59 +1,102 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <title>eatiht by rodricios</title>
+    <meta name="description" content="eatiht : A simple tool used to extract an article&#39;s text in html documents.">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>eatiht</title>
   </head>
 
   <body>
-    <div id="container">
-      <div class="inner">
 
-        <header>
-          <h1>eatiht</h1>
-          <h2>A simple tool used to extract an article&#39;s text in html documents.</h2>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/rodricios/eatiht">View on GitHub</a>
+
+          <h1 id="project_title">eatiht</h1>
+          <h2 id="project_tagline">A simple tool used to extract an article&#39;s text in html documents.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/rodricios/eatiht/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/rodricios/eatiht/tarball/master">Download this project as a tar.gz file</a>
+            </section>
         </header>
+    </div>
 
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/rodricios/eatiht/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/rodricios/eatiht/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/rodricios/eatiht" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
-
-        <hr>
-
-        <section id="main_content">
-          <h1>
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
 <a id="eatiht" class="anchor" href="#eatiht" aria-hidden="true"><span class="octicon octicon-link"></span></a>eatiht</h1>
 
-<p><strong>e</strong>xtract <strong>a</strong>rticle's <strong>t</strong>ext <strong>i</strong>n <strong>ht</strong>ml documents.</p>
+<p>A python package for <strong>e</strong>xtracting <strong>a</strong>rticle <strong>t</strong>ext <strong>i</strong>n <strong>ht</strong>ml documents. Check out this <a href="http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html">demo</a>.</p>
 
-<hr>
+<h3>
+<a id="update" class="anchor" href="#update" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update</h3>
 
-<p>First thing's third:</p>
+<p>Functionally critical update coming in next release. Please head over to <a href="https://github.com/rodricios/eatiht/issues">issues</a> for upcoming list of new features and changes.</p>
+
+<h3>
+<a id="what-people-have-been-saying" class="anchor" href="#what-people-have-been-saying" aria-hidden="true"><span class="octicon octicon-link"></span></a>What people have been saying</h3>
+
+<p><em>You should write a paper on this work</em> - <a href="http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz0vfj">/u/queue_cumber</a></p>
+
+<p><em>This is neat-o. A short and sweet project...</em> - <a href="http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz17gv">/u/CandyCorns_</a></p>
+
+<p><em>From a quick glance this looks super elegant! Very neat idea!</em> - <a href="http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz3akt">/u/worldsayshi</a></p>
 
 <h2>
-<a id="summary" class="anchor" href="#summary" aria-hidden="true"><span class="octicon octicon-link"></span></a>Summary</h2>
+<a id="at-a-glance" class="anchor" href="#at-a-glance" aria-hidden="true"><span class="octicon octicon-link"></span></a>At a Glance</h2>
 
-<p>eatiht is one possible solution in a line of many imperfect solutions 
-to one or more problems in some subfield of the field called
-"<a href="http://en.wikipedia.org/wiki/Data_extraction">data extraction</a>."</p>
+<h4>
+<a id="to-install" class="anchor" href="#to-install" aria-hidden="true"><span class="octicon octicon-link"></span></a>To install:</h4>
 
-<p>Put plainly, eatiht tries to extract the central text from a
-given website.</p>
+<div class="highlight highlight-bash"><pre>pip install eatiht
+...
+easy_install eatiht</pre></div>
+
+<p>Note: On Windows, you may need to install lxml manually using:
+pip install lxml</p>
+
+<h4>
+<a id="using-in-python" class="anchor" href="#using-in-python" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using in Python</h4>
+
+<div class="highlight highlight-python"><pre><span class="pl-k">import</span> eatiht
+
+url <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">'</span>http://news.yahoo.com/curiosity-rover-drills-mars-rock-finds-water-122321635.html<span class="pl-pds">'</span></span>
+
+<span class="pl-k">print</span> eatiht.extract(url)</pre></div>
+
+<h5>
+<a id="output" class="anchor" href="#output" aria-hidden="true"><span class="octicon octicon-link"></span></a>Output</h5>
+
+<pre><code>NASA's Curiosity rover is continuing to help scientists piece together the mystery of how Mars lost its
+surface water over the course of billions of years. The rover drilled into a piece of Martian rock called
+Cumberland and found some ancient water hidden within it. Researchers were then able to test a key ratio
+in the water with Curiosity's onboard instruments...
+</code></pre>
+
+<h4>
+<a id="using-as-a-command-line-tool" class="anchor" href="#using-as-a-command-line-tool" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using as a command line tool:</h4>
+
+<div class="highlight highlight-bash"><pre>eatiht http://news.yahoo.com/curiosity-rover-drills-mars-rock-finds-water-122321635.html <span class="pl-k">&gt;&gt;</span> out.txt</pre></div>
+
+<p>Note: Window's users may have to add the C:\PythonXX\Scripts directory to your <a href="http://www.computerhope.com/issues/ch000549.htm">"path"</a> so that the command line tool works from any directory, not only the ..\Scripts directory.</p>
 
 <h2>
-<a id="background" class="anchor" href="#background" aria-hidden="true"><span class="octicon octicon-link"></span></a>Background</h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h2>
 
-<p>(skip if you've read eatiht's readme)</p>
+<pre><code>requests
+lxml
+</code></pre>
+
+<h2>
+<a id="motivation" class="anchor" href="#motivation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Motivation</h2>
 
 <p>After searching through the deepest crevices of the internet for some tool|library|module that could effectively extract the main content from a website (ignoring text from ads, sidebar links, etc.), I was slightly disheartened by the apparent ambiguity caused by this content-extraction problem.</p>
 
@@ -72,481 +115,51 @@ given website.</p>
 
 <p>The number of research papers I found on the subject largely outweighs the number available open-source projects. This is my attempt at balancing out the disparity.</p>
 
-<h2>
-<a id="the-original-algorithm" class="anchor" href="#the-original-algorithm" aria-hidden="true"><span class="octicon octicon-link"></span></a>The original algorithm*</h2>
-
-<p>There's two assumptions: </p>
+<p>In the process of coming up with a solution, I made two unoriginal observations:</p>
 
 <ol>
-<li>"Valuable" text is "lengthy"</li>
-<li>"Valuable" text come in "<em>packs</em>"</li>
+<li>XPath's select all (//), parent node (..) queries and functions ('string-length') are remarkably powerful when used together</li>
+<li>Unnecessary machine learning is unnecessary</li>
 </ol>
 
-<p>By "valuable," and without getting too philosophical,
-I mean that it's the text you're meant to read.</p>
+<p>By making an assumption on sentence length, and this is trivial, one can query for text-nodes satisfying said sentence length, then create a frequency distribution (histogram) across the parent-nodes, and the argmax of the resulting distribution is the xpath that is shared amongst likely sentences.</p>
 
-<p>By "lengthy," I mean there is a specific value that is used
-to filter out text for a specific computation. More on this
-later.</p>
-
-<p>By "packs," I can describe in two ways:</p>
+<p>The results were surprisingly good. I personally prefer this approach to the others as it seems to lie somewhere in between the purely rule-based and the drowning-in-ML approaches.</p>
 
 <h2>
-<a id="visually" class="anchor" href="#visually" aria-hidden="true"><span class="octicon octicon-link"></span></a>Visually</h2>
+<a id="issues-or-contact" class="anchor" href="#issues-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Issues or Contact</h2>
 
-<p>Head over to this <a href="http://en.wikipedia.org/wiki/Orangutan#FreeTheOrangutans">page</a>; don't forget to come back!</p>
-
-<p>Do you see how the article is centered, how the edges are sharp, how the background-color tones gently compliment 
-each other, yet they serve to contrast differing regions of importance?</p>
-
-<p>Did you also notice how there were groups of text; clearly aligned both vertically and horizontally?</p>
-
-<p>Imagine emboldening every letter on that page to the point where each letter just looks like a somewhat
-rectangular blob and they're starting to overlap with their nearest neighbors. A <em>pack</em> 
-can be described as the largest blob(s). As a side note, this illustration is also a useful description
-of a method used for visual text-extraction.</p>
+<p>Please raise any <a href="https://github.com/rodricios/eatiht/issues">issues</a> or yell at me at <a href="mailto:rodrigopala91@gmail.com">rodrigopala91@gmail.com</a> or <a href="https://twitter.com/rodricios">@rodricios</a></p>
 
 <h2>
-<a id="slightly-technical" class="anchor" href="#slightly-technical" aria-hidden="true"><span class="octicon octicon-link"></span></a>Slightly-technical</h2>
-
-<p>Warning: this part is better understood if you have some understanding
-of HTML and XPath. Scroll all the way down for a quick crash course.</p>
-
-<hr>
-
-<p>Now consider a typical HTML document that eatiht will likely do well on:</p>
-
-<pre><code>foobar.html:
-&lt;html&gt;
-    &lt;head&gt;&lt;/head&gt;
-    &lt;body&gt;
-        &lt;div&gt; 
-            &lt;article&gt;                    
-                &lt;p&gt;This is a story about the life of Foo&lt;/p&gt;
-                &lt;p&gt;The life of Foo was one of great foo&lt;/p&gt;
-                &lt;p&gt;Foo foo, foo foo foo. Foo, foofoo?&lt;/p&gt;
-                &lt;p&gt;Foo was no stranger to foo. For Foo did foo&lt;/p&gt;
-            &lt;/article&gt;
-        &lt;/div&gt;
-        &lt;div&gt; 
-            &lt;div&gt;                    
-                &lt;p&gt;Buy Bar Now!&lt;/p&gt;
-                &lt;p&gt;Get The Bar Next Door!
-                &lt;p&gt;Increase Your Bar!&lt;/p&gt;
-                &lt;p&gt;Never Bar again!&lt;/p&gt;
-            &lt;/div&gt;
-        &lt;div&gt;
-            &lt;footer&gt;
-                &lt;p&gt;Who the hell is Boo. Who the hell is Far?&lt;/p
-            &lt;/footer&gt;
-        &lt;/div&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-
-<h2>
-<a id="the-selection" class="anchor" href="#the-selection" aria-hidden="true"><span class="octicon octicon-link"></span></a>The selection</h2>
-
-<p>The <a href="https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R1">original implementation of eatiht</a> had the following xpath:</p>
-
-<pre><code>//body//*[not(self::script or self::style or self::i or self::b or self::strong or self::span or self::a)]/text()[string-length(normalize-space()) &gt; 20]/..
-</code></pre>
-
-<p>But that expression can, in essence, be simplified down to:</p>
-
-<pre><code>//body//*/text()[string-length(normalize-space()) &gt; 20]/..
-</code></pre>
-
-<p>What was taken out was the <em>but the following</em> in <em>select all but the following.</em></p>
-
-<p>Now for the xpath expression after the '*', but before the '/..':</p>
-
-<pre><code>/text()[string-length(normalize-space()) &gt; 20]
-</code></pre>
-
-<p>This is basically saying <em>select all text nodes that have a <em>normalized</em> string length greater than 20.</em> </p>
-
-<p>The "normalized-space()" of a text node means that said text node will have leading and
-trailing white spaces removed, and internal white spaces will also be reduced down to 
-a single white space, if multiple white spaces occur next to each other.</p>
-
-<p>Finally, the last sub-expression is:</p>
-
-<pre><code>/..
-</code></pre>
-
-<p><em>Select the parent of the last node selected</em> or <em>parent of</em>. Let that sink in for a minute. </p>
-
-<p>A common misconception after <a href="https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R72">executing the entire xpath</a> expression is that the expression 
-will result in the following nodes:</p>
-
-<pre><code>/html/body/div/article
-/html/body/div/div
-/html/body/div/footer
-</code></pre>
-
-<p>when in fact we get:</p>
-
-<pre><code>/html/body/div/article/p          &lt;-- Set A
-/html/body/div/div/p              &lt;-- Set B
-/html/body/div/footer/p           &lt;-- Set C
-</code></pre>
-
-<p>Why is that an important clarification/distinction?</p>
-
-<h2>
-<a id="the-partitioning" class="anchor" href="#the-partitioning" aria-hidden="true"><span class="octicon octicon-link"></span></a>The partitioning</h2>
-
-<p>If you didn't notice, I assigned names to the resulting sets of nodes.</p>
-
-<p>Let's count the number of elements in each set:</p>
-
-<p>Set A has 4 elements; each text node contained a normalized string with length greater than 20.</p>
-
-<p>Set B has only 1 element; all but one text node fell short to our string length requirement.</p>
-
-<p>Set C has 1 element, and it's the only element with that parent. Or in other words, its 
-parent has only one child, and that child is in Set C.</p>
-
-<p>Now you may think, "Alright, we can create a frequency distribution across each Set, and we're good!"</p>
-
-<p>Just to see what that means, here's the freq. distribution (histogram)</p>
-
-<pre><code>Set A | — — — —
-Set B | —
-Set C | —
-</code></pre>
-
-<p>We technically have found collection of nodes with our desired output. But eatiht takes it <strong>two steps further</strong>.</p>
-
-<p>Actually, the real reason why I didn't stop here is, I don't know. This solution came after many 
-sleepless nights, a lot of coffee in addition to some other things that decreased sleep, improved focus,
-and increased short to mid-term memory loss.</p>
-
-<p>Back to the algorithm!</p>
-
-<h3>
-<a id="the-first-step-further" class="anchor" href="#the-first-step-further" aria-hidden="true"><span class="octicon octicon-link"></span></a>The first step further</h3>
-
-<p>What eatiht does before creating the histogram is it <a href="https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R77"><em>partitions</em></a> each Set. How? With a <a href="https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R18">REGEX pattern</a> designed to split a string per sentence (it tries to, at least).</p>
-
-<p>What does our histogram look like now?</p>
-
-<pre><code>Set A | — — — — — — 
-Set B | —
-Set C | — —
-</code></pre>
-
-<p>Let's replace the Set names A, B, and C with their xpath equivalents:</p>
-
-<pre><code>/html/body/div/article/p    | — — — — — — 
-/html/body/div/div/p        | — 
-/html/body/div/footer/p     | — — 
-</code></pre>
-
-<h3>
-<a id="the-second-step-further" class="anchor" href="#the-second-step-further" aria-hidden="true"><span class="octicon octicon-link"></span></a>The second step further</h3>
-
-<p>This one's quick:</p>
-
-<pre><code>/html/body/div/article      | — — — — — — 
-/html/body/div/div          | — 
-/html/body/div/footer       | — — 
-</code></pre>
-
-<p>Yup, all we do is drop the last path, effectively getting the <strong>parent</strong> of the <strong>parent</strong> of the <strong>text nodes</strong>.</p>
-
-<h2>
-<a id="the-merging" class="anchor" href="#the-merging" aria-hidden="true"><span class="octicon octicon-link"></span></a>The merging</h2>
-
-<p>When you find the <em>argmax</em> of some function or random variable, what you are in fact doing is finding the max value
-in said function, and getting the associated key that points to that value. In other words, you are requesting the
-argument that, when passed into a given function, will output the maximum value. And if getting told the same thing
-in two different ways wasn't enough, here's some pseudo-code:</p>
-
-<pre><code>argmax = keyof(max([ value for key,value in histogram ]))
-</code></pre>
-
-<p>The output (argmax) in our test case is the xpath: </p>
-
-<pre><code>/html/body/div/article 
-</code></pre>
-
-<p>Here's where we build the <a href="https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R46">histogram</a> and here's where we find the <a href="https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R85">argmax</a></p>
-
-<p>Now that we've found the xpath, we can target the subtree in the original HTML tree. But instead of executing
-another xpath query on the entire HTML tree, recall that we built a set of text nodes early on in <strong>the 
-selection</strong>. The selection provided a set of text nodes that satisfied our first assumption (some length).</p>
-
-<p>With a simple list comprehension, we can acquire the <strong>some</strong>, but not all of text nodes that exist in the desired
-subtree - yes, this area can be improved, and it is one of many top priorities for me right now. </p>
-
-<p>The <a href="https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R87">string-forming list-comprehenesion</a> is something like this:</p>
-
-<pre><code>article_text = ' '.join( [ textnode.text for textnode in textnodes if argmax in text.xpath ])
-</code></pre>
-
-<h2>
-<a id="conclusion" class="anchor" href="#conclusion" aria-hidden="true"><span class="octicon octicon-link"></span></a>Conclusion</h2>
-
-<p>That's what the eatiht algorith is and does. Simple, no? Yes! It is! From a "high-level" perspective, this is 
-how I might write the pseudo-code of the algorithm in a technical paper:</p>
-
-<pre><code>xpath_to_parent_of_text_nodes = '/path/to/text()/..'
-splitter = TextSplitter()
-text_node_parents = HtmlTree.execute_xpath_expression(xpath_to_parent_of_text_nodes)
-
-for node in text_node_parents:
-    partitions = []
-    for child in node.children:
-        partitions.insert( splitter.split( child ))
-    node.children = partitions
-
-histogram = {}
-for node in text_node_parents:
-    histogram[node.parent.path] = node.children.count
-
-max_path = argmax( histogram )
-main_text_nodes = [ node for node in text_node_parents if max_path in node.path ]
-</code></pre>
-
-<p>From this high-level perspective, one can see the simplicity in this algorithm. It's so simple, 
-I would be surprised if this hasn't been thought of before. If it hasn't, cool! I might have something here. 
-It it has, cool! I for sure have something here. Both the former and the latter points lead to 
-the fact that this code is being tested and experimented with. </p>
-
-<p>That fact alone tells me it should be maintained for stability's sake. It also tells me that there's 
-work to be done. </p>
-
-<h2>
-<a id="some-considerations" class="anchor" href="#some-considerations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Some considerations</h2>
-
-<p>One simple area where improvements can possibly be made is risk the extra cpu cycles to do a full 
-sub-tree search in the HTML-tree rather than the list-comprehension filtering done in the
-merging step, right before the conclusion section. This may or may not be rewarding. </p>
-
-<p>A concrete justification for the partitioning step eludes me. Although intuitively - as were most of the
-actions I took in this project - it appears that partitioning by sentences is a way to "boost" 
-the score or likelihood that a single paragraph with 21 sentences will be extracted than a subtree with
-20 single-sentence paragraphs, divs, etc. - as is sometimes the case with sidebar ads. </p>
-
-<h2>
-<a id="complexity" class="anchor" href="#complexity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Complexity</h2>
-
-<p>What is this algorithm's complexity? I'm not very skilled at algorithm analysis, but I'll try to talk 
-myself through this. Those who know their stuff can laugh at my likely-to-fail attempt, but if you do laugh,
-it wont be at my expense, it'll be at yours! Please help a brother out and send me your complexity analysis :)</p>
-
-<p>So, as the xpath search is more or less out of my hands, I'm going to assume they implemented a binary search,
-through all vertices v, with an average complexity of:</p>
-
-<pre><code>eatiht's complexity += O(log(v))
-</code></pre>
-
-<p>Say we found M text node parents (from <strong>the selection</strong> step, with each parent having an average of N children text nodes</p>
-
-<p>With those assumptions, in <em>the partitioning</em>* step we execute a </p>
-
-<pre><code>for parent in parents:
-    for child in parent.children:
-        ...
-</code></pre>
-
-<p>This would translate over to M parents over an average of N children:</p>
-
-<pre><code>eatiht's complexity += O(M*N) + O(log(v))
-</code></pre>
-
-<p>In building the frequency distribution, we iterate over the parents:</p>
-
-<pre><code>eatiht's complexity += O(M) + O(M*N) + O(log(v))
-</code></pre>
-
-<p>Now in calculating the argmax of the histogram, the number of elements, 
-at most is M, but it may also be less than M. The reason for this is because
-we build the histogram not with the path of the parent of the text node (PoTN)
-but the path of <strong>parent</strong> of the <strong>parent</strong> of the text node - it may be that
-some PoTN's have the same parent, and thus the same path. </p>
-
-<p>But let's just say the complexity is O(M) (would the actual complexity be O(M/2)?)</p>
-
-<pre><code>eatiht's complexity += O(M) + O(M) + O(M*N) + O(log(v))
-</code></pre>
-
-<p>Finally, we have one last linear search for building up a list of final article text nodes:</p>
-
-<pre><code>eatiht's complexity += O(M) + O(M) + O(M) + O(M*N) + O(log(v))
-</code></pre>
-
-<p>Now if you took a intro to comp. sci. theory class, you might recall that the final 
-complexity is sometimes shortened to its component with the highest complexity.</p>
-
-<p>In this case, I'm not sure which is the maximum. At first glance, I'd want to say
-that O(M*N) is, but then I start thinking about all these corner cases. So I'll leave
-it to whomever wishes to find the solution in either my pseudo-analysis, or yours!</p>
-
-<p>There were some more thought's I wanted to get in writing, but I've already spent the
-entire morning writing this up so I think I'll end it here for today. If you read
-all the way to here, I thank you for taking the time to do so. Send me your thoughts,
-suggestions, criticisms, praise, venerations, admirations, palpitations, nude pics 
-to <a href="mailto:rodrigopala91@gmail.com">rodrigopala91@gmail.com</a> or <a href="https://twitter.com/rodricios">@rodricios</a>.</p>
-
-<p>P.S. I have yet to decide whether or not I should test this algorithm against 
-a large dataset. Not because I don't want to, but because it would be an endeavor I 
-do not know how to approach in a more scientific manner, nor how to correctly 
-allocate the time for (I would not want to tackle this head-on, commit and use a lot of 
-time, and then go and find out that the tests I would have done were not done correctly,
-and, in other words, were pointless).  </p>
-
-<p>P.P.S There's some thoughts I had about the lookback-current-node-lookfront scope that's 
-present in this implementation, and how it reminds me of what is known as a "kernel" 
-or "filter" matrix calculus and matrix transformations in the field of computer vision. 
-It also reminds of some of the nltk classifier implementations. But whatever it is I'm 
-trying to say right now will come out like a mumbly mess, so I'll leave it at that.</p>
-
-<h2>
-<a id="crash-course-on-html-and-xpath" class="anchor" href="#crash-course-on-html-and-xpath" aria-hidden="true"><span class="octicon octicon-link"></span></a>Crash Course on HTML and XPath</h2>
-
-<p>Here's a quick crash course in case you're unsure if you <em>got what it takes.</em>
-Ok, this really isn't on html, more like pseudo-html/trees. </p>
-
-<p>This is a tree:</p>
-
-<pre><code>Graph A
-      root of tree:     •
-                       _|_
-                      |   |
-            leaves:   •   •   
-</code></pre>
-
-<p>Let's give those dots (aka: vertexes, nodes, elements, tags) <em>names</em></p>
-
-<pre><code>Graph B
-                       A•
-                       _|_
-                      |   |
-                     b•   •c   
-</code></pre>
-
-<p>Note: The name 'A' is reserved for the root of the tree. There is no limit to the number of 'b' and 'c' nodes
-one wishes to use, nor limit to how far down a tree can reach, as demonstrated here:</p>
-
-<pre><code>Graph C
-                       A•      &lt;-from this level
-                      __|__
-                     |     |
-from this level-&gt;   b•     •c  &lt;-to this level
-                    _|_
-                   |   |
-  to this level-&gt; c•   •c       
-________________________________________________
-   is one level         +        is one level   = there is two levels
-</code></pre>
-
-<p>That's it for your review of html.</p>
-
-<p>As for xpath, let's refer back to Graph C:</p>
-
-<pre><code>Graph C
-                       A•      
-                      __|__
-                     |     |
-                    b•     •c  
-                    _|_
-                   |   |
-                  c•   •c       
-</code></pre>
-
-<p><a href="http://www.w3schools.com/xpath/xpath_intro.asp">XPath</a> is, among other things, 
-a querying tool. </p>
-
-<p>To query for (select) the root node A:</p>
-
-<pre><code>/A
-</code></pre>
-
-<p>To <strong>absolutely</strong> query for the only node named b:</p>
-
-<pre><code>/A/b 
-</code></pre>
-
-<p>The above <em>xpath expression</em> can also be given the moniker: absolute path</p>
-
-<p>The following xpath expressions will also result in the node b:</p>
-
-<pre><code>//b, /A//b, and I'm sure a few others
-|`     |
-|      '-  Select all explicitly starting from the root
-'-  Select all implicitly starting from the root
-</code></pre>
-
-<p>Now what if I asked you to form the expression leading to <em>only</em> the 
-node c on the first level after the root?</p>
-
-<pre><code>//c or /A//c
-</code></pre>
-
-<p>Can't work because these expressions land us all nodes c</p>
-
-<pre><code>/A/c
-</code></pre>
-
-<p>That will do the trick. It works because what it is in fact saying is
-to <em>select all c nodes in the level right after node A</em>. Now what 
-about one or more nodes only in the last level?</p>
-
-<pre><code>/A//c
-</code></pre>
-
-<p>Won't work because again, we get all nodes c on all levels, starting from node A. Now here's part the
-beauty with querying languages like XPath. </p>
-
-<p>We can fine tune our selection by specifying the <strong>parent</strong> node(s) the 
-desired nodes lie. Now that we're using parent-child terminology,
-we can refer to our desired nodes as the children. </p>
-
-<p>But children of what? In case you've forgotten what the graph looks like, 
-here it is again:</p>
-
-<pre><code>Graph C
-                       A•      
-                      __|__
-                     |     |
-                    b•     •c  
-                    _|_
-                   |   |
-                  c•   •c       
-</code></pre>
-
-<p>Clearly, the node named b is the parent of the desired nodes named c.</p>
-
-<p>This selects all nodes c of node b of node A</p>
-
-<pre><code>/A/b/c
-</code></pre>
-
-<p>This selects the first node c of node b of node A</p>
-
-<pre><code>/A/b/c[1]
-</code></pre>
-
-<p>That should be enough to move forward, or rather backwards to the article.</p>
+<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span class="octicon octicon-link"></span></a>TODO:</h2>
 
 <ul>
-<li>There's was/is a debate on whether the process that eatiht goes through to produce an output can be considered an 
-<em>algorithm</em> or not. <a href="http://www.reddit.com/r/Python/comments/2pqx2d/just_made_what_i_consider_my_first_algorithm_and/cmzfojb">Read about it here</a>. 
-What would you describe eatiht as? A neat package? A neat algorithm? Neither? I'm interested in hearing you out 
-at <a href="mailto:rodrigopala@gmail.com">rodrigopala@gmail.com</a>, <a href="https://twitter.com/rodricios">twitter</a>, or <a href="https://github.com/rodricios">github</a>. </li>
+<li>
+<del>Add newline and tab options for printing.</del> Please check out the <a href="http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html">demo</a> for the new <strong>default</strong> output (sorry, no options for formatting as of yet).</li>
 </ul>
-        </section>
-
-        <footer>
-          eatiht is maintained by <a href="https://github.com/rodricios">rodricios</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
-
-        
-      </div>
+      </section>
     </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">eatiht maintained by <a href="https://github.com/rodricios">rodricios</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-57938819-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
   </body>
 </html>
