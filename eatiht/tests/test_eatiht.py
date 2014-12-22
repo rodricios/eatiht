@@ -1,6 +1,10 @@
+import os
 from unittest import TestCase
 
 from ..eatiht import extract, get_sentence_xpath_tuples, get_xpath_frequency_distribution
+
+
+TESTDATA_FILENAME = os.path.join(os.path.dirname(__file__),'assets/regex_test_endings.html')
 
 
 class TestGetSentencesAndXpaths(TestCase):
@@ -30,3 +34,14 @@ class TestExtractArticleText(TestCase):
         text = extract(url)
         self.assertTrue(isinstance(text, basestring))
 
+class TestRegexSentenceEndingsInHTML(TestCase):
+    def setUp(self):
+        self.file =  open(TESTDATA_FILENAME,'r')
+
+    def tearDown(self):
+        self.file.close()
+
+    def test_splits_regex(self):
+
+
+        self.assertEqual(True,True,"TODO!")

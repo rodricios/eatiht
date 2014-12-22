@@ -20,4 +20,5 @@ setup(name='eatiht',
     scripts=['bin/eatiht'],
     test_suite='nose.collector',
     tests_require=['nose'],
+    include_package_data=True,
     zip_safe=False)
