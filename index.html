@@ -300,7 +300,8 @@ subtree - yes, this area can be improved, and it is one of many top priorities f
 
 <p>The <a href="https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R87">string-forming list-comprehenesion</a> is something like this:</p>
 
-<pre><code>article_text = ' '.join( [ textnode.text for textnode in textnodes if argmax in text.xpath ])
+<pre><code>article_text = ' '.join([ textnode.text for textnode in textnodes
+                                    if argmax in textnode.xpath ])
 </code></pre>
 
 <h2>
@@ -362,7 +363,7 @@ through all vertices v, with an average complexity of:</p>
 
 <p>Say we found M text node parents (from <strong>the selection</strong> step, with each parent having an average of N children text nodes</p>
 
-<p>With those assumptions, in <em>the partitioning</em>* step we execute a </p>
+<p>With those assumptions, in <strong>the partitioning</strong> step we execute a </p>
 
 <pre><code>for parent in parents:
     for child in parent.children:
