@@ -36,18 +36,16 @@
 
 <hr>
 
-<p>email me @ <a href="mailto:rodrigopala91@gmail.com">rodrigopala91@gmail.com</a></p>
+<p>email me: <a href="mailto:rodrigopala91@gmail.com">rodrigopala91@gmail.com</a></p>
 
-<p>follow me <a href="https://twitter.com/rodricios">@rodricios</a></p>
+<p>follow me <a href="https://twitter.com/rodricios">@rodricios</a> and <a href="http://hrefshare.com/3276">share eatiht!</a></p>
 
 <hr>
-
-<p><em><strong>First thing's third</strong></em></p>
 
 <h2>
 <a id="summary" class="anchor" href="#summary" aria-hidden="true"><span class="octicon octicon-link"></span></a>Summary</h2>
 
-<p>eatiht is one possible solution in a line of many imperfect solutions 
+<p>eatiht is one possible solution in a line of many imperfect solutions
 to one or more problems in some subfield of the field called
 "<a href="http://en.wikipedia.org/wiki/Data_extraction">data extraction</a>."</p>
 
@@ -81,7 +79,7 @@ given website.</p>
 <h2>
 <a id="the-original-algorithm" class="anchor" href="#the-original-algorithm" aria-hidden="true"><span class="octicon octicon-link"></span></a>The original algorithm*</h2>
 
-<p>There's two assumptions: </p>
+<p>There's two assumptions:</p>
 
 <ol>
 <li>"Valuable" text is "lengthy"</li>
@@ -95,20 +93,20 @@ I mean that it's the text you're meant to read.</p>
 to filter out text for a specific computation. More on this
 later.</p>
 
-<p>By "packs," I can describe in two ways:</p>
+<p>By "packs," I can describe it in two ways:</p>
 
 <h2>
 <a id="visually" class="anchor" href="#visually" aria-hidden="true"><span class="octicon octicon-link"></span></a>Visually</h2>
 
 <p>Head over to this <a href="http://en.wikipedia.org/wiki/Orangutan#FreeTheOrangutans">page</a>; don't forget to come back!</p>
 
-<p>Do you see how the article is centered, how the edges are sharp, how the background-color tones gently compliment 
+<p>Do you see how the article is centered, how the edges are sharp, how the background-color tones gently compliment
 each other, yet they serve to contrast differing regions of importance?</p>
 
 <p>Did you also notice how there were groups of text; clearly aligned both vertically and horizontally?</p>
 
 <p>Imagine emboldening every letter on that page to the point where each letter just looks like a somewhat
-rectangular blob and they're starting to overlap with their nearest neighbors. A <em>pack</em> 
+rectangular blob and they're starting to overlap with their nearest neighbors. A <em>pack</em>
 can be described as the largest blob(s). As a side note, this illustration is also a useful description
 of a method used for visual text-extraction.</p>
 
@@ -126,16 +124,16 @@ of HTML and XPath. Scroll all the way down for a quick crash course.</p>
 &lt;html&gt;
     &lt;head&gt;&lt;/head&gt;
     &lt;body&gt;
-        &lt;div&gt; 
-            &lt;article&gt;                    
+        &lt;div&gt;
+            &lt;article&gt;
                 &lt;p&gt;This is a story about the life of Foo&lt;/p&gt;
                 &lt;p&gt;The life of Foo was one of great foo&lt;/p&gt;
                 &lt;p&gt;Foo foo, foo foo foo. Foo, foofoo?&lt;/p&gt;
                 &lt;p&gt;Foo was no stranger to foo. For Foo did foo&lt;/p&gt;
             &lt;/article&gt;
         &lt;/div&gt;
-        &lt;div&gt; 
-            &lt;div&gt;                    
+        &lt;div&gt;
+            &lt;div&gt;
                 &lt;p&gt;Buy Bar Now!&lt;/p&gt;
                 &lt;p&gt;Get The Bar Next Door!
                 &lt;p&gt;Increase Your Bar!&lt;/p&gt;
@@ -170,9 +168,9 @@ of HTML and XPath. Scroll all the way down for a quick crash course.</p>
 <pre><code>/text()[string-length(normalize-space()) &gt; 20]
 </code></pre>
 
-<p>This is basically saying <em>select all text nodes that have a <em>normalized</em> string length greater than 20.</em> </p>
+<p>This is basically saying <em>select all text nodes that have a <em>normalized</em> string length greater than 20.</em></p>
 
-<p>Note about "text nodes." <a href="http://www.w3schools.com/dom/dom_nodetype.asp">The text node is an html element</a> (scroll to TEXT_TYPES) implicitly declared with the inclusion of text (this includes white spaces and new lines - like between div and p tags). </p>
+<p>Note about "text nodes." <a href="http://www.w3schools.com/dom/dom_nodetype.asp">The text node is an html element</a> (scroll to TEXT_TYPES) implicitly declared with the inclusion of text (this includes white spaces and new lines - like between div and p tags).</p>
 
 <pre><code>...
 &lt;div&gt;
@@ -186,19 +184,20 @@ of HTML and XPath. Scroll all the way down for a quick crash course.</p>
 <pre><code>"\n         foo\n        \n"          #or something similar
 </code></pre>
 
-<p>The <a href="http://www.w3schools.com/xpath/xpath_functions.asp">"normalized-space()"</a> of a text node means that said text node will have leading and trailing white spaces removed, and internal white spaces will also be reduced down to 
+<p>The <a href="http://www.w3schools.com/xpath/xpath_functions.asp">"normalized-space()"</a> of a text node means that said text node will have leading and trailing white spaces removed, and internal white spaces will also be reduced down to
 a single white space, if multiple white spaces occur next to each other.</p>
 
-<p>"\nfoo\n\n" </p>
+<pre><code>"\nfoo\n\n"
+</code></pre>
 
 <p>Finally, the last sub-expression is:</p>
 
 <pre><code>/..
 </code></pre>
 
-<p><em>Select the <strong>parent</strong> of the last node selected</em> or <em>parent of</em>. Let that sink in for a minute. </p>
+<p><em>Select the <strong>parent</strong> of the last node selected</em> or <em>parent of</em>. Let that sink in for a minute.</p>
 
-<p>A common misconception after <a href="https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R72">executing the entire xpath</a> expression is that the expression 
+<p>A common misconception after <a href="https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R72">executing the entire xpath</a> expression is that the expression
 will result in the following nodes:</p>
 
 <pre><code>/html/body/div/article
@@ -226,7 +225,7 @@ will result in the following nodes:</p>
 
 <p>Set B has only 1 element; all but one text node fell short to our string length requirement.</p>
 
-<p>Set C has 1 element, and it's the only element with that parent. Or in other words, its 
+<p>Set C has 1 element, and it's the only element with that parent. Or in other words, its
 parent has only one child, and that child is in Set C.</p>
 
 <p>Now you may think, "Alright, we can create a frequency distribution across each Set, and we're good!"</p>
@@ -240,7 +239,7 @@ Set C | —
 
 <p>We technically have found collection of nodes with our desired output. But eatiht takes it <strong>two steps further</strong>.</p>
 
-<p>Actually, the real reason why I didn't stop here is, I don't know. This solution came after many 
+<p>Actually, the real reason why I didn't stop here is, I don't know. This solution came after many
 sleepless nights, a lot of coffee in addition to some other things that decreased sleep, improved focus,
 and increased short to mid-term memory loss.</p>
 
@@ -253,16 +252,16 @@ and increased short to mid-term memory loss.</p>
 
 <p>What does our histogram look like now?</p>
 
-<pre><code>Set A | — — — — — — 
+<pre><code>Set A | — — — — — —
 Set B | —
 Set C | — —
 </code></pre>
 
 <p>Let's replace the Set names A, B, and C with their xpath equivalents:</p>
 
-<pre><code>/html/body/div/article/p    | — — — — — — 
-/html/body/div/div/p        | — 
-/html/body/div/footer/p     | — — 
+<pre><code>/html/body/div/article/p    | — — — — — —
+/html/body/div/div/p        | —
+/html/body/div/footer/p     | — —
 </code></pre>
 
 <h3>
@@ -270,9 +269,9 @@ Set C | — —
 
 <p>This one's quick:</p>
 
-<pre><code>/html/body/div/article      | — — — — — — 
-/html/body/div/div          | — 
-/html/body/div/footer       | — — 
+<pre><code>/html/body/div/article      | — — — — — —
+/html/body/div/div          | —
+/html/body/div/footer       | — —
 </code></pre>
 
 <p>Yup, all we do is drop the last path, effectively getting the <strong>parent</strong> of the <strong>parent</strong> of the <strong>text nodes</strong>.</p>
@@ -288,19 +287,19 @@ in two different ways wasn't enough, here's some pseudo-code:</p>
 <pre><code>argmax = keyof(max([ value for key,value in histogram ]))
 </code></pre>
 
-<p>The output (argmax) in our test case is the xpath: </p>
+<p>The output (argmax) in our test case is the xpath:</p>
 
-<pre><code>/html/body/div/article 
+<pre><code>/html/body/div/article
 </code></pre>
 
 <p>Here's where we build the <a href="https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R46">histogram</a> and here's where we find the <a href="https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R85">argmax</a></p>
 
 <p>Now that we've found the xpath, we can target the subtree in the original HTML tree. But instead of executing
-another xpath query on the entire HTML tree, recall that we built a set of text nodes early on in <strong>the 
+another xpath query on the entire HTML tree, recall that we built a set of text nodes early on in <strong>the
 selection</strong>. The selection provided a set of text nodes that satisfied our first assumption (some length).</p>
 
 <p>With a simple list comprehension, we can acquire the <strong>some</strong>, but not all of text nodes that exist in the desired
-subtree - yes, this area can be improved, and it is one of many top priorities for me right now. </p>
+subtree - yes, this area can be improved, and it is one of many top priorities for me right now.</p>
 
 <p>The <a href="https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R87">string-forming list-comprehenesion</a> is something like this:</p>
 
@@ -311,7 +310,7 @@ subtree - yes, this area can be improved, and it is one of many top priorities f
 <h2>
 <a id="conclusion" class="anchor" href="#conclusion" aria-hidden="true"><span class="octicon octicon-link"></span></a>Conclusion</h2>
 
-<p>That's what the eatiht algorith is and does. Simple, no? Yes! It is! From a "high-level" perspective, this is 
+<p>That's what the eatiht algorith is and does. Simple, no? Yes! It is! From a "high-level" perspective, this is
 how I might write the pseudo-code of the algorithm in a technical paper:</p>
 
 <pre><code>xpath_to_parent_of_text_nodes = '/path/to/text()/..'
@@ -332,30 +331,30 @@ max_path = argmax( histogram )
 main_text_nodes = [ node for node in text_node_parents if max_path in node.path ]
 </code></pre>
 
-<p>From this high-level perspective, one can see the simplicity in this algorithm. It's so simple, 
-I would be surprised if this hasn't been thought of before. If it hasn't, cool! I might have something here. 
-It it has, cool! I for sure have something here. Both the former and the latter points lead to 
-the fact that this code is being tested and experimented with. </p>
+<p>From this high-level perspective, one can see the simplicity in this algorithm. Weighing in at just 13 l.o.p.c.,
+it's so simple; I would be surprised if this hasn't been thought of before. If it hasn't, cool! I might have something here.
+It it has, cool! I for sure have something here. Both the former and the latter points lead to
+the fact that this code is being tested and experimented with.</p>
 
-<p>That fact alone tells me it should be maintained for stability's sake. It also tells me that there's 
-work to be done. </p>
+<p>That fact alone tells me it should be maintained for stability's sake. It also tells me that there's
+work to be done.</p>
 
 <h2>
 <a id="some-considerations" class="anchor" href="#some-considerations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Some considerations</h2>
 
-<p>One simple area where improvements can possibly be made is risk the extra cpu cycles to do a full 
+<p>One simple area where improvements can possibly be made is risk the extra cpu cycles to do a full
 sub-tree search in the HTML-tree rather than the list-comprehension filtering done in the
-merging step, right before the conclusion section. This may or may not be rewarding. </p>
+merging step, right before the conclusion section. This may or may not be rewarding.</p>
 
 <p>A concrete justification for the partitioning step eludes me. Although intuitively - as were most of the
-actions I took in this project - it appears that partitioning by sentences is a way to "boost" 
+actions I took in this project - it appears that partitioning by sentences is a way to "boost"
 the score or likelihood that a single paragraph with 21 sentences will be extracted than a subtree with
-20 single-sentence paragraphs, divs, etc. - as is sometimes the case with sidebar ads. </p>
+20 single-sentence paragraphs, divs, etc. - as is sometimes the case with sidebar ads.</p>
 
 <h2>
 <a id="complexity" class="anchor" href="#complexity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Complexity</h2>
 
-<p>What is this algorithm's complexity? I'm not very skilled at algorithm analysis, but I'll try to talk 
+<p>What is this algorithm's complexity? I'm not very skilled at algorithm analysis, but I'll try to talk
 myself through this. Those who know their stuff can laugh at my likely-to-fail attempt, but if you do laugh,
 it wont be at my expense, it'll be at yours! Please help a brother out and send me your complexity analysis :)</p>
 
@@ -367,7 +366,7 @@ through all vertices v, with an average complexity of:</p>
 
 <p>Say we found M text node parents (from <strong>the selection</strong> step, with each parent having an average of N children text nodes</p>
 
-<p>With those assumptions, in <strong>the partitioning</strong> step we execute a </p>
+<p>With those assumptions, in <strong>the partitioning</strong> step we execute a</p>
 
 <pre><code>for parent in parents:
     for child in parent.children:
@@ -384,11 +383,11 @@ through all vertices v, with an average complexity of:</p>
 <pre><code>eatiht's complexity += O(M) + O(M*N) + O(log(v))
 </code></pre>
 
-<p>Now in calculating the argmax of the histogram, the number of elements, 
+<p>Now in calculating the argmax of the histogram, the number of elements,
 at most is M, but it may also be less than M. The reason for this is because
 we build the histogram not with the path of the parent of the text node (PoTN)
 but the path of <strong>parent</strong> of the <strong>parent</strong> of the text node - it may be that
-some PoTN's have the same parent, and thus the same path. </p>
+some PoTN's have the same parent, and thus the same path.</p>
 
 <p>But let's just say the complexity is O(M) (would the actual complexity be O(M/2)?)</p>
 
@@ -400,7 +399,7 @@ some PoTN's have the same parent, and thus the same path. </p>
 <pre><code>eatiht's complexity += O(M) + O(M) + O(M) + O(M*N) + O(log(v))
 </code></pre>
 
-<p>Now if you took a intro to comp. sci. theory class, you might recall that the final 
+<p>Now if you took a intro to comp. sci. theory class, you might recall that the final
 complexity is sometimes shortened to its component with the highest complexity.</p>
 
 <p>In this case, I'm not sure which is the maximum. At first glance, I'd want to say
@@ -410,28 +409,28 @@ it to whomever wishes to find the solution in either my pseudo-analysis, or your
 <p>There were some more thought's I wanted to get in writing, but I've already spent the
 entire morning writing this up so I think I'll end it here for today. If you read
 all the way to here, I thank you for taking the time to do so. Send me your thoughts,
-suggestions, criticisms, praise, venerations, admirations, palpitations, nude pics 
+suggestions, criticisms, praise, venerations, admirations, palpitations, nude pics
 (just kidding, don't do at least 4 of those things in series; likely to cause
 unintended consequences!) to <a href="mailto:rodrigopala91@gmail.com">rodrigopala91@gmail.com</a> or <a href="https://twitter.com/rodricios">@rodricios</a>.</p>
 
-<p>P.S. I have yet to decide whether or not I should test this algorithm against 
-a large dataset. Not because I don't want to, but because it would be an endeavor I 
-do not know how to approach in a more scientific manner, nor how to correctly 
-allocate the time for (I would not want to tackle this head-on, commit and use a lot of 
+<p>P.S. I have yet to decide whether or not I should test this algorithm against
+a large dataset. Not because I don't want to, but because it would be an endeavor I
+do not know how to approach in a more scientific manner, nor how to correctly
+allocate the time for (I would not want to tackle this head-on, commit and use a lot of
 time, and then go and find out that the tests I would have done were not done correctly,
-and, in other words, were pointless).  </p>
+and, in other words, were pointless).</p>
 
-<p>P.P.S There's some thoughts I had about the lookback-current-node-lookfront scope that's 
-present in this implementation, and how it reminds me of what is known as a "kernel" 
-or "filter" matrix calculus and matrix transformations in the field of computer vision. 
-It also reminds of some of the nltk classifier implementations. But whatever it is I'm 
+<p>P.P.S There's some thoughts I had about the lookback-current-node-lookfront scope that's
+present in this implementation, and how it reminds me of what is known as a "kernel"
+or "filter" matrix calculus and matrix transformations in the field of computer vision.
+It also reminds of some of the nltk classifier implementations. But whatever it is I'm
 trying to say right now will come out like a mumbly mess, so I'll leave it at that.</p>
 
 <h2>
 <a id="crash-course-on-html-and-xpath" class="anchor" href="#crash-course-on-html-and-xpath" aria-hidden="true"><span class="octicon octicon-link"></span></a>Crash Course on HTML and XPath</h2>
 
 <p>Here's a quick crash course in case you're unsure if you <em>got what it takes.</em>
-Ok, this really isn't on html, more like pseudo-html/trees. </p>
+Ok, this really isn't on html, more like pseudo-html/trees.</p>
 
 <p>This is a tree:</p>
 
@@ -439,7 +438,7 @@ Ok, this really isn't on html, more like pseudo-html/trees. </p>
       root of tree:     •
                        _|_
                       |   |
-            leaves:   •   •   
+            leaves:   •   •
 </code></pre>
 
 <p>Let's give those dots (aka: vertexes, nodes, elements, tags) <em>names</em></p>
@@ -448,7 +447,7 @@ Ok, this really isn't on html, more like pseudo-html/trees. </p>
                        A•
                        _|_
                       |   |
-                     b•   •c   
+                     b•   •c
 </code></pre>
 
 <p>Note: The name 'A' is reserved for the root of the tree. There is no limit to the number of 'b' and 'c' nodes
@@ -461,7 +460,7 @@ one wishes to use, nor limit to how far down a tree can reach, as demonstrated h
 from this level-&gt;   b•     •c  &lt;-to this level
                     _|_
                    |   |
-  to this level-&gt; c•   •c       
+  to this level-&gt; c•   •c
 ________________________________________________
    is one level         +        is one level   = there is two levels
 </code></pre>
@@ -471,17 +470,17 @@ ________________________________________________
 <p>As for xpath, let's refer back to Graph C:</p>
 
 <pre><code>Graph C
-                       A•      
+                       A•
                       __|__
                      |     |
-                    b•     •c  
+                    b•     •c
                     _|_
                    |   |
-                  c•   •c       
+                  c•   •c
 </code></pre>
 
-<p><a href="http://www.w3schools.com/xpath/xpath_intro.asp">XPath</a> is, among other things, 
-a querying tool. </p>
+<p><a href="http://www.w3schools.com/xpath/xpath_intro.asp">XPath</a> is, among other things,
+a querying tool.</p>
 
 <p>To query for (select) the root node A:</p>
 
@@ -490,7 +489,7 @@ a querying tool. </p>
 
 <p>To <strong>absolutely</strong> query for the only node named b:</p>
 
-<pre><code>/A/b 
+<pre><code>/A/b
 </code></pre>
 
 <p>The above <em>xpath expression</em> can also be given the moniker: absolute path</p>
@@ -503,7 +502,7 @@ a querying tool. </p>
 '-  Select all implicitly starting from the root
 </code></pre>
 
-<p>Now what if I asked you to form the expression leading to <em>only</em> the 
+<p>Now what if I asked you to form the expression leading to <em>only</em> the
 node c on the first level after the root?</p>
 
 <pre><code>//c or /A//c
@@ -515,30 +514,30 @@ node c on the first level after the root?</p>
 </code></pre>
 
 <p>That will do the trick. It works because what it is in fact saying is
-to <em>select all c nodes in the level right after node A</em>. Now what 
+to <em>select all c nodes in the level right after node A</em>. Now what
 about one or more nodes only in the last level?</p>
 
 <pre><code>/A//c
 </code></pre>
 
 <p>Won't work because again, we get all nodes c on all levels, starting from node A. Now here's part the
-beauty with querying languages like XPath. </p>
+beauty with querying languages like XPath.</p>
 
-<p>We can fine tune our selection by specifying the <strong>parent</strong> node(s) the 
+<p>We can fine tune our selection by specifying the <strong>parent</strong> node(s) the
 desired nodes lie. Now that we're using parent-child terminology,
-we can refer to our desired nodes as the children. </p>
+we can refer to our desired nodes as the children.</p>
 
-<p>But children of what? In case you've forgotten what the graph looks like, 
+<p>But children of what? In case you've forgotten what the graph looks like,
 here it is again:</p>
 
 <pre><code>Graph C
-                       A•      
+                       A•
                       __|__
                      |     |
-                    b•     •c  
+                    b•     •c
                     _|_
                    |   |
-                  c•   •c       
+                  c•   •c
 </code></pre>
 
 <p>Clearly, the node named b is the parent of the desired nodes named c.</p>
@@ -556,10 +555,10 @@ here it is again:</p>
 <p>That should be enough to move forward, or rather backwards to the article.</p>
 
 <ul>
-<li>There's was/is a debate on whether the process that eatiht goes through to produce an output can be considered an 
-<em>algorithm</em> or not. <a href="http://www.reddit.com/r/Python/comments/2pqx2d/just_made_what_i_consider_my_first_algorithm_and/cmzfojb">Read about it here</a>. 
-What would you describe eatiht as? A neat package? A neat algorithm? Neither? I'm interested in hearing you out 
-at <a href="mailto:rodrigopala@gmail.com">rodrigopala@gmail.com</a>, <a href="https://twitter.com/rodricios">twitter</a>, or <a href="https://github.com/rodricios">github</a>. </li>
+<li>There's was/is a debate on whether the process that eatiht goes through to produce an output can be considered an
+<em>algorithm</em> or not. <a href="http://www.reddit.com/r/Python/comments/2pqx2d/just_made_what_i_consider_my_first_algorithm_and/cmzfojb">Read about it here</a>.
+What would you describe eatiht as? A neat package? A neat algorithm? Neither? I'm interested in hearing you out
+at <a href="mailto:rodrigopala@gmail.com">rodrigopala@gmail.com</a>, <a href="https://twitter.com/rodricios">twitter</a>, or <a href="https://github.com/rodricios">github</a>.</li>
 </ul>
         </section>
 
