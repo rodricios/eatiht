@@ -50,6 +50,8 @@ to one or more problems in some subfield of the field called
 <p>Put plainly, eatiht tries to extract the central text from a
 given website.</p>
 
+<p>Shout out to the folks at <a href="http://www.reddit.com/r/Python/comments/2pqx2d/just_made_what_i_consider_my_first_algorithm_and/">/r/Python</a>,<a href="http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/">/r/compsci</a>,<a href="http://www.reddit.com/r/programming/comments/2pq32f/just_made_what_i_consider_my_first_algorithm_it/">/r/programming</a>. This project started <a href="https://github.com/trending?l=python">trending</a> largely due to the positive response I got from those guys, and for that I'm grateful. Now onto the main article of this page ;)</p>
+
 <h2>
 <a id="background" class="anchor" href="#background" aria-hidden="true"><span class="octicon octicon-link"></span></a>Background</h2>
 
@@ -166,16 +168,31 @@ of HTML and XPath. Scroll all the way down for a quick crash course.</p>
 
 <p>This is basically saying <em>select all text nodes that have a <em>normalized</em> string length greater than 20.</em> </p>
 
-<p>The "normalized-space()" of a text node means that said text node will have leading and
-trailing white spaces removed, and internal white spaces will also be reduced down to 
+<p>Note about "text nodes." <a href="http://www.w3schools.com/dom/dom_nodetype.asp">The text node is an html element</a> (scroll to TEXT_TYPES) implicitly declared with the inclusion of text (this includes white spaces and new lines - like between div and p tags). </p>
+
+<pre><code>...
+&lt;div&gt;
+    &lt;p&gt;foo&lt;/p&gt;
+&lt;/div&gt;
+...
+</code></pre>
+
+<p>If we were to extract the text of those three nodes (using an expression like: "//text()"), here's what we'd get:</p>
+
+<pre><code>"\n         foo\n        \n"          #or something similar
+</code></pre>
+
+<p>The <a href="http://www.w3schools.com/xpath/xpath_functions.asp">"normalized-space()"</a> of a text node means that said text node will have leading and trailing white spaces removed, and internal white spaces will also be reduced down to 
 a single white space, if multiple white spaces occur next to each other.</p>
+
+<p>"\nfoo\n\n" </p>
 
 <p>Finally, the last sub-expression is:</p>
 
 <pre><code>/..
 </code></pre>
 
-<p><em>Select the parent of the last node selected</em> or <em>parent of</em>. Let that sink in for a minute. </p>
+<p><em>Select the <strong>parent</strong> of the last node selected</em> or <em>parent of</em>. Let that sink in for a minute. </p>
 
 <p>A common misconception after <a href="https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R72">executing the entire xpath</a> expression is that the expression 
 will result in the following nodes:</p>
@@ -389,7 +406,8 @@ it to whomever wishes to find the solution in either my pseudo-analysis, or your
 entire morning writing this up so I think I'll end it here for today. If you read
 all the way to here, I thank you for taking the time to do so. Send me your thoughts,
 suggestions, criticisms, praise, venerations, admirations, palpitations, nude pics 
-to <a href="mailto:rodrigopala91@gmail.com">rodrigopala91@gmail.com</a> or <a href="https://twitter.com/rodricios">@rodricios</a>.</p>
+(just kidding, don't do at least 4 of those things in series; likely to cause
+unintended consequences!) to <a href="mailto:rodrigopala91@gmail.com">rodrigopala91@gmail.com</a> or <a href="https://twitter.com/rodricios">@rodricios</a>.</p>
 
 <p>P.S. I have yet to decide whether or not I should test this algorithm against 
 a large dataset. Not because I don't want to, but because it would be an endeavor I 
