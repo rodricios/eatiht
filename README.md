@@ -5,6 +5,8 @@ A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documen
 
 ###Update
 
+[Check out eatiht's new website where I walk through each step in the algorithm! It's virtually pain-free. ](http://rodricios.github.io/eatiht/)
+
 Functionally critical update coming in next release. Please head over to [issues](https://github.com/rodricios/eatiht/issues) for upcoming list of new features and changes.
 
 ###What people have been saying
