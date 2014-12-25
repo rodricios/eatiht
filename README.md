@@ -3,11 +3,38 @@ eatiht
 
 A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out this [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html).
 
-###Update
+###12/24/14 Update
 
-[Check out eatiht's new website where I walk through each step in the algorithm! It's virtually pain-free. ](http://rodricios.github.io/eatiht/)
+tl;dr
 
-Functionally critical update coming in next release. Please head over to [issues](https://github.com/rodricios/eatiht/issues) for upcoming list of new features and changes.
+new and improved algorithm coming really soon (like, probably tomorrow)!
+
+I just finished coding up an improved algorithm (v2) that makes use of a statistical property that everyone knows like the back their hand. 
+
+The failures of the original algorithm is present in the [demo, dohh!](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html). The line that starts with,
+
+    The administration's sudden urgency came after a new threat...
+
+finishes way too early. The fix is explained in the next line. 
+
+v2 does away with regex splitting - and that was likely a cause of many people's headaches, if they've been able to notice them. Due to the generally infrequent use of [?,',",!] as sentence-finishers in large texts, as opposed to plain old ".",  some of you may have not noticed. 
+
+The bug arose on this line of [code](https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht.py#L154) and caused more false-positives than anyone would like - most likely due to different encodings as @rcarmo warns about [here](https://github.com/rodricios/eatiht/issues/2). 
+
+I'd also like to give a plug to @rcarmo's [hy port/improvement of eatiht v1](https://gist.github.com/rcarmo/bb0310c71d6573b3919c) minus the scary list-comprehensions and the regex-splitting present in the original implementation. 
+
+There's a conversation between myself and @voidfiles [here](https://github.com/rodricios/eatiht/issues/3), and I'd like more input from concerned users. It's about whether or not this module should be constructed in an object-oriented manner (aka. use 'class'). I personally favor a side-by-side script-and-class approach, and you can read about why in the above referenced link. You, I, and @voidfiles will probably like an OO implementation because it will likely lead to plug-and-play extensions and more!
+
+Finally, I'd like to say thanks to everyone who's tried out this module. Double thanks if you read thru the [writeup](http://rodricios.github.io/eatiht/). Double that if you showed this to your friends or coworkers. x6 if you also brought up any [issues](https://github.com/rodricios/eatiht/issues). Any of those things definitely helps one's motivation to come up with neat little solutions such as eatiht :)
+
+Best wishes and happy holidays,
+
+@rodricios
+
+---
+
+Check out eatiht's [new website](http://rodricios.github.io/eatiht/) where I walk through each step in the algorithm! It's virtually pain-free.
+
 
 ###What people have been saying
 
