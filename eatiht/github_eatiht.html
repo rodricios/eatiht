@@ -1,0 +1,487 @@
+eatiht - written by rodrigo palacios
+======
+
+---
+
+email me: rodrigopala91@gmail.com
+
+follow me [@rodricios](https://twitter.com/rodricios) and [share eatiht!](http://hrefshare.com/3276)
+
+---
+
+
+Summary
+-------
+
+eatiht is one possible solution in a line of many imperfect solutions
+to one or more problems in some subfield of the field called
+"[data extraction](http://en.wikipedia.org/wiki/Data_extraction)."
+
+Put plainly, eatiht tries to extract the central text from a
+given website.
+
+Shout out to the folks at [/r/Python](http://www.reddit.com/r/Python/comments/2pqx2d/just_made_what_i_consider_my_first_algorithm_and/),[/r/compsci](http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/),[/r/programming](http://www.reddit.com/r/programming/comments/2pq32f/just_made_what_i_consider_my_first_algorithm_it/). This project started [trending](https://github.com/trending?l=python) largely due to the positive response I got from those guys, and for that I'm grateful. Now onto the main article of this page ;)
+
+Background
+----------
+
+(skip if you've read eatiht's readme)
+
+After searching through the deepest crevices of the internet for some tool|library|module that could effectively extract the main content from a website (ignoring text from ads, sidebar links, etc.), I was slightly disheartened by the apparent ambiguity caused by this content-extraction problem.
+
+My survey resulted in some of the following solutions:
+
+* [boilerpipe](https://code.google.com/p/boilerpipe/) - *Boilerplate Removal and Fulltext Extraction from HTML pages*. Java library written by Christian Kohlschütter
+* ["The Easy Way to Extract Useful Text from Arbitrary HTML"](http://ai-depot.com/articles/the-easy-way-to-extract-useful-text-from-arbitrary-html/) - a Python tutorial on implementing a neural network for html content extraction. Written by alexjc
+* [Pyteaser's Cleaners module](https://github.com/xiaoxu193/PyTeaser/blob/master/goose/cleaners.py) - from what I can tell, it's a purely heuristic-based process
+* ["Text Extraction from the Web via Text-to-Tag Ratio"](http://www.cse.nd.edu/~tweninge/pubs/WH_TIR08.pdf) - a thesis on Text-to-Tag-heuristic driven clustering as a solution for the problem at hand. Written by Tim Weninger & William H. Hsu
+
+The number of research papers I found on the subject largely outweighs the number available open-source projects. This is my attempt at balancing out the disparity.
+
+
+The original algorithm*
+----------------------
+
+There's two assumptions:
+
+1. "Valuable" text is "lengthy"
+2. "Valuable" text come in "*packs*"
+
+By "valuable," and without getting too philosophical,
+I mean that it's the text you're meant to read.
+
+By "lengthy," I mean there is a specific value that is used
+to filter out text for a specific computation. More on this
+later.
+
+By "packs," I can describe it in two ways:
+
+Visually
+--------
+
+Head over to this [page](http://en.wikipedia.org/wiki/Orangutan#FreeTheOrangutans); don't forget to come back!
+
+Do you see how the article is centered, how the edges are sharp, how the background-color tones gently compliment
+each other, yet they serve to contrast differing regions of importance?
+
+Did you also notice how there were groups of text; clearly aligned both vertically and horizontally?
+
+Imagine emboldening every letter on that page to the point where each letter just looks like a somewhat
+rectangular blob and they're starting to overlap with their nearest neighbors. A *pack*
+can be described as the largest blob(s). As a side note, this illustration is also a useful description
+of a method used for visual text-extraction.
+
+Slightly-technical
+------------------
+Warning: this part is better understood if you have some understanding
+of HTML and XPath. Scroll all the way down for a quick crash course.
+
+---
+
+Now consider a typical HTML document that eatiht will likely do well on:
+
+    foobar.html:
+    <html>
+        <head></head>
+        <body>
+            <div>
+                <article>
+                    <p>This is a story about the life of Foo</p>
+                    <p>The life of Foo was one of great foo</p>
+                    <p>Foo foo, foo foo foo. Foo, foofoo?</p>
+                    <p>Foo was no stranger to foo. For Foo did foo</p>
+                </article>
+            </div>
+            <div>
+                <div>
+                    <p>Buy Bar Now!</p>
+                    <p>Get The Bar Next Door!
+                    <p>Increase Your Bar!</p>
+                    <p>Never Bar again!</p>
+                </div>
+            <div>
+                <footer>
+                    <p>Who the hell is Boo. Who the hell is Far?</p
+                </footer>
+            </div>
+        </body>
+    </html>
+
+The selection
+-------------
+
+The [original implementation of eatiht](https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R1) had the following xpath:
+
+    //body//*[not(self::script or self::style or self::i or self::b or self::strong or self::span or self::a)]/text()[string-length(normalize-space()) > 20]/..
+
+But that expression can, in essence, be simplified down to:
+
+    //body//*/text()[string-length(normalize-space()) > 20]/..
+
+What was taken out was the *but the following* in *select all but the following.*
+
+Now for the xpath expression after the '*', but before the '/..':
+
+    /text()[string-length(normalize-space()) > 20]
+
+This is basically saying *select all text nodes that have a _normalized_ string length greater than 20.*
+
+Note about "text nodes." [The text node is an html element](http://www.w3schools.com/dom/dom_nodetype.asp) (scroll to TEXT_TYPES) implicitly declared with the inclusion of text (this includes white spaces and new lines - like between div and p tags).
+
+    ...
+    <div>
+        <p>foo</p>
+    </div>
+    ...
+
+If we were to extract the text of those three nodes (using an expression like: "//text()"), here's what we'd get:
+
+    "\n         foo\n        \n"          #or something similar
+
+
+The ["normalized-space()"](http://www.w3schools.com/xpath/xpath_functions.asp) of a text node means that said text node will have leading and trailing white spaces removed, and internal white spaces will also be reduced down to
+a single white space, if multiple white spaces occur next to each other.
+
+    "\nfoo\n\n"
+
+Finally, the last sub-expression is:
+
+    /..
+
+*Select the __parent__ of the last node selected* or *parent of*. Let that sink in for a minute.
+
+A common misconception after [executing the entire xpath](https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R72) expression is that the expression
+will result in the following nodes:
+
+    /html/body/div/article
+    /html/body/div/div
+    /html/body/div/footer
+
+when in fact we get:
+
+    /html/body/div/article/p          <-- Set A
+    /html/body/div/div/p              <-- Set B
+    /html/body/div/footer/p           <-- Set C
+
+Why is that an important clarification/distinction?
+
+The partitioning
+----------------
+
+If you didn't notice, I assigned names to the resulting sets of nodes.
+
+Let's count the number of elements in each set:
+
+Set A has 4 elements; each text node contained a normalized string with length greater than 20.
+
+Set B has only 1 element; all but one text node fell short to our string length requirement.
+
+Set C has 1 element, and it's the only element with that parent. Or in other words, its
+parent has only one child, and that child is in Set C.
+
+Now you may think, "Alright, we can create a frequency distribution across each Set, and we're good!"
+
+Just to see what that means, here's the freq. distribution (histogram)
+
+    Set A | — — — —
+    Set B | —
+    Set C | —
+
+We technically have found collection of nodes with our desired output. But eatiht takes it **two steps further**.
+
+Actually, the real reason why I didn't stop here is, I don't know. This solution came after many
+sleepless nights, a lot of coffee in addition to some other things that decreased sleep, improved focus,
+and increased short to mid-term memory loss.
+
+Back to the algorithm!
+
+###The first step further
+What eatiht does before creating the histogram is it [*partitions*](https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R77) each Set. How? With a [REGEX pattern](https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R18) designed to split a string per sentence (it tries to, at least).
+
+What does our histogram look like now?
+
+    Set A | — — — — — —
+    Set B | —
+    Set C | — —
+
+Let's replace the Set names A, B, and C with their xpath equivalents:
+
+    /html/body/div/article/p    | — — — — — —
+    /html/body/div/div/p        | —
+    /html/body/div/footer/p     | — —
+
+###The second step further
+
+This one's quick:
+
+    /html/body/div/article      | — — — — — —
+    /html/body/div/div          | —
+    /html/body/div/footer       | — —
+
+
+Yup, all we do is drop the last path, effectively getting the **parent** of the **parent** of the **text nodes**.
+
+The merging
+-----------
+
+When you find the *argmax* of some function or random variable, what you are in fact doing is finding the max value
+in said function, and getting the associated key that points to that value. In other words, you are requesting the
+argument that, when passed into a given function, will output the maximum value. And if getting told the same thing
+in two different ways wasn't enough, here's some pseudo-code:
+
+    argmax = keyof(max([ value for key,value in histogram ]))
+
+The output (argmax) in our test case is the xpath:
+
+    /html/body/div/article
+
+Here's where we build the [histogram](https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R46) and here's where we find the [argmax](https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R85)
+
+Now that we've found the xpath, we can target the subtree in the original HTML tree. But instead of executing
+another xpath query on the entire HTML tree, recall that we built a set of text nodes early on in **the
+selection**. The selection provided a set of text nodes that satisfied our first assumption (some length).
+
+With a simple list comprehension, we can acquire the **some**, but not all of text nodes that exist in the desired
+subtree - yes, this area can be improved, and it is one of many top priorities for me right now.
+
+The [string-forming list-comprehenesion](https://github.com/rodricios/eatiht/commit/a872089a8df81d9fed6cd33312d695f19aa111ae#diff-6556ac4c9a425d802573fa15e0141773R87) is something like this:
+
+    article_text = ' '.join([ textnode.text for textnode in textnodes
+                                        if argmax in textnode.xpath ])
+
+Conclusion
+----------
+
+That's what the eatiht algorith is and does. Simple, no? Yes! It is! From a "high-level" perspective, this is
+how I might write the pseudo-code of the algorithm in a technical paper:
+
+    xpath_to_parent_of_text_nodes = '/path/to/text()/..'
+    splitter = TextSplitter()
+    text_node_parents = HtmlTree.execute_xpath_expression(xpath_to_parent_of_text_nodes)
+
+    for node in text_node_parents:
+        partitions = []
+        for child in node.children:
+            partitions.insert( splitter.split( child ))
+        node.children = partitions
+
+    histogram = {}
+    for node in text_node_parents:
+        histogram[node.parent.path] = node.children.count
+
+    max_path = argmax( histogram )
+    main_text_nodes = [ node for node in text_node_parents if max_path in node.path ]
+
+From this high-level perspective, one can see the simplicity in this algorithm. Weighing in at just 13 l.o.p.c.,
+it's so simple; I would be surprised if this hasn't been thought of before. If it hasn't, cool! I might have something here.
+It it has, cool! I for sure have something here. Both the former and the latter points lead to
+the fact that this code is being tested and experimented with.
+
+That fact alone tells me it should be maintained for stability's sake. It also tells me that there's
+work to be done.
+
+Some considerations
+-------------------
+
+One simple area where improvements can possibly be made is risk the extra cpu cycles to do a full
+sub-tree search in the HTML-tree rather than the list-comprehension filtering done in the
+merging step, right before the conclusion section. This may or may not be rewarding.
+
+A concrete justification for the partitioning step eludes me. Although intuitively - as were most of the
+actions I took in this project - it appears that partitioning by sentences is a way to "boost"
+the score or likelihood that a single paragraph with 21 sentences will be extracted than a subtree with
+20 single-sentence paragraphs, divs, etc. - as is sometimes the case with sidebar ads.
+
+##Complexity
+
+What is this algorithm's complexity? I'm not very skilled at algorithm analysis, but I'll try to talk
+myself through this. Those who know their stuff can laugh at my likely-to-fail attempt, but if you do laugh,
+it wont be at my expense, it'll be at yours! Please help a brother out and send me your complexity analysis :)
+
+So, as the xpath search is more or less out of my hands, I'm going to assume they implemented a binary search,
+through all vertices v, with an average complexity of:
+
+    eatiht's complexity += O(log(v))
+
+Say we found M text node parents (from **the selection** step, with each parent having an average of N children text nodes
+
+With those assumptions, in **the partitioning** step we execute a
+
+    for parent in parents:
+        for child in parent.children:
+            ...
+
+This would translate over to M parents over an average of N children:
+
+    eatiht's complexity += O(M*N) + O(log(v))
+
+In building the frequency distribution, we iterate over the parents:
+
+    eatiht's complexity += O(M) + O(M*N) + O(log(v))
+
+Now in calculating the argmax of the histogram, the number of elements,
+at most is M, but it may also be less than M. The reason for this is because
+we build the histogram not with the path of the parent of the text node (PoTN)
+but the path of **parent** of the **parent** of the text node - it may be that
+some PoTN's have the same parent, and thus the same path.
+
+But let's just say the complexity is O(M) (would the actual complexity be O(M/2)?)
+
+    eatiht's complexity += O(M) + O(M) + O(M*N) + O(log(v))
+
+Finally, we have one last linear search for building up a list of final article text nodes:
+
+    eatiht's complexity += O(M) + O(M) + O(M) + O(M*N) + O(log(v))
+
+Now if you took a intro to comp. sci. theory class, you might recall that the final
+complexity is sometimes shortened to its component with the highest complexity.
+
+In this case, I'm not sure which is the maximum. At first glance, I'd want to say
+that O(M*N) is, but then I start thinking about all these corner cases. So I'll leave
+it to whomever wishes to find the solution in either my pseudo-analysis, or yours!
+
+There were some more thought's I wanted to get in writing, but I've already spent the
+entire morning writing this up so I think I'll end it here for today. If you read
+all the way to here, I thank you for taking the time to do so. Send me your thoughts,
+suggestions, criticisms, praise, venerations, admirations, palpitations, nude pics
+(just kidding, don't do at least 4 of those things in series; likely to cause
+unintended consequences!) to rodrigopala91@gmail.com or [@rodricios](https://twitter.com/rodricios).
+
+P.S. I have yet to decide whether or not I should test this algorithm against
+a large dataset. Not because I don't want to, but because it would be an endeavor I
+do not know how to approach in a more scientific manner, nor how to correctly
+allocate the time for (I would not want to tackle this head-on, commit and use a lot of
+time, and then go and find out that the tests I would have done were not done correctly,
+and, in other words, were pointless).
+
+P.P.S There's some thoughts I had about the lookback-current-node-lookfront scope that's
+present in this implementation, and how it reminds me of what is known as a "kernel"
+or "filter" matrix calculus and matrix transformations in the field of computer vision.
+It also reminds of some of the nltk classifier implementations. But whatever it is I'm
+trying to say right now will come out like a mumbly mess, so I'll leave it at that.
+
+
+Crash Course on HTML and XPath
+------------------------------
+
+Here's a quick crash course in case you're unsure if you *got what it takes.*
+Ok, this really isn't on html, more like pseudo-html/trees.
+
+This is a tree:
+
+    Graph A
+          root of tree:     •
+                           _|_
+                          |   |
+                leaves:   •   •
+
+
+Let's give those dots (aka: vertexes, nodes, elements, tags) *names*
+
+    Graph B
+                           A•
+                           _|_
+                          |   |
+                         b•   •c
+
+Note: The name 'A' is reserved for the root of the tree. There is no limit to the number of 'b' and 'c' nodes
+one wishes to use, nor limit to how far down a tree can reach, as demonstrated here:
+
+    Graph C
+                           A•      <-from this level
+                          __|__
+                         |     |
+    from this level->   b•     •c  <-to this level
+                        _|_
+                       |   |
+      to this level-> c•   •c
+    ________________________________________________
+       is one level         +        is one level   = there is two levels
+
+
+That's it for your review of html.
+
+As for xpath, let's refer back to Graph C:
+
+    Graph C
+                           A•
+                          __|__
+                         |     |
+                        b•     •c
+                        _|_
+                       |   |
+                      c•   •c
+
+[XPath](http://www.w3schools.com/xpath/xpath_intro.asp) is, among other things,
+a querying tool.
+
+To query for (select) the root node A:
+
+    /A
+
+To **absolutely** query for the only node named b:
+
+    /A/b
+
+The above *xpath expression* can also be given the moniker: absolute path
+
+The following xpath expressions will also result in the node b:
+
+    //b, /A//b, and I'm sure a few others
+    |`     |
+    |      '-  Select all explicitly starting from the root
+    '-  Select all implicitly starting from the root
+
+Now what if I asked you to form the expression leading to *only* the
+node c on the first level after the root?
+
+    //c or /A//c
+
+Can't work because these expressions land us all nodes c
+
+    /A/c
+
+That will do the trick. It works because what it is in fact saying is
+to *select all c nodes in the level right after node A*. Now what
+about one or more nodes only in the last level?
+
+    /A//c
+
+Won't work because again, we get all nodes c on all levels, starting from node A. Now here's part the
+beauty with querying languages like XPath.
+
+We can fine tune our selection by specifying the **parent** node(s) the
+desired nodes lie. Now that we're using parent-child terminology,
+we can refer to our desired nodes as the children.
+
+But children of what? In case you've forgotten what the graph looks like,
+here it is again:
+
+
+    Graph C
+                           A•
+                          __|__
+                         |     |
+                        b•     •c
+                        _|_
+                       |   |
+                      c•   •c
+
+
+Clearly, the node named b is the parent of the desired nodes named c.
+
+This selects all nodes c of node b of node A
+
+    /A/b/c
+
+This selects the first node c of node b of node A
+
+    /A/b/c[1]
+
+
+That should be enough to move forward, or rather backwards to the article.
+
+* There's was/is a debate on whether the process that eatiht goes through to produce an output can be considered an
+_algorithm_ or not. [Read about it here](http://www.reddit.com/r/Python/comments/2pqx2d/just_made_what_i_consider_my_first_algorithm_and/cmzfojb).
+What would you describe eatiht as? A neat package? A neat algorithm? Neither? I'm interested in hearing you out
+at rodrigopala@gmail.com, [twitter](https://twitter.com/rodricios), or [github](https://github.com/rodricios).

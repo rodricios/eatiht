@@ -1,7 +1,11 @@
 """
-eatiht - Extract Article Text In HyperText documents
+eatiht
+Extract Article Text In HyperText documents
 
-Written by Rodrigo Palacios
+written by Rodrigo Palacios
+
+**tl;dr**
+(revised on 12/20/2014)
 
 Note: for those unfamiliar with xpaths, think of them as file/folder
 paths, where each "file/folder" is really just some HTML element.
@@ -22,9 +26,51 @@ nodes as our sample, we create a frequency distribution measuring
 the number of text node descendants of each parent. In other words,
 We can find the xpath with the most number of text node descendants.
 This output has shown to lead us to the main article in a webpage.
+
+**A slightly more formal explenation**
+(Needs revision as of 12/20/2014)
+
+A reminder: with the help of one of the most fundamental statistical
+tools - the frequency distribution - one can easily pick out the
+element appearing most frequently in a list of elements.
+
+Now, consider some arbitrary webpage, comprising of stylistic/structural
+nodes (div, p, etc.) and "text" nodes (html leafnodes that contain
+onscreen text). For every node, there exists at least one XPath that
+can describe a leaf node's location within the html tree. If one
+assumes some arbitry "sentence length" N and queries for text nodes
+that adhere to that constraint (ie. string-length > N), a list of only
+text nodes with string length greater than N is returned.
+
+Using those newly-acquired list of nodes, two things must happen for
+this algorithm to work properly:
+
+1. Split the text within each text node into sentences (current
+implementation relies on REGEX sentence-splitting patterns).
+
+2. For each new pseudo-node that is created upon sentence-split, attach
+*not* the xpath that leads to the original text node, but the xpath of
+the *parent* node that leads to the original text node.
+
+The last two steps will essentially create a list of (sentence, xpath)
+tuples. After this, one can build a frequency distribution across the
+xpaths.
+
+Finally, the most frequent element in the freq. distribution (aka
+"argmax") should* be the parent node leading to the structural html-element
+that "divides" or "encompasses" the main text body.
+
+Please refer to this project's github page for more information:
+https://github.com/im-rodrigo/eatiht
+
+Contact the author:
+twitter - @mi_ogirdor
+email - rodrigopala91@gmail.com
+github - https://github.com/im-rodrigo
 """
 
 import re
+import urllib2
 from collections import Counter
 try:
     from cStringIO import StringIO as BytesIO
@@ -32,14 +78,12 @@ except ImportError:
     from io import BytesIO
 
 from lxml import html
-import requests
+from lxml.html.clean import Cleaner
 
 
 # This xpath expression effectively queries html text
 # nodes that have a string-length greater than 20
-TEXT_FINDER_XPATH = '//body//*[not(self::script or self::style or self::i or self::b or self::strong or self::span or self::a)]/text()[string-length(normalize-space()) > 20]/.. '
-LEADING_XPATH = '//body//*[not(self::script or self::style or self::i or self::b or self::strong or self::span or self::a)]/text()[string-length(normalize-space()) > '
-TO_PARENT = "]/.."
+TEXT_FINDER_XPATH = '//body//*[not(self::script or self::style or self::i or self::b or self::strong or self::span or self::a)]/text()[string-length(normalize-space()) > 20]/..'
 
 # REGEX patterns for catching bracketted numbers - as seen in wiki articles -
 # and sentence splitters
@@ -65,40 +109,40 @@ sentence_token_pattern = re.compile(r"""
 sentence_ending = ['.', '"', '?', '!', "'"]
 
 
-# TODO(?): turn to decorator
-def build_text_finder(leading_xpath=TEXT_FINDER_XPATH,min_str_length=False):
-    """ takes optional text-finding xpath (WARNING, only for those
-    experienced with xpath expressions!) and min. string-length of text
-    nodes. This returns the construction of default or custom xpath.
+# Refactored download and lxml tree instantiation
+def get_html_tree(filename_url_or_filelike):
+    """From some file path, input stream, or URL, construct and return
+    an HTML tree.
     """
-    # this path is here for support older release
-    if leading_xpath is TEXT_FINDER_XPATH and min_str_length is False:
-        return leading_xpath
+    try:
+        parsed_html = html.parse(filename_url_or_filelike,
+                                 html.HTMLParser(encoding="utf-8"))
 
-    # logically, one would like to experiment with only changing the
-    # mininum string length param in original xpath, this allows that
-    elif (leading_xpath is TEXT_FINDER_XPATH and
-          isinstance(min_str_length,int)):
-        return LEADING_XPATH + str(min_str_length) + TO_PARENT
+    except IOError:
+        # use requests as a workaround for problems in some
+        # sites requiring cookies like nytimes.com
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
+        response = opener.open(filename_url_or_filelike).read()
 
-    # if user supplied a full-on custom xpath, will likely break..
-    elif leading_xpath and min_str_length is False:
-        return leading_xpath
+        # http://lxml.de/parsing.html
+        parsed_html = html.parse(BytesIO(response),
+                                 html.HTMLParser(encoding="utf-8"))
 
-    # this path should only reach if user is VERY sure of the xpath,
-    # will likely break..
-    else:
-        return leading_xpath + str(min_str_length) + TO_PARENT
+    # http://www.reddit.com/r/Python/comments/2pqx2d/just_made_what_i_consider_my_first_algorithm_and/cn0mvku
+    # thanks for the suggestion /u/oliver_newton
+
+    return parsed_html
 
 
 def get_xpath_frequency_distribution(paths):
-    """ Build and return a frequency distribution over xpath occurrences."""
-    # "html/body/div/div/text" -> [ "html", "body", "div", "div", "text" ]
-    splitpaths = [p.split('/') for p in paths]
+    """
+    Build and return a frequency distribution over xpath occurrences.
+    """
+    # "html/body/div/div/text" -> [ "html/body/div/div", "text" ]
+    splitpaths = [p.rsplit('/', 1) for p in paths]
 
-    # get list of "parentpaths" by right-stripping off the last xpath-node, effectively
-    # getting the parent path
-    parentpaths = ['/'.join(p[:-1]) for p in splitpaths]
+    # get list of "parentpaths"
+    parentpaths = [p[0] for p in splitpaths]
 
     # build frequency distribution
     parentpathsCounter = Counter(parentpaths)
@@ -106,24 +150,13 @@ def get_xpath_frequency_distribution(paths):
 
 
 def get_sentence_xpath_tuples(filename_url_or_filelike, xpath_to_text=TEXT_FINDER_XPATH):
-    """Given a url, file, or filelike object and xpath, this function will
-    download, parse, then iterate though queried text-nodes. From the
-    resulting text-nodes, extract a list of (text, exact-xpath) tuples.
     """
-    try:
-        parsed_html = html.parse(filename_url_or_filelike, html.HTMLParser())
+    Given a url and xpath, this function will download, parse, then
+    iterate though queried text-nodes. From the resulting text-nodes,
+    extract a list of (text, exact-xpath) tuples.
+    """
 
-    except IOError as e:
-        # use requests as a workaround for problems in some
-        # sites requiring cookies like nytimes.com
-        # http://stackoverflow.com/questions/15148376/urllib2-returning-no-html
-        try:
-            #if isinstance(filename_url_or_filelike,basestring):
-            page = requests.get(filename_url_or_filelike)
-        except Exception as e:
-            raise e
-        # http://lxml.de/parsing.html
-        parsed_html = html.parse(BytesIO(page.content), html.HTMLParser())
+    parsed_html = get_html_tree(filename_url_or_filelike)
 
     xpath_finder = parsed_html.getroot().getroottree().getpath
 
@@ -140,26 +173,17 @@ def get_sentence_xpath_tuples(filename_url_or_filelike, xpath_to_text=TEXT_FINDE
     return sent_xpath_pairs
 
 
-def extract(filename_url_or_filelike, xpath_to_text = TEXT_FINDER_XPATH,
-            min_str_length=False):
-    """Wrapper function for extracting the main article from html document.
+def extract(url, xpath_to_text = TEXT_FINDER_XPATH):
+    """
+    Wrapper function for extracting the main article from html document.
 
     A crappy flowchart/state-diagram:
-    start: url[,xpath[,min_str_len] -> xpaths of text-nodes ->
-    -> frequency distribution -> argmax( freq. dist. ) =
-    = likely xpath leading to article's content
+    start: url[,xpath] -> xpaths of text-nodes -> frequency distribution
+    -> argmax( freq. dist. ) = likely xpath leading to article's content
     """
+    sent_xpath_pairs = get_sentence_xpath_tuples(url, xpath_to_text)
 
-    # adding new feature for xpath building
-    xpath_to_text = build_text_finder(xpath_to_text,min_str_length)
-
-    sent_xpath_pairs = get_sentence_xpath_tuples(filename_url_or_filelike,
-                                                 xpath_to_text)
-
-    # The following comprehension was moved to its own variable from
-    # get_xpath_freq... argument for readability
-    xpaths = [x for (s, x) in sent_xpath_pairs]
-    max_path = get_xpath_frequency_distribution(xpaths)[0]
+    max_path = get_xpath_frequency_distribution([x for (s, x) in sent_xpath_pairs])[0]
 
     article_text = ' '.join([s for (s, x) in sent_xpath_pairs if max_path[0] in x])
 
