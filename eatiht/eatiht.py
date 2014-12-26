@@ -112,12 +112,11 @@ def get_xpath_frequency_distribution(paths):
     """
     Build and return a frequency distribution over xpath occurrences.
     """
-    # "html/body/div/div/text" -> [ "html", "body", "div", "div", "text" ]
-    splitpaths = [p.split('/') for p in paths]
+    # "html/body/div/div/text" -> [ "html/body/div/div", "text" ]
+    splitpaths = [p.rsplit('/', 1) for p in paths]
 
-    # get list of "parentpaths" by right-stripping off the last xpath-node, effectively
-    # getting the parent path
-    parentpaths = ['/'.join(p[:-1]) for p in splitpaths]
+    # get list of "parentpaths"
+    parentpaths = [p[0] for p in splitpaths]
 
     # build frequency distribution
     parentpathsCounter = Counter(parentpaths)
