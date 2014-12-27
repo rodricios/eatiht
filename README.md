@@ -44,11 +44,11 @@ Currently, there are two new submodules:
 
 eatiht_v2 is functionally identical to the original eatiht
 ```python
-import eatiht_v2 as eatiht
+import eatiht.eatiht_v2 as v2
 
 url = 'http://www.washingtonpost.com/blogs/the-switch/wp/2014/12/26/elon-musk-the-new-tesla-roadster-can-travel-some-400-miles-on-a-single-charge/'
 
-print eatiht.extract(url)
+print v2.extract(url)
 ```
 Output:
 ```
@@ -62,7 +62,7 @@ can get on a tank of gasoline.
 eatiht_v2 contains one extra function that executes the extraction algorithm, but along with outputting the text, it outputs the structures that were used to calculate
 the output (ie. histogram, list of xpaths, etc.):
 ```python
-results = eatiht.extract_more(url)
+results = v2.extract_more(url)
 
 results[0]      # extracted text
 results[1]      # frequency distribution (histogram)
@@ -76,7 +76,7 @@ Now whether or not this little extra function looks messy is up to debate - I th
 So to properly encapsulate those stuctures, there are new classes that will make accessing those properties simpler:
 
 ```python
-import etv2
+import eatiht.etv2 as etv2
 
 url = "..."
 
