@@ -1,12 +1,12 @@
 from setuptools import setup
 
 def readme():
-    with open('README.rst') as readmefile:
-        return readmefile.read()
+    with open('README.rst') as f:
+        return f.read()
 
 setup(name='eatiht',
-      version='0.1.0',
-      description='A featherweight tool used to extract an \
+      version='0.1.1',
+      description='A simple tool used to extract an \
                   article\'s text in html documents.',
       keywords='extract extracted extracting extraction filter filtered \
                filtering out remove removed removing removal text \
@@ -21,7 +21,7 @@ setup(name='eatiht',
       author_email='rodrigopala91@gmail.com',
       license='MIT',
       packages=['eatiht'],
-      install_requires=['lxml',],
+      install_requires=['lxml'],
       scripts=['bin/eatiht'],
       test_suite='nose.collector',
       tests_require=['nose'],

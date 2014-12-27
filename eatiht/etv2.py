@@ -179,14 +179,13 @@ def calcavg_avgstrlen_subtrees(subtrees, dbg=False):
     return (avg, ttl, crd)
 
 
-def get_textnode_subtrees(filename_url_or_filelike,
+def get_textnode_subtrees(html_tree,
                           xpath_to_text=TEXT_FINDER_XPATH):
     """A modification of get_sentence_xpath_tuples: some code was
     refactored-out, variable names are slightly different. This function
     does wrap the ltml.tree construction, so a file path, file-like
     structure, or URL is required.
     """
-    html_tree = get_html_tree(filename_url_or_filelike)
 
     xpath_finder = html_tree.getroot().getroottree().getpath
 
@@ -194,7 +193,7 @@ def get_textnode_subtrees(filename_url_or_filelike,
 
     # Within the TextNodeSubTree construction, the ABSL is calculated
     # refer to eatiht_trees.py
-    parentpaths_textnodes = [TextNodeSubTree(xpath_finder(n),
+    parentpaths_textnodes = [TextNodeSubTree(n, xpath_finder(n),
                                              n.xpath('.//text()'))
                              for n in nodes_with_text]
 
@@ -209,7 +208,10 @@ def get_textnode_subtrees(filename_url_or_filelike,
 def extract(filename_url_or_filelike):
     """An "improved" algorithm over the original eatiht algorithm
     """
-    subtrees = get_textnode_subtrees(filename_url_or_filelike)
+    html_tree = get_html_tree(filename_url_or_filelike)
+
+
+    subtrees = get_textnode_subtrees(html_tree)
     #[iterable, cardinality, ttl across iterable, avg across iterable.])
 
     # calculate AABSL
@@ -226,10 +228,6 @@ def extract(filename_url_or_filelike):
     target_subtrees = [stree for stree in subtrees
                        if hist[0][0] in stree.parent_path]
 
-    target_paras = [''.join(subtree.text_nodes)
-                    for subtree in target_subtrees]
+    title = html_tree.find(".//title")
 
-    target_text = '\n\n'.join([''.join(subtree.text_nodes)
-                               for subtree in target_subtrees])
-
-    return TextNodeTree(target_subtrees, target_paras, target_text, hist)
+    return TextNodeTree(title.text_content(), target_subtrees, hist)

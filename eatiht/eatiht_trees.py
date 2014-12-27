@@ -1,8 +1,8 @@
 """eatiht v2 - Rodrigo Palacios - Copyright 2014"""
 
 
-from lxml.builder import E
-
+from lxml.html import builder as E
+from lxml.html import tostring as htmltostring
 
 class TextNodeSubTree(object):
     """ This class can be described in a few different ways. A proper
@@ -142,35 +142,47 @@ class TextNodeSubTree(object):
         #super(TextNodeSubTree, self).__init__()
         #self.parent_path = kwargs.get('parpath')
 
-    def __init__(self, parpath, tnodes):
+    def __init__(self, parent_elem, parent_path, tnodes):
         """This is a structure that is explained above.
         parpath     = path to root
         tnodes      = list of children textnodes
         """
         super(TextNodeSubTree, self).__init__()
+        # subtree's root element (aka wrapping html)
+        self.__parent_elem = parent_elem
         # subtree parent's path
-        self.__parent_path = parpath
+        self.__parent_path = parent_path
         # number of text children
-        self.text_nodes = tnodes
+        self.__text_nodes = tnodes
+        # calculate the feature's values
         self.__learn_oneself()
         self.clean()
 
     def __learn_oneself(self):
         """calculate cardinality, total and average string length"""
-        if not self.__parent_path or not self.text_nodes:
+        if not self.__parent_path or not self.__text_nodes:
             raise Exception("This should never happen.")
         # Iterate through text nodes and sum up text length
-
-        # consider naming this child_count or cardinality
-        self.tnodes_cnt = len(self.text_nodes)
+        # TODO: consider naming this child_count or cardinality
+        # or branch_cnt
+        self.tnodes_cnt = len(self.__text_nodes)
         # consider naming this total
-        self.ttl_strlen = sum([len(tnode) for tnode in self.text_nodes])
+        self.ttl_strlen = sum([len(tnode) for tnode in self.__text_nodes])
         # consider naming this average
         self.avg_strlen = self.ttl_strlen/self.tnodes_cnt
 
+    def get_text(self):
+        """Return all joined text in textnodes"""
+        return "".join(self.__text_nodes)
+
+    def get_html(self):
+        """Return the html that wraps around the text"""
+        return self.__parent_elem
+
+
     def clean(self):
         """clean up newlines"""
-        for textnode in self.text_nodes:
+        for textnode in self.__text_nodes:
             textnode.strip()
 
     @property
@@ -181,11 +193,74 @@ class TextNodeSubTree(object):
 
 class TextNodeTree(object):
     """collection of textnode subtrees"""
-
-    def __init__(self, subtrees, subtree_texts, fulltext, hist):
+    def __init__(self, title, subtrees, hist):
         """This is a structure that is explained above."""
         super(TextNodeTree, self).__init__()
-        self.subtrees = subtrees
-        self.subtree_texts = subtree_texts
-        self.fulltext = fulltext
-        self.histogram = hist
+        self.__title = title
+        self.__subtrees = subtrees
+        self.__histogram = hist
+
+        self.__htmltree = ""
+        self.__fulltext = ""
+
+    @property
+    def histogram(self):
+        """Return frequency distribution used to find the best subtree"""
+        return self.__histogram
+
+    @property
+    def title(self):
+        """Return title of website"""
+        return self.__title
+
+    def __make_tree(self):
+        """Build a tree using lxml.html.builder and our subtrees"""
+
+        # start by connecting title in header to body
+        body = E.BODY(
+            E.H2(self.__title)
+            )
+
+        # next, iterate through subtrees appending each tree
+        for subtree in self.__subtrees:
+            body.append(subtree.get_html())
+
+        # attach body to html
+        self.__htmltree = E.HTML(
+            E.HEAD(
+                E.TITLE(self.__title)
+                ),
+            body
+            )
+
+    def get_html(self):
+        """Generates if need be and returns a simpler html document with text"""
+        if self.__htmltree:
+            return self.__htmltree
+        else:
+            self.__make_tree()
+            return self.__htmltree
+
+    def get_html_string(self):
+        """Generates if need be and returns a simpler html string with
+        extracted text"""
+        if self.__htmltree:
+            return htmltostring(self.__htmltree)
+        else:
+            self.__make_tree()
+            return htmltostring(self.__htmltree)
+
+
+    def get_text(self):
+        """Return all joined text from each subtree"""
+        if self.__fulltext:
+            return self.__fulltext
+        else:
+            self.__fulltext = "\n\n".join(text.get_text()
+                                          for text in self.__subtrees)
+            return self.__fulltext
+
+
+    def get_subtrees(self):
+        """Return all subtrees"""
+        return self.__subtrees

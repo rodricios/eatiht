@@ -2,21 +2,22 @@ eatiht
 ======
 
 A python package for **e**\ xtracting **a**\ rticle **t**\ ext **i**\ n
-**ht**\ ml documents. Check out this
-`demo <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html>`__.
+**ht**\ ml documents. Check out the new
+`demo <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://sputniknews.com/middleeast/20141225/1016239222.html>`__
+where the surrounding HTML is extracted as well!
 
 12/26/14 Update
 ~~~~~~~~~~~~~~~
 
-New algorithm, please skip to eatiht's `usage <#using-in-python>`__ for
-details.
+New algorithm, please skip to eatiht's usage for details.
 
 Please refer to the issues for notes on possible bugs, improvements,
 etc.
 
 Check out eatiht's `new website <http://rodricios.github.io/eatiht/>`__
-where I walk through each step in the original algorithm! It's virtually
-pain-free. New writeup will be coming soon!
+where I walk through each step in the original algorithm!
+
+New writeup will be coming soon!
 
 What people have been saying
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -48,17 +49,72 @@ install lxml
 Using in Python
 ^^^^^^^^^^^^^^^
 
-Currently, there are two new submodules: \* eatiht\_v2.py \* etv2.py
+Currently, there are two new submodules: \* etv2.py \* eatiht\_v2.py
 
-eatiht\_v2 is functionally identical to the original eatiht
+As `requested <https://github.com/rodricios/eatiht/issues/3>`__,
+etv2.extract will extract not only the text, but also the parent
+element's html:
 
 .. code:: python
 
-    import eatiht_v2 as eatiht
+    import eatiht.etv2 as etv2
+
+    url = "http://sputniknews.com/middleeast/20141225/1016239222.html"
+
+    tree = etv2.extract(url)
+
+    # we know what this does...
+    # print tree.get_text()
+    print tree.get_html_string()
+
+Output:
+
+::
+
+    <html><head><title>Syrian Army Kills Nearly 5,000 IS Militants in Three Months: Source / Sputnik International</title></head>
+    <body><h2>Syrian Army Kills Nearly 5,000 IS Militants in Three Months: Source / Sputnik International</h2>...
+
+Now what about if that's rendered?
+
+`Take a
+look! <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://sputniknews.com/middleeast/20141225/1016239222.html>`__
+
+etv2 uses classes defined in
+`eatiht\_trees.py <https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht_trees.py>`__
+to construct what is sometimes known as the "state space" in the world
+of AI. But instead of only keeping track of averages and totals - as is
+required for the algorithm - the "state" class
+`TextNodeSubTree <https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht_trees.py#L7>`__
+also keeps a reference to its original lxml.html element from whence it
+came.
+
+You can access the original, extracted html elements like this:
+
+.. code:: python
+
+    subtrees = tree.get_subtrees()
+
+    first_subtree = subtrees[0]
+
+    first_subtree.get_html()
+    # <Element div at 0x2f88cc8>
+
+    first_subtree.get_html().tag
+    # 'div'
+
+Please refer to
+`eatiht\_trees.py <https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht_trees.py>`__
+for more info on what functions are available for you to use.
+
+eatiht\_v2 is functionally identical to the original eatiht:
+
+.. code:: python
+
+    import eatiht.eatiht_v2 as v2
 
     url = 'http://www.washingtonpost.com/blogs/the-switch/wp/2014/12/26/elon-musk-the-new-tesla-roadster-can-travel-some-400-miles-on-a-single-charge/'
 
-    print eatiht.extract(url)
+    print v2.extract(url)
 
 Output:
 
@@ -66,7 +122,9 @@ Output:
 
     Car nerds, you just got an extra present under the tree.
 
-    Tesla announced Friday an upgrade for its Roadster, the electric car company’s convertible model, and said that the new features significantly boost its range -- beyond what many traditional cars can get on a tank of gasoline.
+    Tesla announced Friday an upgrade for its Roadster, the electric car company’s convertible model,
+    and said that the new features significantly boost its range -- beyond what many traditional cars
+    can get on a tank of gasoline.
 
 eatiht\_v2 contains one extra function that executes the extraction
 algorithm, but along with outputting the text, it outputs the structures
@@ -75,7 +133,7 @@ etc.):
 
 .. code:: python
 
-    results = eatiht.extract_more(url)
+    results = v2.extract_more(url)
 
     results[0]      # extracted text
     results[1]      # frequency distribution (histogram)
@@ -83,54 +141,11 @@ etc.):
     results[3]      # pruned subtrees
     results[4]      # list of paragraphs (as seperated in original website)
 
-Now whether or not this little extra function looks messy is up to
-debate - I think it looks messy and difficult to remember which index
+Now whether or not this function's output looks messy is up for debate;
+I personally think it looks messy and difficult to remember which index
 leads to what.
 
-So to properly encapsulate those stuctures, there are new classes that
-will make accessing those properties simpler:
-
-.. code:: python
-
-    import etv2
-
-    url = "..."
-
-    tree = etv2.extract(url)
-
-    print tree.fulltext
-
-Output:
-
-::
-
-    Car nerds, you just got an extra present under the tree.
-
-    Tesla announced Friday an upgrade for its Roadster, the electric car company’s...
-
-There are currently no public methods, only the structures present in
-the *extract\_more*:
-
-.. code:: python
-
-    print tree.histogram
-
-Output:
-
-::
-
-    [('/html/body/div[2]/div[5]/div[1]/div[1]/div/article', 8),
-     ('/html/body/div[2]/div[5]/div[1]/div[6]/div/div[2]/div[2]/div[6]', 1),
-     ('/html/body/div[2]/div[5]/div[2]/div[2]/div/ul/li[3]/a', 1),
-     ...]
-
-Please refer to eatiht\_trees.py for more info on what properties are
-available.
-
-As of now, a feature that should be on its way is the ability to not
-only have the extracted text, but also the original, immediately
-surounding html. This may help with keeping a persistant look. This is a
-top priority.
+I suggest using this module if you simply want the extracted text.
 
 And of course, there is the original:
 
@@ -148,7 +163,9 @@ Output
 
 ::
 
-    NASA's Curiosity rover is continuing to help scientists piece together the mystery of how Mars lost its surface water over the course of billions of years. The rover drilled into a piece of Martian rock called Cumberland and found some ancient water hidden within it...
+    NASA's Curiosity rover is continuing to help scientists piece together the mystery of how Mars
+    lost its surface water over the course of billions of years. The rover drilled into a piece of
+    Martian rock called Cumberland and found some ancient water hidden within it...
 
 Using as a command line tool:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -236,6 +253,12 @@ ensure that modifications to eatiht.py and eatiht\_v2.py run properly.
 TODO:
 -----
 
--  HTML-and-text extraction
+-  [STRIKEOUT:HTML-and-text extraction]
+-  etv2 command line scripts
 -  etv2.py tests
+-  improve filtering\|pruning step so that taglines from articles get
+   dropped
 
+   -  if and only if tagline has a reference image, don't prune
+
+-  add some template engine so that extracted html has *style*
