@@ -39,8 +39,8 @@ pip install lxml
 #### Using in Python
 
 Currently, there are two new submodules:
-* etv2.py
-* eatiht_v2.py
+* etv2.py   - class-based approach
+* v2.py     - script-like approach
 
 As [requested](https://github.com/rodricios/eatiht/issues/3), etv2.extract will extract not only the text, but also the parent element's html:
 
@@ -83,9 +83,9 @@ first_subtree.get_html().tag
 
 Please refer to [eatiht_trees.py](https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht_trees.py) for more info on what functions are available for you to use.
 
-eatiht_v2 is functionally identical to the original eatiht:
+v2 is functionally identical to the original eatiht:
 ```python
-import eatiht.eatiht_v2 as v2
+import eatiht.v2 as v2
 
 url = 'http://www.washingtonpost.com/blogs/the-switch/wp/2014/12/26/elon-musk-the-new-tesla-roadster-can-travel-some-400-miles-on-a-single-charge/'
 
@@ -100,7 +100,7 @@ and said that the new features significantly boost its range -- beyond what many
 can get on a tank of gasoline.
 ```
 
-eatiht_v2 contains one extra function that executes the extraction algorithm, but along with outputting the text, it outputs the structures that were used to calculate the output (ie. histogram, list of xpaths, etc.):
+v2 contains one extra function that executes the extraction algorithm, but along with returning the text, it also returns the structures that were used to calculate the output (ie. histogram, list of xpaths, etc.):
 
 ```python
 results = v2.extract_more(url)
