@@ -9,7 +9,9 @@ New algorithm, please skip to eatiht's [usage](#using-in-python) for details.
 
 Please refer to the issues for notes on possible bugs, improvements, etc.
 
-Check out eatiht's [new website](http://rodricios.github.io/eatiht/) where I walk through each step in the original algorithm! It's virtually pain-free. New writeup will be coming soon!
+Check out eatiht's [new website](http://rodricios.github.io/eatiht/) where I walk through each step in the original algorithm! 
+
+New writeup will be coming soon!
 
 
 ###What people have been saying
@@ -52,7 +54,9 @@ Output:
 ```
 Car nerds, you just got an extra present under the tree.
 
-Tesla announced Friday an upgrade for its Roadster, the electric car company’s convertible model, and said that the new features significantly boost its range -- beyond what many traditional cars can get on a tank of gasoline.
+Tesla announced Friday an upgrade for its Roadster, the electric car company’s convertible model, 
+and said that the new features significantly boost its range -- beyond what many traditional cars
+can get on a tank of gasoline.
 ```
 
 eatiht_v2 contains one extra function that executes the extraction algorithm, but along with outputting the text, it outputs the structures that were used to calculate
@@ -114,7 +118,9 @@ print eatiht.extract(url)
 ```
 ##### Output
 ```
-NASA's Curiosity rover is continuing to help scientists piece together the mystery of how Mars lost its surface water over the course of billions of years. The rover drilled into a piece of Martian rock called Cumberland and found some ancient water hidden within it...
+NASA's Curiosity rover is continuing to help scientists piece together the mystery of how Mars 
+lost its surface water over the course of billions of years. The rover drilled into a piece of 
+Martian rock called Cumberland and found some ancient water hidden within it...
 ```
 
 
