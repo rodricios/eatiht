@@ -143,8 +143,8 @@ Note: Window's users may have to add the C:\PythonXX\Scripts directory to your [
 Requirements
 ------------
 ```
-requests
 lxml
+*requests, as of v0.1.0, is no longer required
 ```
 
 Motivation
