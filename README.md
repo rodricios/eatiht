@@ -1,7 +1,7 @@
 eatiht
 ======
 
-A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out the new [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://sputniknews.com/middleeast/20141225/1016239222.html) where the surrounding HTML is extracted as well!
+A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out the new [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://phys.org/news/2014-12-faster-than-light-particles.html) where the surrounding HTML is extracted as well!
 
 ###12/26/14 Update
 
