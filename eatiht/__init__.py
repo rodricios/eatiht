@@ -2,13 +2,76 @@
 
 written by Rodrigo Palacios - Copyright 2014
 
-**tl;dr**
+(added on 12/26/2014)
+
+Algorithm v2, dammit!:
+
+This algorithm is small modification to the original. I argue that
+it is more "precise" at the cost of extra computations
+that may otherwise be unnecessary.
+
+The overall process is similar to v1, but removes the "partitioning"
+step (please refer to the eatiht.py for details). What the above step
+allowed for was a way to artificially boost subtrees (where the root
+had branches/leaves that comprised of text) towards the top. The
+boosting score was in proportion to a rough estimate on the # of
+sentences in that subtree.
+
+Instead, we rely on the average string length across each branch in a
+subtree as the one of two vital calculations in this algorithm. Let's
+call this a subtree's "avg branch string length" or ABSL for short.
+just mentioned avg score is stored in list, along with the original
+textnodes (branches), the total string length across the textnodes, and
+the number of textnodes (you'll see me sometimes refer to this as the
+"cardinal" or "cardinality").
+
+The second decisive calculation is the average across all subtrees'
+average branch string length.
+Yes, it's an ugly mouthful, but it's a pretty and simple calculation.
+We iterate across our list of subtrees, accruing a total of each subtree's
+ABSL, and then calculate the average of that, which I'll refer to as
+the AStABSL (avg. subtree avg branch str.len.) or AABSL.
+
+The AABSL value serves as a cutoff threshold used during a filtering pass.
+
+This filtering pass happens post-ABSL-AABSL calculations; for each
+subtree, we use the subtree's total subtree string (TSL) length as the
+value that's gets measured against the AABSL value; those subtree's
+with TSL values higher than the AABSL are kept for one final processing
+step. I basically see this as a high-pass filter.
+
+This last step will be familiar to those who know a bit about how the
+first algorithm generated its results. In short, we build a frequency
+distribution where the key ("bucket" or "bin" when referring to our
+distribution as a histogram) is a subtree's root xpath.
+
+That's basically it. Now to address some differences, and also to address
+the claim I made towards the top, that this algorithm is more "precise"
+than the previous one.
+
+I'm not sure if "precise" is the correct word to use, but I'll go with
+it anyways. The resulting histogram has shown to have less overall buckets.
+In other words, in the "high-pass" filtering stage, it prunes out many
+subtrees where text is likely to not be a part of resulting "body."
+
+Put simply, and with some AI nomenclature, we shrink our state space
+dramatically. In other words, to me,
+
+    "smaller state space" === "more precise"
+    iff "result is the same as previous algorithm"
+
+That may be circular reasoning, faulty logic, what have you. I'm not
+classically trained in this sort of thing so I'd appreciate any insight
+as to what exactly it is that I'm doing lol.
+
+
 (revised on 12/20/2014)
 
 Note: for those unfamiliar with xpaths, think of them as file/folder
 paths, where each "file/folder" is really just some HTML element.
 
-Algorithm, dammit!:
+Algorithm v1, dammit!:
+
 Using a clever xpath expression that targets the immediate parents of
 text nodes of a certain length N, one can get a list of parent nodes
 which have, what we can consider as "ideal," text nodes (nodes that
@@ -25,41 +88,8 @@ the number of text node descendants of each parent. In other words,
 We can find the xpath with the most number of text node descendants.
 This output has shown to lead us to the main article in a webpage.
 
-**A slightly more formal explenation**
-(Needs revision as of 12/20/2014)
 
-A reminder: with the help of one of the most fundamental statistical
-tools - the frequency distribution - one can easily pick out the
-element appearing most frequently in a list of elements.
-
-Now, consider some arbitrary webpage, comprising of stylistic/structural
-nodes (div, p, etc.) and "text" nodes (html leafnodes that contain
-onscreen text). For every node, there exists at least one XPath that
-can describe a leaf node's location within the html tree. If one
-assumes some arbitry "sentence length" N and queries for text nodes
-that adhere to that constraint (ie. string-length > N), a list of only
-text nodes with string length greater than N is returned.
-
-Using those newly-acquired list of nodes, two things must happen for
-this algorithm to work properly:
-
-1. Split the text within each text node into sentences (current
-implementation relies on REGEX sentence-splitting patterns).
-
-2. For each new pseudo-node that is created upon sentence-split, attach
-*not* the xpath that leads to the original text node, but the xpath of
-the *parent* node that leads to the original text node.
-
-The last two steps will essentially create a list of (sentence, xpath)
-tuples. After this, one can build a frequency distribution across the
-xpaths.
-
-Finally, the most frequent element in the freq. distribution (aka
-"argmax") should* be the parent node leading to the structural html-element
-that "divides" or "encompasses" the main text body.
-
-Please refer to this project's github page for more information:
-https://github.com/im-rodrigo/eatiht
+https://github.com/rodricios/eatiht
 
 Contact the author:
 twitter - @rodricios
@@ -68,5 +98,6 @@ github - https://github.com/rodricios/eatiht
 """
 
 
-from .eatiht import extract, get_sentence_xpath_tuples, get_xpath_frequency_distribution
+from .eatiht import extract, get_sentence_xpath_tuples, get_xpath_frequencydistribution
+from .eatiht_v2 import extract, get_xpath_frequencydistribution, get_html_tree
 

@@ -11,15 +11,9 @@ except ImportError:
 from lxml import html
 from lxml.html.clean import Cleaner
 
-from etv2_textnode_subtree import TextNodeSubTree, TextNodeTree
+from eatiht_trees import TextNodeSubTree, TextNodeTree
 
 # decided to use backslashes for readability?
-'''TEXT_FINDER_XPATH = '//body \
-                        //text() \
-                            [string-length(normalize-space()) > 20] \
-                            /..'
-'''
-
 TEXT_FINDER_XPATH = '//body\
                         //*[not(\
                             self::script or \
@@ -154,7 +148,7 @@ def extract(filename_url_or_filelike, use_sent_ending_filter=False):
     target_paras = [''.join(subtree.text_nodes)
                     for subtree in target_subtrees]
 
-    target_text = '\n'.join([''.join(subtree.text_nodes)
+    target_text = '\n\n'.join([''.join(subtree.text_nodes)
                              for subtree in target_subtrees])
 
     return TextNodeTree(target_subtrees, target_paras, target_text, hist)

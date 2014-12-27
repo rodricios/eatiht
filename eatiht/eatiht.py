@@ -177,7 +177,7 @@ def get_sentence_xpath_tuples(filename_url_or_filelike,
         for n in nodes_with_text
         for e, s in enumerate(SENTENCE_TOKEN_PATTERN.split(
             BRACKET_PATTERN.sub('', ''.join(n.xpath('.//text()')))))
-        #if s.endswith(tuple(SENTENCE_ENDING))
+        if s.endswith(tuple(SENTENCE_ENDING))
         ]
 
     return sent_xpath_pairs
@@ -202,4 +202,4 @@ def extract(url, xpath_to_text=TEXT_FINDER_XPATH):
                              if max_path[0] in x])
 
     # starting from index 2 because of the two extra newlines in front
-    return (article_text[2:], sent_xpath_pairs, hist)
+    return article_text[2:]
