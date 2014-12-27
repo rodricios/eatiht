@@ -3,37 +3,13 @@ eatiht
 
 A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out this [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html).
 
-###12/24/14 Update
+###12/26/14 Update
 
-tl;dr
+New algorithm, please skip to eatiht's [usage](#using-in-python) for details.
 
-new and improved algorithm coming really soon (like, probably tomorrow)!
+Please refer to the issues for notes on possible bugs, improvements, etc.
 
-I just finished coding up an improved algorithm (v2) that makes use of a statistical property that everyone knows like the back their hand. 
-
-The failures of the original algorithm is present in the [demo, dohh!](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html). The line that starts with,
-
-    The administration's sudden urgency came after a new threat...
-
-finishes way too early. The fix is explained in the next line. 
-
-v2 does away with regex splitting - and that was likely a cause of many people's headaches, if they've been able to notice them. Due to the generally infrequent use of [?,',",!] as sentence-finishers in large texts, as opposed to plain old ".",  some of you may have not noticed. 
-
-The bug arose on this line of [code](https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht.py#L154) and caused more false-positives than anyone would like - most likely due to different encodings as @rcarmo warns about [here](https://github.com/rodricios/eatiht/issues/2). 
-
-I'd also like to give a plug to @rcarmo's [hy port/improvement of eatiht v1](https://gist.github.com/rcarmo/bb0310c71d6573b3919c) minus the scary list-comprehensions and the regex-splitting present in the original implementation. 
-
-There's a conversation between myself and @voidfiles [here](https://github.com/rodricios/eatiht/issues/3), and I'd like more input from concerned users. It's about whether or not this module should be constructed in an object-oriented manner (aka. use 'class'). I personally favor a side-by-side script-and-class approach, and you can read about why in the above referenced link. You, I, and @voidfiles will probably like an OO implementation because it will likely lead to plug-and-play extensions and more!
-
-Finally, I'd like to say thanks to everyone who's tried out this module. Double thanks if you read thru the [writeup](http://rodricios.github.io/eatiht/). Double that if you showed this to your friends or coworkers. x6 if you also brought up any [issues](https://github.com/rodricios/eatiht/issues). Any of those things definitely helps one's motivation to come up with neat little solutions such as eatiht :)
-
-Best wishes and happy holidays,
-
-@rodricios
-
----
-
-Check out eatiht's [new website](http://rodricios.github.io/eatiht/) where I walk through each step in the algorithm! It's virtually pain-free.
+Check out eatiht's [new website](http://rodricios.github.io/eatiht/) where I walk through each step in the original algorithm! It's virtually pain-free. New writeup will be coming soon!
 
 
 ###What people have been saying
@@ -59,7 +35,77 @@ Note: On Windows, you may need to install lxml manually using:
 pip install lxml
 
 #### Using in Python
+
+Currently, there are two new submodules:
+* eatiht_v2.py
+* etv2.py
+
+eatiht_v2 is functionally identical to the original eatiht
 ```python
+import eatiht_v2 as eatiht
+
+url = 'http://www.washingtonpost.com/blogs/the-switch/wp/2014/12/26/elon-musk-the-new-tesla-roadster-can-travel-some-400-miles-on-a-single-charge/'
+
+print eatiht.extract(url)
+```
+Output:
+```
+Car nerds, you just got an extra present under the tree.
+
+Tesla announced Friday an upgrade for its Roadster, the electric car company’s convertible model, and said that the new features significantly boost its range -- beyond what many traditional cars can get on a tank of gasoline.
+```
+
+eatiht_v2 contains one extra function that executes the extraction algorithm, but along with outputting the text, it outputs the structures that were used to calculate
+the output (ie. histogram, list of xpaths, etc.):
+```python
+results = eatiht.extract_more(url)
+
+results[0]      # extracted text
+results[1]      # frequency distribution (histogram)
+results[2]      # subtrees (list of textnodes pre-filter)
+results[3]      # pruned subtrees
+results[4]      # list of paragraphs (as seperated in original website)
+```
+
+Now whether or not this little extra function looks messy is up to debate - I think it looks messy and difficult to remember which index leads to what.
+
+So to properly encapsulate those stuctures, there are new classes that will make accessing those properties simpler:
+
+```python
+import etv2
+
+url = "..."
+
+tree = etv2.extract(url)
+
+print tree.fulltext
+```
+Output:
+```
+Car nerds, you just got an extra present under the tree.
+
+Tesla announced Friday an upgrade for its Roadster, the electric car company’s...
+```
+
+There are currently no public methods, only the structures present in the *extract_more*:
+```python
+print tree.histogram
+```
+Output:
+```
+[('/html/body/div[2]/div[5]/div[1]/div[1]/div/article', 8),
+ ('/html/body/div[2]/div[5]/div[1]/div[6]/div/div[2]/div[2]/div[6]', 1),
+ ('/html/body/div[2]/div[5]/div[2]/div[2]/div/ul/li[3]/a', 1),
+ ...]
+```
+
+Please refer to eatiht_trees.py for more info on what properties are available.
+
+As of now, a feature that should be on its way is the ability to not only have the extracted text, but also the original, immediately surounding html. This may help with keeping a persistant look. This is a top priority.
+
+And of course, there is the original:
+```python
+# from initial release
 import eatiht
 
 url = 'http://news.yahoo.com/curiosity-rover-drills-mars-rock-finds-water-122321635.html'
@@ -68,10 +114,7 @@ print eatiht.extract(url)
 ```
 ##### Output
 ```
-NASA's Curiosity rover is continuing to help scientists piece together the mystery of how Mars lost its
-surface water over the course of billions of years. The rover drilled into a piece of Martian rock called
-Cumberland and found some ancient water hidden within it. Researchers were then able to test a key ratio
-in the water with Curiosity's onboard instruments...
+NASA's Curiosity rover is continuing to help scientists piece together the mystery of how Mars lost its surface water over the course of billions of years. The rover drilled into a piece of Martian rock called Cumberland and found some ancient water hidden within it...
 ```
 
 
@@ -117,7 +160,16 @@ Issues or Contact
 
 Please raise any [issues](https://github.com/rodricios/eatiht/issues) or yell at me at rodrigopala91@gmail.com or [@rodricios](https://twitter.com/rodricios)
 
+Tests
+-----
+Currently, the tests are lacking. But please still run these tests to ensure that
+modifications to eatiht.py and eatiht_v2.py run properly.
+```python
+python setup.py test
+```
+
 TODO:
 -----
 
-* ~~Add newline and tab options for printing.~~ Please check out the [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html) for the new **default** output (sorry, no options for formatting as of yet).
+* HTML-and-text extraction
+* etv2.py tests

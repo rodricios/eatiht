@@ -152,10 +152,10 @@ class TextNodeSubTree(object):
         self.__parent_path = parpath
         # number of text children
         self.text_nodes = tnodes
-        self.learn_oneself()
+        self.__learn_oneself()
         self.clean()
 
-    def learn_oneself(self):
+    def __learn_oneself(self):
         """calculate cardinality, total and average string length"""
         if not self.__parent_path or not self.text_nodes:
             raise Exception("This should never happen.")
@@ -183,8 +183,7 @@ class TextNodeTree(object):
     """collection of textnode subtrees"""
 
     def __init__(self, subtrees, subtree_texts, fulltext, hist):
-        """This is a structure that is explained above.
-        """
+        """This is a structure that is explained above."""
         super(TextNodeTree, self).__init__()
         self.subtrees = subtrees
         self.subtree_texts = subtree_texts

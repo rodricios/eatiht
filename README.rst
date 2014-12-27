@@ -5,6 +5,19 @@ A python package for **e**\ xtracting **a**\ rticle **t**\ ext **i**\ n
 **ht**\ ml documents. Check out this
 `demo <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html>`__.
 
+12/26/14 Update
+~~~~~~~~~~~~~~~
+
+New algorithm, please skip to eatiht's `usage <#using-in-python>`__ for
+details.
+
+Please refer to the issues for notes on possible bugs, improvements,
+etc.
+
+Check out eatiht's `new website <http://rodricios.github.io/eatiht/>`__
+where I walk through each step in the original algorithm! It's virtually
+pain-free. New writeup will be coming soon!
+
 What people have been saying
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -35,8 +48,95 @@ install lxml
 Using in Python
 ^^^^^^^^^^^^^^^
 
+Currently, there are two new submodules: \* eatiht\_v2.py \* etv2.py
+
+eatiht\_v2 is functionally identical to the original eatiht
+
 .. code:: python
 
+    import eatiht_v2 as eatiht
+
+    url = 'http://www.washingtonpost.com/blogs/the-switch/wp/2014/12/26/elon-musk-the-new-tesla-roadster-can-travel-some-400-miles-on-a-single-charge/'
+
+    print eatiht.extract(url)
+
+Output:
+
+::
+
+    Car nerds, you just got an extra present under the tree.
+
+    Tesla announced Friday an upgrade for its Roadster, the electric car company’s convertible model, and said that the new features significantly boost its range -- beyond what many traditional cars can get on a tank of gasoline.
+
+eatiht\_v2 contains one extra function that executes the extraction
+algorithm, but along with outputting the text, it outputs the structures
+that were used to calculate the output (ie. histogram, list of xpaths,
+etc.):
+
+.. code:: python
+
+    results = eatiht.extract_more(url)
+
+    results[0]      # extracted text
+    results[1]      # frequency distribution (histogram)
+    results[2]      # subtrees (list of textnodes pre-filter)
+    results[3]      # pruned subtrees
+    results[4]      # list of paragraphs (as seperated in original website)
+
+Now whether or not this little extra function looks messy is up to
+debate - I think it looks messy and difficult to remember which index
+leads to what.
+
+So to properly encapsulate those stuctures, there are new classes that
+will make accessing those properties simpler:
+
+.. code:: python
+
+    import etv2
+
+    url = "..."
+
+    tree = etv2.extract(url)
+
+    print tree.fulltext
+
+Output:
+
+::
+
+    Car nerds, you just got an extra present under the tree.
+
+    Tesla announced Friday an upgrade for its Roadster, the electric car company’s...
+
+There are currently no public methods, only the structures present in
+the *extract\_more*:
+
+.. code:: python
+
+    print tree.histogram
+
+Output:
+
+::
+
+    [('/html/body/div[2]/div[5]/div[1]/div[1]/div/article', 8),
+     ('/html/body/div[2]/div[5]/div[1]/div[6]/div/div[2]/div[2]/div[6]', 1),
+     ('/html/body/div[2]/div[5]/div[2]/div[2]/div/ul/li[3]/a', 1),
+     ...]
+
+Please refer to eatiht\_trees.py for more info on what properties are
+available.
+
+As of now, a feature that should be on its way is the ability to not
+only have the extracted text, but also the original, immediately
+surounding html. This may help with keeping a persistant look. This is a
+top priority.
+
+And of course, there is the original:
+
+.. code:: python
+
+    # from initial release
     import eatiht
 
     url = 'http://news.yahoo.com/curiosity-rover-drills-mars-rock-finds-water-122321635.html'
@@ -48,10 +148,7 @@ Output
 
 ::
 
-    NASA's Curiosity rover is continuing to help scientists piece together the mystery of how Mars lost its
-    surface water over the course of billions of years. The rover drilled into a piece of Martian rock called
-    Cumberland and found some ancient water hidden within it. Researchers were then able to test a key ratio
-    in the water with Curiosity's onboard instruments...
+    NASA's Curiosity rover is continuing to help scientists piece together the mystery of how Mars lost its surface water over the course of billions of years. The rover drilled into a piece of Martian rock called Cumberland and found some ancient water hidden within it...
 
 Using as a command line tool:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -122,16 +219,23 @@ and the drowning-in-ML approaches.
 Issues or Contact
 -----------------
 
-Please raise any
-`issues <https://github.com/rodricios/eatiht/issues>`__ or yell at me
-at rodrigopala91@gmail.com or
+Please raise any `issues <https://github.com/rodricios/eatiht/issues>`__
+or yell at me at rodrigopala91@gmail.com or
 [@rodricios](https://twitter.com/rodricios)
+
+Tests
+-----
+
+Currently, the tests are lacking. But please still run these tests to
+ensure that modifications to eatiht.py and eatiht\_v2.py run properly.
+
+.. code:: python
+
+    python setup.py test
 
 TODO:
 -----
 
--  [STRIKEOUT:Add newline and tab options for printing.] Please check
-   out the
-   `demo <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/filter?url=http://www.nytimes.com/2014/12/18/world/asia/us-links-north-korea-to-sony-hacking.html>`__
-   for the new **default** output (sorry, no options for formatting as
-   of yet).
+-  HTML-and-text extraction
+-  etv2.py tests
+

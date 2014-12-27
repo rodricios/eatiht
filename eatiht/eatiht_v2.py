@@ -77,7 +77,6 @@ dramatically. In other words, to me,
 That may be circular reasoning, faulty logic, what have you. I'm not
 classically trained in this sort of thing so I'd appreciate any insight
 as to what exactly it is that I'm doing lol.
-
 """
 
 import urllib2
@@ -234,8 +233,6 @@ def extract(filename_url_or_filelike):
 
     target_tnodes = [tnode for par, tnode in pars_tnodes if hist[0][0] in par]
 
-    target_paras = [' '.join(tnode[0]) for tnode in target_tnodes]
-
     target_text = '\n\n'.join([' '.join(tnode[0]) for tnode in target_tnodes])
 
     return target_text
@@ -243,9 +240,22 @@ def extract(filename_url_or_filelike):
 
 def extract_more(filename_url_or_filelike):
     """Does what etv2.extract does, but returns not only the text, but also
-    some of the structures that were built along the way. May provide some
-    insight to how this algorithm is calculated, without having to read
-    in detail the documentation.
+    some of the structures that were built along the way:
+
+    results = extract_more(filename_url_or_filelike)
+
+    results[0]      # extracted text
+
+    results[1]      # frequency distribution (histogram)
+
+    results[2]      # subtrees (list of textnodes pre-filter)
+
+    results[3]      # pruned subtrees
+
+    results[4]      # list of paragraphs (as seperated in original website)
+
+    May provide some insight to how this algorithm is calculated, without
+    having to read in detail the documentation.
     """
     pars_tnodes = get_parent_xpaths_and_textnodes(filename_url_or_filelike)
     #[iterable, cardinality, ttl across iterable, avg across iterable.])
@@ -266,4 +276,4 @@ def extract_more(filename_url_or_filelike):
 
     target_text = '\n\n'.join([' '.join(tnode[0]) for tnode in target_tnodes])
 
-    return (target_text, target_tnodes, filtered, pars_tnodes, hist)
+    return (target_text, hist, target_tnodes, filtered, target_paras)
