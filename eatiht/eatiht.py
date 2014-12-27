@@ -78,19 +78,27 @@ except ImportError:
     from io import BytesIO
 
 from lxml import html
-from lxml.html.clean import Cleaner
 
 
 # This xpath expression effectively queries html text
 # nodes that have a string-length greater than 20
-TEXT_FINDER_XPATH = '//body//*[not(self::script or self::style or self::i or self::b or self::strong or self::span or self::a)]/text()[string-length(normalize-space()) > 20]/..'
+TEXT_FINDER_XPATH = '//body\
+                        //*[not(\
+                            self::script or \
+                            self::style or \
+                            self::i or \
+                            self::b or \
+                            self::strong or \
+                            self::span or \
+                            self::a)] \
+                            /text()[string-length(normalize-space()) > 20]/..'
 
 # REGEX patterns for catching bracketted numbers - as seen in wiki articles -
 # and sentence splitters
-bracket_pattern = re.compile('(\[\d*\])')
+BRACKET_PATTERN = re.compile(r'(\[\d*\])')
 
 # http://stackoverflow.com/questions/8465335/a-regex-for-extracting-sentence-from-a-paragraph-in-python
-sentence_token_pattern = re.compile(r"""
+SENTENCE_TOKEN_PATTERN = re.compile(r"""
         # Split sentences on whitespace between them.
         (?:               # Group for two positive lookbehinds.
           (?<=[.!?])      # Either an end of sentence punct,
@@ -103,10 +111,9 @@ sentence_token_pattern = re.compile(r"""
         (?<!  Prof\. )    # Don't end sentence on "Prof."
         (?<!  Sr\.   )    # Don't end sentence on "Sr."
         \s+               # Split on whitespace between sentences.
-        """,
-        re.IGNORECASE | re.VERBOSE)
+        """, re.IGNORECASE | re.VERBOSE)
 
-sentence_ending = ['.', '"', '?', '!', "'"]
+SENTENCE_ENDING = ['.', '"', '?', '!', "'"]
 
 
 # Refactored download and lxml tree instantiation
@@ -134,7 +141,7 @@ def get_html_tree(filename_url_or_filelike):
     return parsed_html
 
 
-def get_xpath_frequency_distribution(paths):
+def get_xpath_frequencydistribution(paths):
     """
     Build and return a frequency distribution over xpath occurrences.
     """
@@ -145,11 +152,12 @@ def get_xpath_frequency_distribution(paths):
     parentpaths = [p[0] for p in splitpaths]
 
     # build frequency distribution
-    parentpathsCounter = Counter(parentpaths)
-    return parentpathsCounter.most_common()
+    parentpaths_counter = Counter(parentpaths)
+    return parentpaths_counter.most_common()
 
 
-def get_sentence_xpath_tuples(filename_url_or_filelike, xpath_to_text=TEXT_FINDER_XPATH):
+def get_sentence_xpath_tuples(filename_url_or_filelike,
+                              xpath_to_text=TEXT_FINDER_XPATH):
     """
     Given a url and xpath, this function will download, parse, then
     iterate though queried text-nodes. From the resulting text-nodes,
@@ -163,17 +171,19 @@ def get_sentence_xpath_tuples(filename_url_or_filelike, xpath_to_text=TEXT_FINDE
     nodes_with_text = parsed_html.xpath(xpath_to_text)
 
     sent_xpath_pairs = [
-        ('\n\n' + s, xpath_finder(n)) if e == 0     # hard-code paragraph breaks (there has to be a better way)
+        # hard-code paragraph breaks (there has to be a better way)
+        ('\n\n' + s, xpath_finder(n)) if e == 0
         else (s, xpath_finder(n))
         for n in nodes_with_text
-        for e, s in enumerate(sentence_token_pattern.split(bracket_pattern.sub('', ''.join(n.xpath('.//text()')))))
-        if s.endswith(tuple(sentence_ending))
+        for e, s in enumerate(SENTENCE_TOKEN_PATTERN.split(
+            BRACKET_PATTERN.sub('', ''.join(n.xpath('.//text()')))))
+        #if s.endswith(tuple(SENTENCE_ENDING))
         ]
 
     return sent_xpath_pairs
 
 
-def extract(url, xpath_to_text = TEXT_FINDER_XPATH):
+def extract(url, xpath_to_text=TEXT_FINDER_XPATH):
     """
     Wrapper function for extracting the main article from html document.
 
@@ -183,9 +193,13 @@ def extract(url, xpath_to_text = TEXT_FINDER_XPATH):
     """
     sent_xpath_pairs = get_sentence_xpath_tuples(url, xpath_to_text)
 
-    max_path = get_xpath_frequency_distribution([x for (s, x) in sent_xpath_pairs])[0]
+    hist = get_xpath_frequencydistribution(
+        [x for (s, x) in sent_xpath_pairs])
 
-    article_text = ' '.join([s for (s, x) in sent_xpath_pairs if max_path[0] in x])
+    max_path = hist[0]
+
+    article_text = ' '.join([s for (s, x) in sent_xpath_pairs
+                             if max_path[0] in x])
 
     # starting from index 2 because of the two extra newlines in front
-    return article_text[2:]
+    return (article_text[2:], sent_xpath_pairs, hist)

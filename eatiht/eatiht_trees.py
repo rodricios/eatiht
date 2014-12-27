@@ -182,15 +182,11 @@ class TextNodeSubTree(object):
 class TextNodeTree(object):
     """collection of textnode subtrees"""
 
-    def __init__(self, subtrees):
+    def __init__(self, subtrees, subtree_texts, fulltext, hist):
         """This is a structure that is explained above.
-        parpath     = path to root
-        tnodes      = list of children textnodes
         """
         super(TextNodeTree, self).__init__()
-        self.__tree = E.html(
-            E.body(
-                subtree for subtree in subtrees
-            )
-        )
-
+        self.subtrees = subtrees
+        self.subtree_texts = subtree_texts
+        self.fulltext = fulltext
+        self.histogram = hist
