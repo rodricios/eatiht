@@ -1,15 +1,19 @@
 eatiht
 ======
 
-A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out the new [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://phys.org/news/2014-12-faster-than-light-particles.html) where the surrounding HTML is extracted as well!
+A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out the new bootstrap-ready [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://phys.org/news/2014-12-faster-than-light-particles.html) produced by the new extraction algorithm!
 
-###12/26/14 Update
+###12/28/14 Update
+
+Previewing a new feature that will "bootstrap" the extracted HTML, giving it that *clean* look we're accustomed to.
+
+###12/26/14
 
 New algorithm, please skip to eatiht's [usage](#using-in-python) for details.
 
 Please refer to the issues for notes on possible bugs, improvements, etc.
 
-Check out eatiht's [new website](http://rodricios.github.io/eatiht/) where I walk through each step in the original algorithm! 
+Check out eatiht's [new website](http://rodricios.github.io/eatiht/) where I walk through each step in the original algorithm!
 
 New writeup will be coming soon!
 
@@ -39,7 +43,9 @@ pip install lxml
 #### Using in Python
 
 Currently, there are two new submodules:
+
 * etv2.py   - class-based approach
+
 * v2.py     - script-like approach
 
 As [requested](https://github.com/rodricios/eatiht/issues/3), etv2.extract will extract not only the text, but also the parent element's html:
@@ -53,19 +59,28 @@ tree = etv2.extract(url)
 
 # we know what this does...
 # print tree.get_text()
+
+# add necessary link tags to bootstrap cdn, center content, etc.
+tree.bootstrapify()
+
 print tree.get_html_string()
 ```
 Output:
 ```
-<html><head><title>Syrian Army Kills Nearly 5,000 IS Militants in Three Months: Source / Sputnik International</title></head>
+<html><head><title>Syrian Army Kills Nearly 5,000 IS Militants in Three Months: Source / Sputnik International</title>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css" rel="stylesheet"></head>
 <body><h2>Syrian Army Kills Nearly 5,000 IS Militants in Three Months: Source / Sputnik International</h2>...
 ```
 
-Now what about if that's rendered? 
+Now what about if that's rendered?
 
-[Take a look!](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://sputniknews.com/middleeast/20141225/1016239222.html)
+[With boostrap](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/bootstrapify?url=http://sputniknews.com/middleeast/20141225/1016239222.html)
 
-etv2 uses classes defined in [eatiht_trees.py](https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht_trees.py) to construct what is sometimes known as the "state space" in the world of AI. But instead of only keeping track of averages and totals - as is required for the algorithm - the "state" class [TextNodeSubTree](https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht_trees.py#L7) also keeps a reference to its original lxml.html element from whence it came. 
+
+[Without](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://sputniknews.com/middleeast/20141225/1016239222.html)
+
+
+etv2 uses classes defined in [eatiht_trees.py](https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht_trees.py) to construct what is sometimes known as the "state space" in the world of AI. But instead of only keeping track of averages and totals - as is required for the algorithm - the "state" class [TextNodeSubTree](https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht_trees.py#L7) also keeps a reference to its original lxml.html element from whence it came.
 
 You can access the original, extracted html elements like this:
 
@@ -95,7 +110,7 @@ Output:
 ```
 Car nerds, you just got an extra present under the tree.
 
-Tesla announced Friday an upgrade for its Roadster, the electric car company’s convertible model, 
+Tesla announced Friday an upgrade for its Roadster, the electric car company’s convertible model,
 and said that the new features significantly boost its range -- beyond what many traditional cars
 can get on a tank of gasoline.
 ```
@@ -127,8 +142,8 @@ print eatiht.extract(url)
 ```
 ##### Output
 ```
-NASA's Curiosity rover is continuing to help scientists piece together the mystery of how Mars 
-lost its surface water over the course of billions of years. The rover drilled into a piece of 
+NASA's Curiosity rover is continuing to help scientists piece together the mystery of how Mars
+lost its surface water over the course of billions of years. The rover drilled into a piece of
 Martian rock called Cumberland and found some ancient water hidden within it...
 ```
 
@@ -190,5 +205,5 @@ TODO:
 * etv2 command line scripts
 * etv2.py tests
 * improve filtering|pruning step so that taglines from articles get dropped
-    * if and only if tagline has a reference image, don't prune 
+    * if and only if tagline has a reference image, don't prune
 * add some template engine so that extracted html has *style*

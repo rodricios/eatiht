@@ -5,7 +5,7 @@ def readme():
         return f.read()
 
 setup(name='eatiht',
-      version='0.1.1',
+      version='0.1.11',
       description='A simple tool used to extract an \
                   article\'s text in html documents.',
       keywords='extract extracted extracting extraction filter filtered \

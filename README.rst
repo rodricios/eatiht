@@ -2,14 +2,21 @@ eatiht
 ======
 
 A python package for **e**\ xtracting **a**\ rticle **t**\ ext **i**\ n
-**ht**\ ml documents. Check out the new
-`demo <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://sputniknews.com/middleeast/20141225/1016239222.html>`__
-where the surrounding HTML is extracted as well!
+**ht**\ ml documents. Check out the new bootstrap-ready
+`demo <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://phys.org/news/2014-12-faster-than-light-particles.html>`__
+produced by the new extraction algorithm!
 
-12/26/14 Update
+12/28/14 Update
 ~~~~~~~~~~~~~~~
 
-New algorithm, please skip to eatiht's usage for details.
+Previewing a new feature that will "bootstrap" the extracted HTML,
+giving it that *clean* look we're accustomed to.
+
+12/26/14
+~~~~~~~~
+
+New algorithm, please skip to eatiht's `usage <#using-in-python>`__ for
+details.
 
 Please refer to the issues for notes on possible bugs, improvements,
 etc.
@@ -49,7 +56,11 @@ install lxml
 Using in Python
 ^^^^^^^^^^^^^^^
 
-Currently, there are two new submodules: \* etv2.py \* eatiht\_v2.py
+Currently, there are two new submodules:
+
+-  etv2.py - class-based approach
+
+-  v2.py - script-like approach
 
 As `requested <https://github.com/rodricios/eatiht/issues/3>`__,
 etv2.extract will extract not only the text, but also the parent
@@ -65,19 +76,26 @@ element's html:
 
     # we know what this does...
     # print tree.get_text()
+
+    # add necessary link tags to bootstrap cdn, center content, etc.
+    tree.bootstrapify()
+
     print tree.get_html_string()
 
 Output:
 
 ::
 
-    <html><head><title>Syrian Army Kills Nearly 5,000 IS Militants in Three Months: Source / Sputnik International</title></head>
+    <html><head><title>Syrian Army Kills Nearly 5,000 IS Militants in Three Months: Source / Sputnik International</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css" rel="stylesheet"></head>
     <body><h2>Syrian Army Kills Nearly 5,000 IS Militants in Three Months: Source / Sputnik International</h2>...
 
 Now what about if that's rendered?
 
-`Take a
-look! <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://sputniknews.com/middleeast/20141225/1016239222.html>`__
+`With
+boostrap <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/bootstrapify?url=http://sputniknews.com/middleeast/20141225/1016239222.html>`__
+
+`Without <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://sputniknews.com/middleeast/20141225/1016239222.html>`__
 
 etv2 uses classes defined in
 `eatiht\_trees.py <https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht_trees.py>`__
@@ -106,11 +124,11 @@ Please refer to
 `eatiht\_trees.py <https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht_trees.py>`__
 for more info on what functions are available for you to use.
 
-eatiht\_v2 is functionally identical to the original eatiht:
+v2 is functionally identical to the original eatiht:
 
 .. code:: python
 
-    import eatiht.eatiht_v2 as v2
+    import eatiht.v2 as v2
 
     url = 'http://www.washingtonpost.com/blogs/the-switch/wp/2014/12/26/elon-musk-the-new-tesla-roadster-can-travel-some-400-miles-on-a-single-charge/'
 
@@ -126,10 +144,9 @@ Output:
     and said that the new features significantly boost its range -- beyond what many traditional cars
     can get on a tank of gasoline.
 
-eatiht\_v2 contains one extra function that executes the extraction
-algorithm, but along with outputting the text, it outputs the structures
-that were used to calculate the output (ie. histogram, list of xpaths,
-etc.):
+v2 contains one extra function that executes the extraction algorithm,
+but along with returning the text, it also returns the structures that
+were used to calculate the output (ie. histogram, list of xpaths, etc.):
 
 .. code:: python
 
@@ -183,8 +200,8 @@ Requirements
 
 ::
 
-    requests
     lxml
+    *requests, as of v0.1.0, is no longer required
 
 Motivation
 ----------
@@ -262,3 +279,4 @@ TODO:
    -  if and only if tagline has a reference image, don't prune
 
 -  add some template engine so that extracted html has *style*
+
