@@ -1,7 +1,7 @@
 import os
 from unittest import TestCase
 
-from ..v2 import extract, get_parent_xpaths_and_textnodes, get_xpath_frequencydistribution
+from ..etv2 import get_html_tree, get_textnode_subtrees
 
 # Testdata file declarations
 RE_SPLIT_VARIOUS_ENDINGS_FILENAME = os.path.join(os.path.dirname(__file__),'assets/regex_various_endings.html')
@@ -17,8 +17,11 @@ class TestRegexSplitVariousEndingsInHTML(TestCase):
         self.file.close()
 
     def test_splits_regex(self):
-        sent_xpath_pairs = get_parent_xpaths_and_textnodes(self.file)
-        num_of_splits = len(sent_xpath_pairs)
+        html_tree = get_html_tree(self.file)
+
+        subtrees = get_textnode_subtrees(html_tree)
+
+        num_of_splits = len(subtrees)
         self.assertEqual(num_of_splits, 9, "\nrequired number of splits: 9\n" +
                          "actual number of splits:   " + str(num_of_splits))
 
@@ -31,7 +34,10 @@ class TestRegexSplitDotEndingsInHTML(TestCase):
         self.file.close()
 
     def test_splits_regex(self):
-        sent_xpath_pairs = get_parent_xpaths_and_textnodes(self.file)
-        num_of_splits = len(sent_xpath_pairs)
+        html_tree = get_html_tree(self.file)
+
+        subtrees = get_textnode_subtrees(html_tree)
+
+        num_of_splits = len(subtrees)
         self.assertEqual(num_of_splits, 9, "\nrequired number of splits: 9\n" +
                          "actual number of splits:   " + str(num_of_splits))

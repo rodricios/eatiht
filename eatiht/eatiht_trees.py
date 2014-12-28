@@ -179,7 +179,6 @@ class TextNodeSubTree(object):
         """Return the html that wraps around the text"""
         return self.__parent_elem
 
-
     def clean(self):
         """clean up newlines"""
         for textnode in self.__text_nodes:
@@ -199,9 +198,15 @@ class TextNodeTree(object):
         self.__title = title
         self.__subtrees = subtrees
         self.__histogram = hist
+        self.__content_path = hist[0][0]
 
-        self.__htmltree = ""
+        self.__htmltree = None
         self.__fulltext = ""
+
+    @property
+    def get_subtrees(self):
+        """Return all subtrees"""
+        return self.__subtrees
 
     @property
     def histogram(self):
@@ -213,17 +218,26 @@ class TextNodeTree(object):
         """Return title of website"""
         return self.__title
 
+    @property
+    def content_path(self):
+        """Return xpath to main content"""
+        return self.__content_path
+
     def __make_tree(self):
         """Build a tree using lxml.html.builder and our subtrees"""
 
-        # start by connecting title in header to body
-        body = E.BODY(
-            E.H2(self.__title)
-            )
+        # create div with "container" class
+        div = E.DIV(E.CLASS("container"))
 
-        # next, iterate through subtrees appending each tree
+        # append header with title
+        div.append(E.H2(self.__title))
+
+        # next, iterate through subtrees appending each tree to div
         for subtree in self.__subtrees:
-            body.append(subtree.get_html())
+            div.append(subtree.get_html())
+
+        # Connect div to body
+        body = E.BODY(div)
 
         # attach body to html
         self.__htmltree = E.HTML(
@@ -235,7 +249,7 @@ class TextNodeTree(object):
 
     def get_html(self):
         """Generates if need be and returns a simpler html document with text"""
-        if self.__htmltree:
+        if self.__htmltree is not None:
             return self.__htmltree
         else:
             self.__make_tree()
@@ -244,12 +258,11 @@ class TextNodeTree(object):
     def get_html_string(self):
         """Generates if need be and returns a simpler html string with
         extracted text"""
-        if self.__htmltree:
+        if self.__htmltree is not None:
             return htmltostring(self.__htmltree)
         else:
             self.__make_tree()
             return htmltostring(self.__htmltree)
-
 
     def get_text(self):
         """Return all joined text from each subtree"""
@@ -260,7 +273,26 @@ class TextNodeTree(object):
                                           for text in self.__subtrees)
             return self.__fulltext
 
+    # TODO: I consider this a "prototype" to the template generator
+    # Clearly, bootstrap shouldn't be the only styling possible
+    def bootstrapify(self):
+        """Add bootstrap cdn to headers of html"""
+        if self.__htmltree is None:
+            #raise Exception("HtmlTree has not been made yet")
+            self.__make_tree()
 
-    def get_subtrees(self):
-        """Return all subtrees"""
-        return self.__subtrees
+        # add bootstrap cdn to head
+        self.__htmltree.find('head').append(
+            E.LINK(rel="stylesheet",
+                   href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css",
+                   type="text/css"))
+
+        # center images
+        for img_parent in self.__htmltree.xpath("//img/.."):
+            # the space before the class to insert is CRITICAL!
+            img_parent.attrib["class"] += " text-center"
+
+        # make images responsive
+        for img in self.__htmltree.xpath("//img"):
+            # the space before the class to insert is CRITICAL!
+            img.attrib["class"] += " img-responsive"
