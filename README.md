@@ -1,7 +1,7 @@
 eatiht
 ======
 
-A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out the new bootstrap-ready [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://phys.org/news/2014-12-faster-than-light-particles.html) produced by the new extraction algorithm!
+A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out the new bootstrap-ready [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/bootstrapify?url=http://phys.org/news/2014-12-faster-than-light-particles.html) produced by the new extraction algorithm!
 
 ###12/28/14 Update
 
