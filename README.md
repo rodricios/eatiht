@@ -24,7 +24,7 @@ New writeup will be coming soon!
 
 *This is neat-o. A short and sweet project...* - [/u/CandyCorns_](http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz17gv)
 
-*From a quick glance this looks super elegant! Very neat idea!* - [/u/worldsayshi](http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz3akt)
+*This is both useful and shows a simple use case for data mining for the general population - an outreach of sorts.* - [/u/tweninger](http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmzai6s) (author of the Text-to-Tag Clustering paper I referenced below)
 
 At a Glance
 -----------
