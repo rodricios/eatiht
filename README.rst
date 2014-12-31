@@ -3,7 +3,7 @@ eatiht
 
 A python package for **e**\ xtracting **a**\ rticle **t**\ ext **i**\ n
 **ht**\ ml documents. Check out the new bootstrap-ready
-`demo <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://phys.org/news/2014-12-faster-than-light-particles.html>`__
+`demo <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/bootstrapify?url=http://phys.org/news/2014-12-faster-than-light-particles.html>`__
 produced by the new extraction algorithm!
 
 12/28/14 Update
@@ -15,7 +15,7 @@ giving it that *clean* look we're accustomed to.
 12/26/14
 ~~~~~~~~
 
-New algorithm, please skip to eatiht's `usage <#using-in-python>`__ for
+New algorithm, please skip to eatiht's usage for
 details.
 
 Please refer to the issues for notes on possible bugs, improvements,
@@ -35,8 +35,10 @@ What people have been saying
 *This is neat-o. A short and sweet project...* -
 `/u/CandyCorns\_ <http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz17gv>`__
 
-*From a quick glance this looks super elegant! Very neat idea!* -
-`/u/worldsayshi <http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz3akt>`__
+*This is both useful and shows a simple use case for data mining for the
+general population - an outreach of sorts.* -
+`/u/tweninger <http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmzai6s>`__
+(author of the Text-to-Tag Clustering paper I referenced below)
 
 At a Glance
 -----------
