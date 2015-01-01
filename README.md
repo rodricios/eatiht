@@ -3,7 +3,11 @@ eatiht
 
 A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out the new twitter-bootstrap-ready [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/bootstrapify?url=http://phys.org/news/2014-12-faster-than-light-particles.html) produced by the new extraction algorithm!
 
-###12/31/14 Update
+###1/1/2015 Update
+
+[Follow the current work I'll be doing here!](https://github.com/rodricios/crawl-to-the-future)
+
+###12/31/14 
 
 For those checking in for the writeup or project, I'd like to apologize and say that I'm going to be somewhat busy these upcoming weeks/months due to a project I've undertaken with [Tim Weninger](http://www3.nd.edu/~tweninge/), which means I likely won't be making many changes to eatiht - but please do still submit issues or pull requests; I will get to them eventually. The writeup itself is getting proof'ed atm. I hope to have that out sometime in the upcoming week. 
 
@@ -15,15 +19,11 @@ Cheers to the New Year,
 
 Rodrigo
 
-P.S. 
-
 Follow me and both these projects on [twitter](https://twitter.com/rodricios) :) 
 
-###12/28/14 
+####Last week's updates
 
 Previewing a new feature that will "twitter-bootstrap" the extracted HTML, giving it that *clean* look we're accustomed to.
-
-###12/26/14
 
 New algorithm, please skip to eatiht's [usage](#using-in-python) for details.
 
