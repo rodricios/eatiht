@@ -1,11 +1,27 @@
 eatiht
 ======
 
-A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out the new bootstrap-ready [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/bootstrapify?url=http://phys.org/news/2014-12-faster-than-light-particles.html) produced by the new extraction algorithm!
+A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out the new twitter-bootstrap-ready [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/bootstrapify?url=http://phys.org/news/2014-12-faster-than-light-particles.html) produced by the new extraction algorithm!
 
-###12/28/14 Update
+###12/31/14 Update
 
-Previewing a new feature that will "bootstrap" the extracted HTML, giving it that *clean* look we're accustomed to.
+For those checking in for the writeup or project, I'd like to apologize and say that I'm going to be somewhat busy these upcoming weeks/months due to a project I've undertaken with [Tim Weninger](http://www3.nd.edu/~tweninge/), which means I likely won't be making many changes to eatiht - but please do still submit issues or pull requests; I will get to them eventually. The writeup itself is getting proof'ed atm. I hope to have that out sometime in the upcoming week. 
+
+As for the project, it will be a position piece that I hope will be insightful, yet critical on the current state of data|text-extraction methods. If all goes to plan, we hope to cover and test extraction methods from the last 15 years.
+
+I will try to document much if not the all of the project in a GitHub repository soon to be created. Please stay tuned for a link. 
+
+Cheers to the New Year,
+
+Rodrigo
+
+P.S. 
+
+Follow this both projects on [twitter](https://twitter.com/rodricios). 
+
+###12/28/14 
+
+Previewing a new feature that will "twitter-bootstrap" the extracted HTML, giving it that *clean* look we're accustomed to.
 
 ###12/26/14
 
@@ -24,7 +40,7 @@ New writeup will be coming soon!
 
 *This is neat-o. A short and sweet project...* - [/u/CandyCorns_](http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz17gv)
 
-*This is both useful and shows a simple use case for data mining for the general population - an outreach of sorts.* - [/u/tweninger](http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmzai6s) (author of the Text-to-Tag Clustering paper I referenced below)
+*This is both useful and shows a simple use case for data mining for the general population - an outreach of sorts.* - [/u/tweninger](http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmzai6s)
 
 At a Glance
 -----------
@@ -193,7 +209,7 @@ Please raise any [issues](https://github.com/rodricios/eatiht/issues) or yell at
 Tests
 -----
 Currently, the tests are lacking. But please still run these tests to ensure that
-modifications to eatiht.py and eatiht_v2.py run properly.
+modifications to eatiht.py, v2.py, and etv2.py run properly.
 ```python
 python setup.py test
 ```
@@ -203,7 +219,7 @@ TODO:
 
 * ~~HTML-and-text extraction~~
 * etv2 command line scripts
-* etv2.py tests
+* ~~etv2.py tests~~
 * improve filtering|pruning step so that taglines from articles get dropped
     * if and only if tagline has a reference image, don't prune
-* add some template engine so that extracted html has *style*
+* add some template engine (see "bootstrapify" function for current state)

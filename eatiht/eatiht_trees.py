@@ -161,7 +161,9 @@ class TextNodeSubTree(object):
     def __learn_oneself(self):
         """calculate cardinality, total and average string length"""
         if not self.__parent_path or not self.__text_nodes:
-            raise Exception("This should never happen.")
+            raise Exception("This error occurred because the step constructor\
+                            had insufficient textnodes or it had empty string\
+                            for its parent xpath")
         # Iterate through text nodes and sum up text length
         # TODO: consider naming this child_count or cardinality
         # or branch_cnt
