@@ -17,7 +17,7 @@ Rodrigo
 
 P.S. 
 
-Follow this both projects on [twitter](https://twitter.com/rodricios). 
+Follow me and both these projects on [twitter](https://twitter.com/rodricios) :) 
 
 ###12/28/14 
 
