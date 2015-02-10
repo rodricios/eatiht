@@ -9,7 +9,7 @@ Hello all! I'm here to update, sadly, not the package, but instead to inform you
 
 I'll refer the reader to the [homepage](http://rodricios.github.io/eatiht) for details into how the original algo works. If that's too long, and didn't read, refer to the [eatiht.py](eatiht/eatiht.py), [v2.py](eatiht/v2.py), and [etv2.py](eatiht/etv2.py) docstrings for more info! 
 
-Second,  I'll be streaming a live coding session via Alex Putilin's, aka [eleweek](https://github.com/eleweek)'s awesome project: WatchPeopleCode ([github project](https://github.com/eleweek/WatchPeopleCode), [subreddit](http://www.reddit.com/r/WatchPeopleCode/).
+Second,  I'll be streaming a live coding session via Alex Putilin's, aka [eleweek](https://github.com/eleweek)'s awesome project: WatchPeopleCode ([github project](https://github.com/eleweek/WatchPeopleCode), [subreddit](http://www.reddit.com/r/WatchPeopleCode/)).
 
 This is an amazing effort by Alex! I highly recommend following his effort on twitter [@WatchPeopleCode](https://twitter.com/WatchPeopleCode). 
 
