@@ -3,23 +3,25 @@ eatiht
 
 A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out the new twitter-bootstrap-ready [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/bootstrapify?url=http://phys.org/news/2014-12-faster-than-light-particles.html) produced by the new extraction algorithm!
 
-###1/1/2015 Update
+###2/10/2015 Update
+
+Hello all! I'm here to update, sadly, not the package, but instead to inform you of two things. First, that I'm seeking help for this project. If you feel up to the job of getting to know how the predictive model works, please do so. The required changes are essentially encoding/decoding bugs where the time-to-patch ratio is too high for me - I'm in the middle of school and other exciting projects :)
+
+I'll refer the reader to the [homepage](http://rodricios.github.io/eatiht) for details into how the original algo works. If that's too long, and didn't read, refer to the [eatiht.py](eatiht/eatiht.py), [v2.py](eatiht/v2.py), and [etv2.py](eatiht/etv2.py) docstrings for more info! 
+
+Second,  I'll be streaming a live coding session via Alex Putilin's, aka [eleweek](https://github.com/eleweek)'s awesome project: WatchPeopleCode ([github project](https://github.com/eleweek/WatchPeopleCode), [subreddit](http://www.reddit.com/r/WatchPeopleCode/).
+
+This is an amazing effort by Alex! I highly recommend following his effort on twitter [@WatchPeopleCode](https://twitter.com/WatchPeopleCode). 
+
+The day of streaming will be this Saturday, currently scheduled for 10 AM pst, 1 PM est.
+
+Cheers!
+
+###1/1/2015
 
 [Follow the current work I'll be doing here!](https://github.com/rodricios/crawl-to-the-future)
 
-###12/31/14 
-
-For those checking in for the writeup or project, I'd like to apologize and say that I'm going to be somewhat busy these upcoming weeks/months due to a project I've undertaken with [Tim Weninger](http://www3.nd.edu/~tweninge/), which means I likely won't be making many changes to eatiht - but please do still submit issues or pull requests; I will get to them eventually. The writeup itself is getting proof'ed atm. I hope to have that out sometime in the upcoming week. 
-
-As for the project, it will be a position piece that I hope will be insightful, yet critical on the current state of data|text-extraction methods. If all goes to plan, we hope to cover and test extraction methods from the last 15 years.
-
-I will try to document much if not the all of the project in a GitHub repository soon to be created. Please stay tuned for a link. 
-
-Cheers to the New Year,
-
-Rodrigo
-
-Follow me and both these projects on [twitter](https://twitter.com/rodricios) :) 
+Follow me on [twitter](https://twitter.com/rodricios) :) 
 
 ####Last week's updates
 
