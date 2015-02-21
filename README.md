@@ -3,6 +3,10 @@ eatiht
 
 A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out the new twitter-bootstrap-ready [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/bootstrapify?url=http://phys.org/news/2014-12-faster-than-light-particles.html) produced by the new extraction algorithm!
 
+###2/20/2015 Update
+
+Hey y'all, I made another "machine-learning" predictive Python module called [autocomplete](https://github.com/rodricios/autocomplete). I intended it on being more of a learning resource, and I include an explanation to the algorithm literally written for young kids and teens (like my own siblings), and anyone not immediately aware of what goes on in the spooky world of "AI". 
+
 ###2/10/2015 Update
 
 Hello all! I'm here to update, sadly, not the package, but instead to inform you of two things. First, that I'm seeking help for this project. If you feel up to the job of getting to know how the predictive model works, please do so. The required changes are essentially encoding/decoding bugs where the time-to-patch ratio is too high for me - I'm in the middle of school and other exciting projects :)
