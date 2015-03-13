@@ -81,7 +81,11 @@ as to what exactly it is that I'm doing lol.
 
 
 import urllib2
+import cookielib
+import chardet
+
 from collections import Counter
+
 try:
     from cStringIO import StringIO as BytesIO
 except ImportError:
@@ -125,21 +129,27 @@ def get_html_tree(filename_url_or_filelike):
     """From some file path, input stream, or URL, construct and return
     an HTML tree.
     """
+
+    handler = (
+        urllib2.HTTPSHandler
+            if filename_url_or_filelike.lower().startswith('https')
+            else urllib2.HTTPHandler
+    )
+    cj = cookielib.CookieJar()
+    opener = urllib2.build_opener(handler)
+    opener.add_handler(urllib2.HTTPCookieProcessor(cj))
+    resp = opener.open(filename_url_or_filelike)
+
     try:
-        parsed_html = html.parse(filename_url_or_filelike,
-                                 html.HTMLParser(encoding="utf-8",
-                                                 remove_blank_text=True))
+        content = resp.read()
+    finally:
+        resp.close()
 
-    except IOError:
-        # use requests as a workaround for problems in some
-        # sites requiring cookies like nytimes.com
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
-        response = opener.open(filename_url_or_filelike).read()
+    encoding = chardet.detect(content)['encoding']
 
-        # http://lxml.de/parsing.html
-        parsed_html = html.parse(BytesIO(response),
-                                 html.HTMLParser(encoding="utf-8",
-                                                 remove_blank_text=True))
+    parsed_html = html.parse(BytesIO(content),
+                             html.HTMLParser(encoding=encoding,
+                                             remove_blank_text=True))
 
     # http://www.reddit.com/r/Python/comments/2pqx2d/just_made_what_i_consider_my_first_algorithm_and/cn0mvku
     # thanks for the suggestion /u/oliver_newton
