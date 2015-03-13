@@ -129,17 +129,36 @@ def get_html_tree(filename_url_or_filelike):
     """From some file path, input stream, or URL, construct and return
     an HTML tree.
     """
+    try:
+        handler = (
+            urllib2.HTTPSHandler
+                if filename_url_or_filelike.lower().startswith('https')
+                else urllib2.HTTPHandler
+        )
+        cj = cookielib.CookieJar()
+        opener = urllib2.build_opener(handler)
+        opener.add_handler(urllib2.HTTPCookieProcessor(cj))
+    
+        resp = opener.open(filename_url_or_filelike)
+    except(AttributeError):
+        content = filename_url_or_filelike.read()
+        encoding = chardet.detect(content)['encoding']
 
-    handler = (
-        urllib2.HTTPSHandler
-            if filename_url_or_filelike.lower().startswith('https')
-            else urllib2.HTTPHandler
-    )
-    cj = cookielib.CookieJar()
-    opener = urllib2.build_opener(handler)
-    opener.add_handler(urllib2.HTTPCookieProcessor(cj))
-    resp = opener.open(filename_url_or_filelike)
+        parsed_html = html.parse(BytesIO(content),
+                                 html.HTMLParser(encoding=encoding,
+                                                 remove_blank_text=True))
+        
+        return parsed_html
+    except(ValueError):
+        content = filename_url_or_filelike
+        encoding = chardet.detect(content)['encoding']
 
+        parsed_html = html.parse(BytesIO(content),
+                                 html.HTMLParser(encoding=encoding,
+                                                 remove_blank_text=True))
+        
+        return parsed_html
+    
     try:
         content = resp.read()
     finally:
@@ -150,10 +169,6 @@ def get_html_tree(filename_url_or_filelike):
     parsed_html = html.parse(BytesIO(content),
                              html.HTMLParser(encoding=encoding,
                                              remove_blank_text=True))
-
-    # http://www.reddit.com/r/Python/comments/2pqx2d/just_made_what_i_consider_my_first_algorithm_and/cn0mvku
-    # thanks for the suggestion /u/oliver_newton
-    # HTML_CLEANER(parsed_html)
 
     return parsed_html
 
@@ -197,8 +212,11 @@ def get_textnode_subtrees(html_tree,
     structure, or URL is required.
     """
 
-    xpath_finder = html_tree.getroot().getroottree().getpath
-
+    try:
+        xpath_finder = html_tree.getroot().getroottree().getpath
+    except(AttributeError):
+        xpath_finder = html_tree.getroottree().getpath
+        
     nodes_with_text = html_tree.xpath(xpath_to_text)
 
     # Within the TextNodeSubTree construction, the ABSL is calculated
@@ -215,11 +233,10 @@ def get_textnode_subtrees(html_tree,
     return parentpaths_textnodes
 
 
-def extract(filename_url_or_filelike):
+def extract(filename_url_filelike_or_htmlstring):
     """An "improved" algorithm over the original eatiht algorithm
     """
-    html_tree = get_html_tree(filename_url_or_filelike)
-
+    html_tree = get_html_tree(filename_url_filelike_or_htmlstring)
 
     subtrees = get_textnode_subtrees(html_tree)
     #[iterable, cardinality, ttl across iterable, avg across iterable.])

@@ -123,16 +123,35 @@ def get_html_tree(filename_url_or_filelike):
     """From some file path, input stream, or URL, construct and return
     an HTML tree.
     """
+    try:
+        handler = (
+            urllib2.HTTPSHandler
+                if filename_url_or_filelike.lower().startswith('https')
+                else urllib2.HTTPHandler
+        )
+        cj = cookielib.CookieJar()
+        opener = urllib2.build_opener(handler)
+        opener.add_handler(urllib2.HTTPCookieProcessor(cj))
+        
+        resp = opener.open(filename_url_or_filelike)
+    except(AttributeError):
+        content = filename_url_or_filelike.read()
+        encoding = chardet.detect(content)['encoding']
 
-    handler = (
-        urllib2.HTTPSHandler
-            if filename_url_or_filelike.lower().startswith('https')
-            else urllib2.HTTPHandler
-    )
-    cj = cookielib.CookieJar()
-    opener = urllib2.build_opener(handler)
-    opener.add_handler(urllib2.HTTPCookieProcessor(cj))
-    resp = opener.open(filename_url_or_filelike)
+        parsed_html = html.parse(BytesIO(content),
+                                 html.HTMLParser(encoding=encoding,
+                                                 remove_blank_text=True))
+        
+        return parsed_html
+    except(ValueError):
+        content = filename_url_or_filelike
+        encoding = chardet.detect(content)['encoding']
+
+        parsed_html = html.parse(BytesIO(content),
+                                 html.HTMLParser(encoding=encoding,
+                                                 remove_blank_text=True))
+        
+        return parsed_html
 
     try:
         content = resp.read()
@@ -144,10 +163,6 @@ def get_html_tree(filename_url_or_filelike):
     parsed_html = html.parse(BytesIO(content),
                              html.HTMLParser(encoding=encoding,
                                              remove_blank_text=True))
-
-    # http://www.reddit.com/r/Python/comments/2pqx2d/just_made_what_i_consider_my_first_algorithm_and/cn0mvku
-    # thanks for the suggestion /u/oliver_newton
-    # HTML_CLEANER(parsed_html)
 
     return parsed_html
 
@@ -177,7 +192,10 @@ def get_sentence_xpath_tuples(filename_url_or_filelike,
 
     parsed_html = get_html_tree(filename_url_or_filelike)
 
-    xpath_finder = parsed_html.getroot().getroottree().getpath
+    try:
+        xpath_finder = parsed_html.getroot().getroottree().getpath
+    except(AttributeError):
+        xpath_finder = parsed_html.getroottree().getpath
 
     nodes_with_text = parsed_html.xpath(xpath_to_text)
 
@@ -194,7 +212,7 @@ def get_sentence_xpath_tuples(filename_url_or_filelike,
     return sent_xpath_pairs
 
 
-def extract(url, xpath_to_text=TEXT_FINDER_XPATH):
+def extract(url_or_htmlstring, xpath_to_text=TEXT_FINDER_XPATH):
     """
     Wrapper function for extracting the main article from html document.
 
@@ -202,7 +220,7 @@ def extract(url, xpath_to_text=TEXT_FINDER_XPATH):
     start: url[,xpath] -> xpaths of text-nodes -> frequency distribution
     -> argmax( freq. dist. ) = likely xpath leading to article's content
     """
-    sent_xpath_pairs = get_sentence_xpath_tuples(url, xpath_to_text)
+    sent_xpath_pairs = get_sentence_xpath_tuples(url_or_htmlstring, xpath_to_text)
 
     hist = get_xpath_frequencydistribution(
         [x for (s, x) in sent_xpath_pairs])
