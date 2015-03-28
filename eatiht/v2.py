@@ -80,6 +80,9 @@ as to what exactly it is that I'm doing lol.
 """
 
 import urllib2
+import cookielib
+import chardet
+
 from collections import Counter
 try:
     from cStringIO import StringIO as BytesIO
@@ -108,20 +111,48 @@ def get_html_tree(filename_url_or_filelike):
     an HTML tree.
     """
     try:
-        parsed_html = html.parse(filename_url_or_filelike,
-                                 html.HTMLParser(encoding="utf-8"))
+        handler = (
+            urllib2.HTTPSHandler
+                if filename_url_or_filelike.lower().startswith('https')
+                else urllib2.HTTPHandler
+        )
+        cj = cookielib.CookieJar()
+        opener = urllib2.build_opener(handler)
+        opener.add_handler(urllib2.HTTPCookieProcessor(cj))
 
-    except IOError:
-        # use requests as a workaround for problems in some
-        # sites requiring cookies like nytimes.com
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
-        response = opener.open(filename_url_or_filelike).read()
+        resp = opener.open(filename_url_or_filelike)
+    except(AttributeError):
+        content = filename_url_or_filelike.read()
+        encoding = chardet.detect(content)['encoding']
 
-        # http://lxml.de/parsing.html
-        parsed_html = html.parse(BytesIO(response),
-                                 html.HTMLParser(encoding="utf-8"))
+        parsed_html = html.parse(BytesIO(content),
+                                 html.HTMLParser(encoding=encoding,
+                                                 remove_blank_text=True))
+
+        return parsed_html
+    except(ValueError):
+        content = filename_url_or_filelike
+        encoding = chardet.detect(content)['encoding']
+
+        parsed_html = html.parse(BytesIO(content),
+                                 html.HTMLParser(encoding=encoding,
+                                                 remove_blank_text=True))
+
+        return parsed_html
+
+    try:
+        content = resp.read()
+    finally:
+        resp.close()
+
+    encoding = chardet.detect(content)['encoding']
+
+    parsed_html = html.parse(BytesIO(content),
+                             html.HTMLParser(encoding=encoding,
+                                             remove_blank_text=True))
 
     return parsed_html
+
 
 # same as v1
 def get_xpath_frequencydistribution(paths):
@@ -150,7 +181,7 @@ def calc_avgstrlen_pathstextnodes(pars_tnodes, dbg=False):
     crd = len(pars_tnodes)
     avg = ttl/crd
     if dbg is True:
-        print avg
+        print(avg)
     #       avg = ttl/crd
     return (avg, ttl, crd)
 
@@ -173,7 +204,7 @@ def calc_across_paths_textnodes(paths_nodes, dbg=False):
         path_nodes[1][2] = ttl                          # total
         path_nodes[1][3] = ttl/ cnt                     # average
         if dbg:
-            print path_nodes[1]
+            print(path_nodes[1])
 
 # TODO: consider changing this name to "get_textnode_subtrees"
 # see etv2.
@@ -230,13 +261,14 @@ def extract(filename_url_or_filelike):
     paths = [path for path, tnode in filtered]
 
     hist = get_xpath_frequencydistribution(paths)
+    try:
+        target_tnodes = [tnode for par, tnode in pars_tnodes if hist[0][0] in par]
 
-    target_tnodes = [tnode for par, tnode in pars_tnodes if hist[0][0] in par]
+        target_text = '\n\n'.join([' '.join(tnode[0]) for tnode in target_tnodes])
 
-    target_text = '\n\n'.join([' '.join(tnode[0]) for tnode in target_tnodes])
-
-    return target_text
-
+        return target_text
+    except IndexError:
+        return ""
 
 def extract_more(filename_url_or_filelike):
     """Does what etv2.extract does, but returns not only the text, but also

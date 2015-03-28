@@ -138,7 +138,7 @@ def get_html_tree(filename_url_or_filelike):
         cj = cookielib.CookieJar()
         opener = urllib2.build_opener(handler)
         opener.add_handler(urllib2.HTTPCookieProcessor(cj))
-    
+
         resp = opener.open(filename_url_or_filelike)
     except(AttributeError):
         content = filename_url_or_filelike.read()
@@ -147,7 +147,7 @@ def get_html_tree(filename_url_or_filelike):
         parsed_html = html.parse(BytesIO(content),
                                  html.HTMLParser(encoding=encoding,
                                                  remove_blank_text=True))
-        
+
         return parsed_html
     except(ValueError):
         content = filename_url_or_filelike
@@ -156,9 +156,9 @@ def get_html_tree(filename_url_or_filelike):
         parsed_html = html.parse(BytesIO(content),
                                  html.HTMLParser(encoding=encoding,
                                                  remove_blank_text=True))
-        
+
         return parsed_html
-    
+
     try:
         content = resp.read()
     finally:
@@ -199,7 +199,7 @@ def calcavg_avgstrlen_subtrees(subtrees, dbg=False):
     crd = len(subtrees)
     avg = ttl/crd
     if dbg is True:
-        print avg
+        print(avg)
     #       avg = ttl/crd
     return (avg, ttl, crd)
 
@@ -216,7 +216,7 @@ def get_textnode_subtrees(html_tree,
         xpath_finder = html_tree.getroot().getroottree().getpath
     except(AttributeError):
         xpath_finder = html_tree.getroottree().getpath
-        
+
     nodes_with_text = html_tree.xpath(xpath_to_text)
 
     # Within the TextNodeSubTree construction, the ABSL is calculated

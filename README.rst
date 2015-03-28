@@ -2,29 +2,34 @@ eatiht
 ======
 
 A python package for **e**\ xtracting **a**\ rticle **t**\ ext **i**\ n
-**ht**\ ml documents. Check out the new bootstrap-ready
+**ht**\ ml documents. Check out the new twitter-bootstrap-ready
 `demo <http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/bootstrapify?url=http://phys.org/news/2014-12-faster-than-light-particles.html>`__
 produced by the new extraction algorithm!
 
-12/28/14 Update
-~~~~~~~~~~~~~~~
+Latest News
+~~~~~~~~~~~
 
-Previewing a new feature that will "bootstrap" the extracted HTML,
-giving it that *clean* look we're accustomed to.
+Check out my latest project: `autocomplete - a kid and adult friendly
+exercise in machine
+learning <https://github.com/rodricios/autocomplete>`__
 
-12/26/14
-~~~~~~~~
+I'm collaborating with `Tim Weninger <http://www3.nd.edu/~tweninge/>`__
+in a must-read data-driven opinion piece (publish date is tba). I
+benchmarked Eatiht and many more content extractors; you can follow the
+`current work
+here! <https://github.com/rodricios/crawl-to-the-future>`__.
 
-New algorithm, please skip to eatiht's usage for
-details.
+Read `Matthew Peters's <https://github.com/matt-peters>`__ article that
+benchmarked Eatiht, along with few other content extractors written in
+Python.
 
-Please refer to the issues for notes on possible bugs, improvements,
-etc.
+tl;dr: Eatiht's etv2 is fast, but not so accurate (my own research
+suggests that the original algo is more reliable).
 
-Check out eatiht's `new website <http://rodricios.github.io/eatiht/>`__
+Check out eatiht's `website <http://rodricios.github.io/eatiht/>`__
 where I walk through each step in the original algorithm!
 
-New writeup will be coming soon!
+Follow me on `twitter <https://twitter.com/rodricios>`__ :)
 
 What people have been saying
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -38,7 +43,6 @@ What people have been saying
 *This is both useful and shows a simple use case for data mining for the
 general population - an outreach of sorts.* -
 `/u/tweninger <http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmzai6s>`__
-(author of the Text-to-Tag Clustering paper I referenced below)
 
 At a Glance
 -----------
@@ -263,7 +267,7 @@ Tests
 -----
 
 Currently, the tests are lacking. But please still run these tests to
-ensure that modifications to eatiht.py and eatiht\_v2.py run properly.
+ensure that modifications to eatiht.py, v2.py, and etv2.py run properly.
 
 .. code:: python
 
@@ -274,11 +278,12 @@ TODO:
 
 -  [STRIKEOUT:HTML-and-text extraction]
 -  etv2 command line scripts
--  etv2.py tests
+-  [STRIKEOUT:etv2.py tests]
 -  improve filtering\|pruning step so that taglines from articles get
    dropped
 
    -  if and only if tagline has a reference image, don't prune
 
--  add some template engine so that extracted html has *style*
+-  add some template engine (see "bootstrapify" function for current
+   state)
 

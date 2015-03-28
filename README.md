@@ -3,42 +3,19 @@ eatiht
 
 A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out the new twitter-bootstrap-ready [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/bootstrapify?url=http://phys.org/news/2014-12-faster-than-light-particles.html) produced by the new extraction algorithm!
 
-###2/20/2015 Update
+###Latest News
 
-Hey y'all, I made another "machine-learning" predictive Python module called [autocomplete](https://github.com/rodricios/autocomplete). I intended it on being more of a learning resource, and I include an explanation to the algorithm literally written for young kids and teens (like my own siblings), and anyone not immediately aware of what goes on in the spooky world of "AI". 
+Check out my latest project: [autocomplete - a kid and adult friendly exercise in machine learning](https://github.com/rodricios/autocomplete)
 
-###2/10/2015 Update
+I'm collaborating with [Tim Weninger](http://www3.nd.edu/~tweninge/) in a must-read data-driven opinion piece (publish date is tba). I benchmarked Eatiht and many more content extractors; you can follow the [current work here!](https://github.com/rodricios/crawl-to-the-future).
 
-Hello all! I'm here to update, sadly, not the package, but instead to inform you of two things. First, that I'm seeking help for this project. If you feel up to the job of getting to know how the predictive model works, please do so. The required changes are essentially encoding/decoding bugs where the time-to-patch ratio is too high for me - I'm in the middle of school and other exciting projects :)
+Read [Matthew Peters's](https://github.com/matt-peters) article that benchmarked Eatiht, along with few other content extractors written in Python.
 
-I'll refer the reader to the [homepage](http://rodricios.github.io/eatiht) for details into how the original algo works. If that's too long, and didn't read, refer to the [eatiht.py](eatiht/eatiht.py), [v2.py](eatiht/v2.py), and [etv2.py](eatiht/etv2.py) docstrings for more info! 
+tl;dr: Eatiht's etv2 is fast, but not so accurate (my own research suggests that the original algo is more reliable).
 
-Second,  I'll be streaming a live coding session via Alex Putilin's, aka [eleweek](https://github.com/eleweek)'s awesome project: WatchPeopleCode ([github project](https://github.com/eleweek/WatchPeopleCode), [subreddit](http://www.reddit.com/r/WatchPeopleCode/)).
+Check out eatiht's [website](http://rodricios.github.io/eatiht/) where I walk through each step in the original algorithm!
 
-This is an amazing effort by Alex! I highly recommend following his effort on twitter [@WatchPeopleCode](https://twitter.com/WatchPeopleCode). 
-
-The day of streaming will be this Saturday, currently scheduled for 10 AM pst, 1 PM est.
-
-Cheers!
-
-###1/1/2015
-
-[Follow the current work I'll be doing here!](https://github.com/rodricios/crawl-to-the-future)
-
-Follow me on [twitter](https://twitter.com/rodricios) :) 
-
-####Last week's updates
-
-Previewing a new feature that will "twitter-bootstrap" the extracted HTML, giving it that *clean* look we're accustomed to.
-
-New algorithm, please skip to eatiht's [usage](#using-in-python) for details.
-
-Please refer to the issues for notes on possible bugs, improvements, etc.
-
-Check out eatiht's [new website](http://rodricios.github.io/eatiht/) where I walk through each step in the original algorithm!
-
-New writeup will be coming soon!
-
+Follow me on [twitter](https://twitter.com/rodricios) :)
 
 ###What people have been saying
 
