@@ -2,6 +2,26 @@
 
 written by Rodrigo Palacios - Copyright 2014
 
+(added on 4/1/2014)
+
+After measuring the performance of eatiht for a semi-related research paper,
+tests show that the second version of the algorithm performed worse than the
+first version.
+
+In light of those results, I've overhauled this package; I've filleted out the
+ineffective submodule algo's (etv2.py and v2.py); I've also included .epub
+content extraction support.
+
+PDF support coming soon.
+
+Your extraction algo. maker friend,
+
+Rodrigo Palacios
+
+Follow me @rodricios
+
+~~~
+
 (added on 12/26/2014)
 
 Algorithm v2, dammit!:
@@ -64,6 +84,7 @@ That may be circular reasoning, faulty logic, what have you. I'm not
 classically trained in this sort of thing so I'd appreciate any insight
 as to what exactly it is that I'm doing lol.
 
+~~~
 
 (revised on 12/20/2014)
 
@@ -96,8 +117,3 @@ twitter - @rodricios
 email - rodrigopala91@gmail.com
 github - https://github.com/rodricios/eatiht
 """
-
-
-from .eatiht import extract, get_sentence_xpath_tuples, get_xpath_frequencydistribution
-import eatiht_trees
-import etv2

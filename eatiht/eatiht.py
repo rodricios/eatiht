@@ -132,7 +132,7 @@ def get_html_tree(filename_url_or_filelike):
         cj = cookielib.CookieJar()
         opener = urllib2.build_opener(handler)
         opener.add_handler(urllib2.HTTPCookieProcessor(cj))
-        
+
         resp = opener.open(filename_url_or_filelike)
     except(AttributeError):
         content = filename_url_or_filelike.read()
@@ -141,7 +141,7 @@ def get_html_tree(filename_url_or_filelike):
         parsed_html = html.parse(BytesIO(content),
                                  html.HTMLParser(encoding=encoding,
                                                  remove_blank_text=True))
-        
+
         return parsed_html
     except(ValueError):
         content = filename_url_or_filelike
@@ -150,7 +150,7 @@ def get_html_tree(filename_url_or_filelike):
         parsed_html = html.parse(BytesIO(content),
                                  html.HTMLParser(encoding=encoding,
                                                  remove_blank_text=True))
-        
+
         return parsed_html
 
     try:
@@ -205,7 +205,7 @@ def get_sentence_xpath_tuples(filename_url_or_filelike,
         else (s, xpath_finder(n))
         for n in nodes_with_text
         for e, s in enumerate(SENTENCE_TOKEN_PATTERN.split(
-            BRACKET_PATTERN.sub('', ''.join(n.xpath('.//text()')))))
+            BRACKET_PATTERN.sub('', ''.join(n.xpath('.//text()[normalize-space()]')))))
         if s.endswith(tuple(SENTENCE_ENDING))
         ]
 
