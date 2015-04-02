@@ -17,13 +17,10 @@ from lxml import html
 
 BRACKET_PATTERN = re.compile(r'(\[\d*\])')
 
-FILTER_TAGS_XPRSN = ".//*[not(self::script or self::style or self::a or\
-                    self::figure)]//text()[normalize-space()]"
-
 TEXT_XPATH = '//*[not(self::script or self::style)]/\
                     text()[normalize-space()]/..'
 
-NORM_TEXT_XPRSN = '/text()[normalize-space()]'
+NORM_TEXT_XPRSN = './/*[not(self::script or self::style or self::a or self::figure or self::span)]/text()[normalize-space()]'
 
 SENTENCE_ENDINGS = ['.', '"', '?', '!', "'"]
 
@@ -101,13 +98,13 @@ def content_from_etree(etree, normalize=True):
     """Eatiht algo for .epub files.
     Optionally normalize all text, removing epub format."""
 
-    content_etree = _get_content_etree(etree)
+    global CONTENT_ETREE
+    CONTENT_ETREE = content_etree = _get_content_etree(etree)
 
     assert len(content_etree) is 1
 
     if normalize:
-        content = ' '.join(content_etree[0].xpath(".//*"+FILTER_TAGS_XPRSN+
-                                                  NORM_TEXT_XPRSN))
+        content = ' '.join(content_etree[0].xpath(NORM_TEXT_XPRSN))
     else:
         content = ' '.join(content_etree[0].xpath(".//text()"))
 

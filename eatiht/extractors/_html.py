@@ -9,8 +9,10 @@ import cookielib
 
 import _eatiht as _extract
 
+from lxml.html.clean import clean_html
 
-def _etree_from_url(url):
+
+def _etree_from_url(url, clean):
     """Given URL, construct and return an element tree.
     """
     handler = (urllib2.HTTPSHandler
@@ -30,15 +32,28 @@ def _etree_from_url(url):
     finally:
         resp.close()
 
+    if clean:
+        content = clean_html(content)
+
     return _extract._etree_from_string(content)
 
 
-def extract_text(url, normalize=True):
+def extract_text(url, normalize=True, clean=False):
     """From url's html, and extract main content from website"""
-    return _extract.content_from_etree(_etree_from_url(url), normalize=True)
+
+    global HTML_ETREE
+    HTML_ETREE = etree = _etree_from_url(url, clean)
+
+    return _extract.content_from_etree(etree, normalize)
 
 
-def extract_from_string(htmlstring, normalize=True):
+def extract_from_string(htmlstring, normalize=True, clean=False):
     """Extract main content from html string"""
-    return _extract.content_from_etree(_extract._etree_from_string(htmlstring),
-                                       normalize=True)
+
+    if clean:
+        htmlstring = clean_html(htmlstring)
+
+    global HTML_ETREE
+    HTML_ETREE = etree = _extract._etree_from_string(htmlstring)
+
+    return _extract.content_from_etree(etree, normalize)

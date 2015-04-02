@@ -86,12 +86,12 @@ def sections_from_epub(filepath, normalize=True):
     return _epub.extract_sections(filepath, normalize)
 
 
-def text_from_html(url_string_filepath_or_file, normalize=True):
+def text_from_html(url_string_filepath_or_file, normalize=True, clean=False):
     """"Extract main text from html source"""
     url = string = filepath = fileobj = url_string_filepath_or_file
 
     if url.startswith(tuple(["http://", "https://"])):
-        return _html.extract_text(url, normalize)
+        return _html.extract_text(url, normalize, clean)
 
     elif _os.path.exists(filepath):
         with open(filepath, 'r') as htmlfile:
@@ -100,4 +100,4 @@ def text_from_html(url_string_filepath_or_file, normalize=True):
     elif isinstance(fileobj, file):
         string = fileobj.read()
 
-    return _html.extract_from_string(string, normalize)
+    return _html.extract_from_string(string, normalize, clean)
