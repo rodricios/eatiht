@@ -1,21 +1,13 @@
 eatiht
 ======
 
-A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out the new twitter-bootstrap-ready [demo](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/bootstrapify?url=http://phys.org/news/2014-12-faster-than-light-particles.html) produced by the new extraction algorithm!
+A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents (and .epub files).
 
-###Latest News
+##Breaking Changes
 
-Check out my latest project: [autocomplete - a kid and adult friendly exercise in machine learning](https://github.com/rodricios/autocomplete)
+EPUB support added!
 
-I'm collaborating with [Tim Weninger](http://www3.nd.edu/~tweninge/) in a must-read data-driven opinion piece (publish date is tba). I benchmarked Eatiht and many more content extractors; you can follow the [current work here!](https://github.com/rodricios/crawl-to-the-future).
-
-Read [Matthew Peters's](https://github.com/matt-peters) article that benchmarked Eatiht, along with few other content extractors written in Python.
-
-tl;dr: Eatiht's etv2 is fast, but not so accurate (my own research suggests that the original algo is more reliable).
-
-Check out eatiht's [website](http://rodricios.github.io/eatiht/) where I walk through each step in the original algorithm!
-
-Follow me on [twitter](https://twitter.com/rodricios) :)
+I've restructured the entire module. Previous conventions and methods will not work in this version of eatiht. Sorry :(
 
 ###What people have been saying
 
@@ -41,28 +33,17 @@ pip install lxml
 
 #### Using in Python
 
-Currently, there are two new submodules:
-
-* etv2.py   - class-based approach
-
-* v2.py     - script-like approach
-
-As [requested](https://github.com/rodricios/eatiht/issues/3), etv2.extract will extract not only the text, but also the parent element's html:
+#####HTML
 
 ```python
-import eatiht.etv2 as etv2
+from eatiht import extract
 
-url = "http://sputniknews.com/middleeast/20141225/1016239222.html"
+sorcerersstone = "c:/users/rodrigo/documents/downloads/j.K. Rowling/1 - Harry Potter and the Sorcerer's Stone/Harry Potter 1 - Harry Potter and the Sorcerer's Stone - J. K. Rowling & Mary Grandpre.epub"
 
-tree = etv2.extract(url)
+hp1text = extract.text_from_epub(sorcerersstone)
 
-# we know what this does...
-# print tree.get_text()
+congresstext = extract.text_from_html(congresspath)
 
-# add necessary link tags to bootstrap cdn, center content, etc.
-tree.bootstrapify()
-
-print tree.get_html_string()
 ```
 Output:
 ```

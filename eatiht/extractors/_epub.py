@@ -13,7 +13,7 @@ from ebooklib import epub
 
 from lxml import html
 
-import _eaitht as _extract
+import _eatiht as _extract
 
 def extract_sections(filepath, normalize=True):
     """Extract content and return list of sections (book's copyright sections,
@@ -31,6 +31,7 @@ def extract_sections(filepath, normalize=True):
         texts.append(text)
 
     return texts
+
 
 def extract_text(filepath, normalize=True):
     """Extract section's content, and join to single string"""

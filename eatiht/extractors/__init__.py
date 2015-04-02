@@ -117,3 +117,7 @@ twitter - @rodricios
 email - rodrigopala91@gmail.com
 github - https://github.com/rodricios/eatiht
 """
+
+import _html
+
+import _epub

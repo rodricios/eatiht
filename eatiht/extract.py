@@ -69,34 +69,35 @@ email - rodrigopala91@gmail.com
 github - https://github.com/im-rodrigo
 """
 
-import os
+import os as _os
 
-import warnings
+from extractors import _html
 
-import _html
-
-import _epub
-
-def fxn():
-    warnings.warn("deprecated", DeprecationWarning)
+from extractors import _epub
 
 
 def text_from_epub(filepath, normalize=True):
     """Extract main text from epub file"""
     return _epub.extract_text(filepath, normalize)
 
-def text_from_html(url_string_filepath_or_file):
+
+def sections_from_epub(filepath, normalize=True):
+    """Extract sections from epub file"""
+    return _epub.extract_sections(filepath, normalize)
+
+
+def text_from_html(url_string_filepath_or_file, normalize=True):
     """"Extract main text from html source"""
     url = string = filepath = fileobj = url_string_filepath_or_file
 
-    if url.startswith(tuple("http://", "https://")):
-        return _html.extract_text(url)
+    if url.startswith(tuple(["http://", "https://"])):
+        return _html.extract_text(url, normalize)
 
-    elif os.path.exists(filepath):
+    elif _os.path.exists(filepath):
         with open(filepath, 'r') as htmlfile:
             string = htmlfile.read()
 
     elif isinstance(fileobj, file):
         string = fileobj.read()
 
-    return _html.extract_from_string(string)
+    return _html.extract_from_string(string, normalize)

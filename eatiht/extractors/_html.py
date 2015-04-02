@@ -4,6 +4,7 @@ The reasons for these breaking changes are empirically justified (refer to
 work by Weninger, Palacios, et. al."""
 
 import urllib2
+
 import cookielib
 
 import _eatiht as _extract
@@ -31,10 +32,13 @@ def _etree_from_url(url):
 
     return _extract._etree_from_string(content)
 
-def extract_text(url):
-    """From url's html, and extract main content from website"""
-    return _extract.content_from_etree(_etree_from_url(url))
 
-def extract_from_string(htmlstring):
+def extract_text(url, normalize=True):
+    """From url's html, and extract main content from website"""
+    return _extract.content_from_etree(_etree_from_url(url), normalize=True)
+
+
+def extract_from_string(htmlstring, normalize=True):
     """Extract main content from html string"""
-    return _extract.content_from_etree(_extract._etree_from_string(htmlstring))
+    return _extract.content_from_etree(_extract._etree_from_string(htmlstring),
+                                       normalize=True)

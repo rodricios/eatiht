@@ -17,10 +17,13 @@ from lxml import html
 
 BRACKET_PATTERN = re.compile(r'(\[\d*\])')
 
+FILTER_TAGS_XPRSN = ".//*[not(self::script or self::style or self::a or\
+                    self::figure)]//text()[normalize-space()]"
+
 TEXT_XPATH = '//*[not(self::script or self::style)]/\
                     text()[normalize-space()]/..'
 
-NORM_TEXT_XPRSN = './/text()[normalize-space()]'
+NORM_TEXT_XPRSN = '/text()[normalize-space()]'
 
 SENTENCE_ENDINGS = ['.', '"', '?', '!', "'"]
 
@@ -103,7 +106,8 @@ def content_from_etree(etree, normalize=True):
     assert len(content_etree) is 1
 
     if normalize:
-        content = ' '.join(content_etree[0].xpath("."+NORM_TEXT_XPRSN))
+        content = ' '.join(content_etree[0].xpath(".//*"+FILTER_TAGS_XPRSN+
+                                                  NORM_TEXT_XPRSN))
     else:
         content = ' '.join(content_etree[0].xpath(".//text()"))
 
