@@ -75,6 +75,8 @@ from extractors import _html
 
 from extractors import _epub
 
+from extractors import _eatiht
+
 
 def text_from_epub(filepath, normalize=True):
     """Extract main text from epub file"""
@@ -101,3 +103,28 @@ def text_from_html(url_string_filepath_or_file, normalize=True, clean=False):
         string = fileobj.read()
 
     return _html.extract_from_string(string, normalize, clean)
+
+
+def article_html(url_string_filepath_or_file, normalize=True, clean=False):
+    """"Extract the sub-html-tree (lxml's etree) containing the main article"""
+    url = string = filepath = fileobj = url_string_filepath_or_file
+
+    if url.startswith(tuple(["http://", "https://"])):
+        etree = _eatiht._get_content_etree(_html._etree_from_url(url, clean))
+
+        _eatiht._filter_etree(etree, ["//a"])
+
+        return etree
+
+    elif _os.path.exists(filepath):
+        with open(filepath, 'r') as htmlfile:
+            string = htmlfile.read()
+
+    elif isinstance(fileobj, file):
+        string = fileobj.read()
+
+    etree =  _eatiht._get_content_etree(_eatiht._etree_from_string(string))
+
+    _eatiht._filter_etree(etree, ["//a"])
+
+    return etree

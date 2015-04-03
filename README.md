@@ -9,6 +9,9 @@ EPUB support added!
 
 I've restructured the entire module. Previous conventions and methods will not work in this version of eatiht. Sorry :(
 
+Note: I decided to drop many of the other features/extractors from versions < 0.2.0 because it was empirically shown
+that those additions I've made did not improve extraction accuracy, precision. Results will be coming in a paper I'm coauthoring with a few other cool guys. This branch in a way is "going back to its roots".
+
 ###What people have been saying
 
 *You should write a paper on this work* - [/u/queue_cumber](http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz0vfj)
@@ -38,108 +41,67 @@ pip install lxml
 ```python
 from eatiht import extract
 
-sorcerersstone = "c:/users/rodrigo/documents/downloads/j.K. Rowling/1 - Harry Potter and the Sorcerer's Stone/Harry Potter 1 - Harry Potter and the Sorcerer's Stone - J. K. Rowling & Mary Grandpre.epub"
+nytimes_iran_url = "http://www.nytimes.com/2015/04/04/world/middleeast/iran-nuclear-deal.html"
 
-hp1text = extract.text_from_epub(sorcerersstone)
+nytimes_iran_story = extract.text_from_html(nytimes_iran_url)
 
-congresstext = extract.text_from_html(congresspath)
-
+print(nytimes_iran_story)
 ```
+
+Output:
+
+```text
+TEHRAN — As word made its way around the globe that an understanding had
+been reached with the United States and other powers to limit Iran’s nuclear
+program, Iranians themselves greeted the news with optimism and skepticism
+on Friday. While the political climate remained uncertain, the government was
+allowed to promote the deal at Friday Prayer, a sign that the plan was broadly
+supported by Iran’s establishment.
+```
+
+#####EPUB
+
+Shout out to the maintainers of [ebooklib](https://github.com/aerkalov/ebooklib)  :)
+
+```python
+from eatiht import extract
+
+sorcerersstone_path = "c:/Path/to/totally/legal/downloads/Harry Potter and the Sorcerer's Stone - J. K. Rowling.epub"
+
+#Unfortunately, there is no "smart" algorithm that will ignore the coverpage, titlepage, copyright page(s) yet.
+#Suggestions welcomed :)
+sorcerersstone_sections = extract.sections_from_epub(sorcerersstone_path, normalize=False)
+#set "normalize" to false if you'd like to keep the original XML-based-document's format/layout
+
+ print(sorcerersstone_sections[4]) #the 5th section is where this book's story begins
+```
+
 Output:
 ```
-<html><head><title>Syrian Army Kills Nearly 5,000 IS Militants in Three Months: Source / Sputnik International</title>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css" rel="stylesheet"></head>
-<body><h2>Syrian Army Kills Nearly 5,000 IS Militants in Three Months: Source / Sputnik International</h2>...
+ Chapter 1
+
+     The Boy Who Lived
+
+     Mr. and Mrs. Dursley, of number four, Privet Drive, were proud to say that
+     they were perfectly normal, thank you very much. They were the last
+     people you’d expect to be involved in anything strange or mysterious,
+     because they just didn’t hold with such nonsense.
+     [...]
 ```
 
-Now what about if that's rendered?
+#####Missing Features
 
-[With boostrap](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/bootstrapify?url=http://sputniknews.com/middleeast/20141225/1016239222.html)
+1. CLI
+2. Title-extraction is initself a content-extraction problem to solve (this module extracts the article)
+3. Lots of other stuff that you may have liked from the master branch
 
-
-[Without](http://web-tier-load-balancer-1502628209.us-west-2.elb.amazonaws.com/backto95?url=http://sputniknews.com/middleeast/20141225/1016239222.html)
-
-
-etv2 uses classes defined in [eatiht_trees.py](https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht_trees.py) to construct what is sometimes known as the "state space" in the world of AI. But instead of only keeping track of averages and totals - as is required for the algorithm - the "state" class [TextNodeSubTree](https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht_trees.py#L7) also keeps a reference to its original lxml.html element from whence it came.
-
-You can access the original, extracted html elements like this:
-
-```python
-subtrees = tree.get_subtrees()
-
-first_subtree = subtrees[0]
-
-first_subtree.get_html()
-# <Element div at 0x2f88cc8>
-
-first_subtree.get_html().tag
-# 'div'
-```
-
-Please refer to [eatiht_trees.py](https://github.com/rodricios/eatiht/blob/master/eatiht/eatiht_trees.py) for more info on what functions are available for you to use.
-
-v2 is functionally identical to the original eatiht:
-```python
-import eatiht.v2 as v2
-
-url = 'http://www.washingtonpost.com/blogs/the-switch/wp/2014/12/26/elon-musk-the-new-tesla-roadster-can-travel-some-400-miles-on-a-single-charge/'
-
-print v2.extract(url)
-```
-Output:
-```
-Car nerds, you just got an extra present under the tree.
-
-Tesla announced Friday an upgrade for its Roadster, the electric car company’s convertible model,
-and said that the new features significantly boost its range -- beyond what many traditional cars
-can get on a tank of gasoline.
-```
-
-v2 contains one extra function that executes the extraction algorithm, but along with returning the text, it also returns the structures that were used to calculate the output (ie. histogram, list of xpaths, etc.):
-
-```python
-results = v2.extract_more(url)
-
-results[0]      # extracted text
-results[1]      # frequency distribution (histogram)
-results[2]      # subtrees (list of textnodes pre-filter)
-results[3]      # pruned subtrees
-results[4]      # list of paragraphs (as seperated in original website)
-```
-
-Now whether or not this function's output looks messy is up for debate; I personally think it looks messy and difficult to remember which index leads to what.
-
-I suggest using this module if you simply want the extracted text.
-
-And of course, there is the original:
-```python
-# from initial release
-import eatiht
-
-url = 'http://news.yahoo.com/curiosity-rover-drills-mars-rock-finds-water-122321635.html'
-
-print eatiht.extract(url)
-```
-##### Output
-```
-NASA's Curiosity rover is continuing to help scientists piece together the mystery of how Mars
-lost its surface water over the course of billions of years. The rover drilled into a piece of
-Martian rock called Cumberland and found some ancient water hidden within it...
-```
-
-
-#### Using as a command line tool:
-```bash
-eatiht http://news.yahoo.com/curiosity-rover-drills-mars-rock-finds-water-122321635.html >> out.txt
-```
 
 Note: Window's users may have to add the C:\PythonXX\Scripts directory to your ["path"](http://www.computerhope.com/issues/ch000549.htm) so that the command line tool works from any directory, not only the ..\Scripts directory.
 
 Requirements
 ------------
 ```
-lxml
-*requests, as of v0.1.0, is no longer required
+lxml, chardet, ebooklib
 ```
 
 Motivation

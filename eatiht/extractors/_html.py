@@ -12,7 +12,7 @@ import _eatiht as _extract
 from lxml.html.clean import clean_html
 
 
-def _etree_from_url(url, clean):
+def _etree_from_url(url, clean=False):
     """Given URL, construct and return an element tree.
     """
     handler = (urllib2.HTTPSHandler

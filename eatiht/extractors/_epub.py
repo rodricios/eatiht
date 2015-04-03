@@ -6,7 +6,7 @@ Copyright - Rodrigo Palacios
 twitter: http://twitter.com/rodricios
 email: rodrigopala91@gmail.com
 """
-
+#https://github.com/aerkalov/ebooklib
 import ebooklib
 
 from ebooklib import epub
