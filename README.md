@@ -143,9 +143,4 @@ python setup.py test
 TODO:
 -----
 
-* ~~HTML-and-text extraction~~
-* etv2 command line scripts
-* ~~etv2.py tests~~
-* improve filtering|pruning step so that taglines from articles get dropped
-    * if and only if tagline has a reference image, don't prune
-* add some template engine (see "bootstrapify" function for current state)
+TODO
