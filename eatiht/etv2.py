@@ -80,21 +80,23 @@ as to what exactly it is that I'm doing lol.
 """
 
 
-import urllib2
-import cookielib
 import chardet
 
 from collections import Counter
 
 try:
     from cStringIO import StringIO as BytesIO
+    from urllib2 import HTTPHandler, HTTPSHandler, build_opener, HTTPCookieProcessor
+    from cookielib import CookieJar
 except ImportError:
     from io import BytesIO
+    from urllib.request import HTTPHandler, HTTPSHandler, build_opener, HTTPCookieProcessor
+    from http.cookiejar import CookieJar
 
 from lxml import html
 from lxml.html.clean import Cleaner
 
-from eatiht_trees import TextNodeSubTree, TextNodeTree
+from .eatiht_trees import TextNodeSubTree, TextNodeTree
 
 # decided to use backslashes for readability?
 TEXT_FINDER_XPATH = '//body\
@@ -131,13 +133,13 @@ def get_html_tree(filename_url_or_filelike):
     """
     try:
         handler = (
-            urllib2.HTTPSHandler
+            HTTPSHandler
                 if filename_url_or_filelike.lower().startswith('https')
-                else urllib2.HTTPHandler
+                else HTTPHandler
         )
-        cj = cookielib.CookieJar()
-        opener = urllib2.build_opener(handler)
-        opener.add_handler(urllib2.HTTPCookieProcessor(cj))
+        cj = CookieJar()
+        opener = build_opener(handler)
+        opener.add_handler(HTTPCookieProcessor(cj))
 
         resp = opener.open(filename_url_or_filelike)
     except(AttributeError):

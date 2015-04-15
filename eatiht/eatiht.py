@@ -70,15 +70,19 @@ github - https://github.com/im-rodrigo
 """
 
 import re
-import urllib2
-import cookielib
 import chardet
 
 from collections import Counter
+
 try:
     from cStringIO import StringIO as BytesIO
+    from urllib2 import HTTPHandler, HTTPSHandler, build_opener, HTTPCookieProcessor
+    from cookielib import CookieJar
 except ImportError:
     from io import BytesIO
+    from urllib.request import HTTPHandler, HTTPSHandler, build_opener, HTTPCookieProcessor
+    from http.cookiejar import CookieJar
+
 
 from lxml import html
 
@@ -125,14 +129,14 @@ def get_html_tree(filename_url_or_filelike):
     """
     try:
         handler = (
-            urllib2.HTTPSHandler
+            HTTPSHandler
                 if filename_url_or_filelike.lower().startswith('https')
-                else urllib2.HTTPHandler
+                else HTTPHandler
         )
-        cj = cookielib.CookieJar()
-        opener = urllib2.build_opener(handler)
-        opener.add_handler(urllib2.HTTPCookieProcessor(cj))
-        
+        cj = CookieJar()
+        opener = build_opener(handler)
+        opener.add_handler(HTTPCookieProcessor(cj))
+
         resp = opener.open(filename_url_or_filelike)
     except(AttributeError):
         content = filename_url_or_filelike.read()
@@ -141,7 +145,7 @@ def get_html_tree(filename_url_or_filelike):
         parsed_html = html.parse(BytesIO(content),
                                  html.HTMLParser(encoding=encoding,
                                                  remove_blank_text=True))
-        
+
         return parsed_html
     except(ValueError):
         content = filename_url_or_filelike
@@ -150,7 +154,7 @@ def get_html_tree(filename_url_or_filelike):
         parsed_html = html.parse(BytesIO(content),
                                  html.HTMLParser(encoding=encoding,
                                                  remove_blank_text=True))
-        
+
         return parsed_html
 
     try:

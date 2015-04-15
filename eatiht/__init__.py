@@ -99,5 +99,5 @@ github - https://github.com/rodricios/eatiht
 
 
 from .eatiht import extract, get_sentence_xpath_tuples, get_xpath_frequencydistribution
-import eatiht_trees
-import etv2
+from . import eatiht_trees
+from . import etv2
