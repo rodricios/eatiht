@@ -2,11 +2,11 @@ A word about this repo
 ----------------------
 
 
-[@eugene-eeo](https://github.com/eugene-eeo) and I are reimagining web data extraction: [/libextract](https://github.com/libextract/libextract). It supports not only article extraction, but also tabular data extraction! 
+[@eugene-eeo](https://github.com/eugene-eeo) and I are reimagining web data extraction: [libextract](https://github.com/libextract/libextract). It supports not only article extraction, but also tabular data extraction! 
 
 That said, it's very unlikely that I will be pushing any updates to this branch, but I will continue to accept pull requests.
 
-Hope to see at [/libextract](https://github.com/libextract/libextract),
+Hope to see you at [libextract](https://github.com/libextract/libextract),
 
 [Rodrigo](https://twitter.com/rodricios) :)
 
