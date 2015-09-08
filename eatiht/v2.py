@@ -101,6 +101,7 @@ TEXT_FINDER_XPATH = '//body\
                             self::noscript or \
                             self::style or \
                             self::i or \
+                            self::em or \
                             self::b or \
                             self::strong or \
                             self::span or \
