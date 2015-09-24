@@ -203,7 +203,7 @@ def calc_across_paths_textnodes(paths_nodes, dbg=False):
     #           avg strlen across tnodes.])
     for path_nodes in paths_nodes:
         cnt = len(path_nodes[1][0])
-        ttl = sum([len(s) for s in paths_nodes[1][0]])  # calculate total
+        ttl = sum([len(s) for s in path_nodes[1][0]])  # calculate total
         path_nodes[1][1] = cnt                          # cardinality
         path_nodes[1][2] = ttl                          # total
         path_nodes[1][3] = ttl/ cnt                     # average
