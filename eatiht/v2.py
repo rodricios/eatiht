@@ -81,7 +81,7 @@ as to what exactly it is that I'm doing lol.
 
 import chardet
 
-from collections import Counter
+from collections import Counter, defaultdict
 
 try:
     from cStringIO import StringIO as BytesIO
@@ -95,17 +95,10 @@ except ImportError:
 from lxml import html
 #from lxml.html.clean import Cleaner TODO!
 
-TEXT_FINDER_XPATH = '//body\
-                        //*[not(\
+TEXT_FINDER_XPATH = '//*[not(\
                             self::script or \
                             self::noscript or \
-                            self::style or \
-                            self::i or \
-                            self::em or \
-                            self::b or \
-                            self::strong or \
-                            self::span or \
-                            self::a)] \
+                            self::style)] \
                             /text()[string-length(normalize-space()) > 20]/..'
 
 
@@ -161,16 +154,16 @@ def get_html_tree(filename_url_or_filelike):
 # same as v1
 def get_xpath_frequencydistribution(paths):
     """ Build and return a frequency distribution over xpath occurrences."""
-    # "html/body/div/div/text" -> [ "html", "body", "div", "div", "text" ]
-    splitpaths = [p.split('/') for p in paths]
 
-    # get list of "parentpaths" by right-stripping off the last xpath-node,
-    # effectively getting the parent path
-    parentpaths = ['/'.join(p[:-1]) for p in splitpaths]
+    freqs = defaultdict(float)
 
     # build frequency distribution
-    parentpaths_counter = Counter(parentpaths)
-    return parentpaths_counter.most_common()
+    for x in paths:
+        pp = '/'.join(x[0].split('/')[:-1])
+
+        freqs[pp] += x[1][3]
+
+    return sorted(freqs.items(), key=lambda x: (x[1], len(x[0])))[-1][0]
 
 
 # TODO: rename these funcs to something that makes more sense
@@ -202,8 +195,13 @@ def calc_across_paths_textnodes(paths_nodes, dbg=False):
     #           ttl strlen across tnodes,
     #           avg strlen across tnodes.])
     for path_nodes in paths_nodes:
-        cnt = len(path_nodes[1][0])
-        ttl = sum([len(s) for s in path_nodes[1][0]])  # calculate total
+        cnt = 0
+
+        for x in path_nodes[1][0]:
+            if x.strip():
+                cnt += 1
+
+        ttl = sum([len(s.strip()) for s in path_nodes[1][0]])  # calc total len
         path_nodes[1][1] = cnt                          # cardinality
         path_nodes[1][2] = ttl                          # total
         path_nodes[1][3] = ttl/ cnt                     # average
@@ -235,14 +233,14 @@ def get_parent_xpaths_and_textnodes(filename_url_or_filelike,
     # read note 5
     parentpaths_textnodes = [
         (xpath_finder(n),
-         [n.xpath('.//text()'),   # list of text from textnode
+         [n.xpath('.//text()[not(ancestor::script | ancestor::noscript | ancestor::style)]'),
           0,                      # number of texts (cardinality)
           0,                      # total string length in list of texts
           0])                     # average string length
         for n in nodes_with_text
         ]
 
-    if len(parentpaths_textnodes) is 0:
+    if not parentpaths_textnodes:
         raise Exception("No text nodes satisfied the xpath:\n\n" +
                         xpath_to_text + "\n\nThis can be due to user's" +
                         " custom xpath, min_str_length value, or both")
@@ -260,13 +258,11 @@ def extract(filename_url_or_filelike):
     avg, _, _ = calc_avgstrlen_pathstextnodes(pars_tnodes)
 
     filtered = [parpath_tnodes for parpath_tnodes in pars_tnodes
-                if parpath_tnodes[1][2] > avg]
+                if parpath_tnodes[1][2] >= avg]
 
-    paths = [path for path, tnode in filtered]
-
-    hist = get_xpath_frequencydistribution(paths)
+    hist = get_xpath_frequencydistribution(filtered)
     try:
-        target_tnodes = [tnode for par, tnode in pars_tnodes if hist[0][0] in par]
+        target_tnodes = [tnode for par, tnode in pars_tnodes if hist in par]
 
         target_text = '\n\n'.join([' '.join(tnode[0]) for tnode in target_tnodes])
 
