@@ -201,10 +201,12 @@ def calc_across_paths_textnodes(paths_nodes, dbg=False):
             if x.strip():
                 cnt += 1
 
-        ttl = sum([len(s.strip()) for s in path_nodes[1][0]])  # calc total len
-        path_nodes[1][1] = cnt                          # cardinality
-        path_nodes[1][2] = ttl                          # total
-        path_nodes[1][3] = ttl/ cnt                     # average
+        if cnt:
+            ttl = sum([len(s.strip()) for s in path_nodes[1][0]])  # total len
+            path_nodes[1][1] = cnt                                 # cardinality
+            path_nodes[1][2] = ttl                                 # total
+            path_nodes[1][3] = ttl/ cnt                            # average
+
         if dbg:
             print(path_nodes[1])
 
