@@ -15,7 +15,7 @@ eatiht
 
 A python package for **e**xtracting **a**rticle **t**ext **i**n **ht**ml documents. Check out the new twitter-bootstrap-ready [demo](http://retext.us/extract?url=http://phys.org/news/2014-12-faster-than-light-particles.html) produced by the new extraction algorithm!
 
-###Latest News
+### Latest News
 
 Check out my latest project: [autocomplete - a kid and adult friendly exercise in machine learning](https://github.com/rodricios/autocomplete)
 
@@ -25,7 +25,7 @@ Read [Matthew Peters's](https://github.com/matt-peters) article that benchmarked
 
 Follow me on [twitter](https://twitter.com/rodricios) :)
 
-###What people have been saying
+### What people have been saying
 
 *You should write a paper on this work* - [/u/queue_cumber](http://www.reddit.com/r/compsci/comments/2ppyot/just_made_what_i_consider_my_first_algorithm_it/cmz0vfj)
 
