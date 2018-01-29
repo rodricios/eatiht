@@ -78,7 +78,7 @@ try:
     from cStringIO import StringIO as BytesIO
     from urllib2 import HTTPHandler, HTTPSHandler, build_opener, HTTPCookieProcessor
     from cookielib import CookieJar
-except ImportError:
+except ModuleNotFoundError:
     from io import BytesIO
     from urllib.request import HTTPHandler, HTTPSHandler, build_opener, HTTPCookieProcessor
     from http.cookiejar import CookieJar
