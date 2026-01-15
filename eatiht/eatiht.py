@@ -78,7 +78,7 @@ try:
     from cStringIO import StringIO as BytesIO
     from urllib2 import HTTPHandler, HTTPSHandler, build_opener, HTTPCookieProcessor
     from cookielib import CookieJar
-except ImportError:
+except ModuleNotFoundError:
     from io import BytesIO
     from urllib.request import HTTPHandler, HTTPSHandler, build_opener, HTTPCookieProcessor
     from http.cookiejar import CookieJar
@@ -135,6 +135,7 @@ def get_html_tree(filename_url_or_filelike):
         )
         cj = CookieJar()
         opener = build_opener(handler)
+        opener.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A')]
         opener.add_handler(HTTPCookieProcessor(cj))
 
         resp = opener.open(filename_url_or_filelike)
