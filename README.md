@@ -1,5 +1,11 @@
-A word about this repo
-----------------------
+## Note from the author
+
+If you're a user of `eatiht` or any other one of my projects ([autocomplete](https://github.com/rodricios/autocomplete), [libextract](https://github.com/datalib/libextract)), I humbly ask that you check out my new project **[wxpath](https://github.com/rodricios/wxpath)**: a declarative web crawler and scraper that extends the [XPath](https://en.wikipedia.org/wiki/XPath) DSL to navigate and scrape web pages. 
+
+**wxpath** is a natural progression of my work in web data extraction and I am very excited to share it with you.
+
+### A word about this repo (April 13, 2015)
+
 
 
 [@eugene-eeo](https://github.com/eugene-eeo) and I are reimagining web data extraction: [libextract](https://github.com/libextract/libextract). It supports not only article extraction, but also tabular data extraction! 
